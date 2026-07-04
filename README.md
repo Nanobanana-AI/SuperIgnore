@@ -1,7 +1,7 @@
 <div align="center">
   <h1>🚫 SuperIgnore</h1>
   <p><b>The Ultimate Account-wide Ignore System for WoW</b></p>
-  <p>全战网通用，突破限制的极简魔兽黑名单插件</p>
+  <p>全战网通用，极简魔兽黑名单插件</p>
   
   [![GitHub Release](https://img.shields.io/github/v/release/Nanobanana-AI/SuperIgnore?style=for-the-badge&logo=github)](https://github.com/Nanobanana-AI/SuperIgnore/releases)
   [![CurseForge](https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/wow/addons/superignore)
