@@ -64,6 +64,10 @@ In-game Menu / 游戏内菜单: Right-click on a player's character portrait or 
 Slash Command / 指令: Type /si to open the configuration panel to manage your players, keywords, and data.<br>
 聊天框输入 /si 打开配置面板，管理你的数据与自动同步选项。
 
+⬇️ 下载与安装
+
+[![CurseForge](https://img.shields.io/badge/CurseForge-Official_Page-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/wow/addons/superignore)
+
 <img width="819" height="830" alt="2" src="https://github.com/user-attachments/assets/7767c8fe-d260-4c07-9105-bf9eef3f0daa" />
 
 <img width="821" height="822" alt="3" src="https://github.com/user-attachments/assets/48e1c7b0-abdf-4a7a-9805-6099d74923ff" />
