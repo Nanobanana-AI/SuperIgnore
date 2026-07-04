@@ -66,7 +66,10 @@ Slash Command / 指令: Type /si to open the configuration panel to manage your 
 
 ⬇️ 下载与安装
 
+🔗 [CurseForge 官方页面](https://www.curseforge.com/wow/addons/superignore)
+
 [![CurseForge](https://img.shields.io/badge/CurseForge-Official_Page-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/wow/addons/superignore)
+
 
 <img width="819" height="830" alt="2" src="https://github.com/user-attachments/assets/7767c8fe-d260-4c07-9105-bf9eef3f0daa" />
 
