@@ -1,0 +1,8 @@
+## Interface: 120005
+## Title: SuperIgnore
+## Notes: 突破系统限制的战网通用黑名单
+## Version: 1.1.0
+## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB
+## IconTexture: 136813
+
+SuperIgnore.lua
