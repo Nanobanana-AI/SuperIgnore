@@ -1,9 +1,18 @@
-SuperIgnore / 超级黑名单
+<div align="center">
+  <h1>🚫 SuperIgnore</h1>
+  <p><b>The Ultimate Account-wide Ignore System for WoW</b></p>
+  <p>全战网通用，突破限制的极简魔兽黑名单插件</p>
+  
+  [![GitHub Release](https://img.shields.io/github/v/release/Nanobanana-AI/SuperIgnore?style=for-the-badge&logo=github)](https://github.com/Nanobanana-AI/SuperIgnore/releases)
+  [![CurseForge](https://img.shields.io/badge/CurseForge-F16436?style=for-the-badge&logo=curseforge&logoColor=white)](https://www.curseforge.com/wow/addons/superignore)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+  [![WoW Version](https://img.shields.io/badge/WoW-Retail-blue?style=for-the-badge&logo=worldofwarcraft)](https://worldofwarcraft.blizzard.com/)
+</div>
 
-A lightweight, high-performance addon designed to provide a comprehensive ignore system that works across the entire Battle.net account.<br>
-这是一个极简、轻量、高性能的聊天过滤与黑名单管理插件，
-旨在提供一套覆盖整个战网账号的全面屏蔽系统。
-一次拉黑，全战网所有角色共同生效！
+## 📖 Introduction (简介)
+SuperIgnore is a lightweight, high-performance addon designed to provide a comprehensive ignore system that works across the entire Battle.net account. It helps you block players across all characters and filter annoying chat messages with ease.
+
+这是一个极简、轻量、高性能的聊天过滤与黑名单管理插件，旨在提供一套覆盖整个战网账号的全面屏蔽系统。一次拉黑，全战网所有角色共同生效！
 
 
 
