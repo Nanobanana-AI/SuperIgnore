@@ -54,6 +54,11 @@ In-game Menu / 游戏内菜单: Right-click on a player's character portrait or 
 Slash Command / 指令: Type /si to open the configuration panel to manage your players, keywords, and data.
 聊天框输入 /si 打开配置面板，管理你的数据与自动同步选项。
 
+<img width="819" height="830" alt="2" src="https://github.com/user-attachments/assets/7767c8fe-d260-4c07-9105-bf9eef3f0daa" />
+
+<img width="821" height="822" alt="3" src="https://github.com/user-attachments/assets/48e1c7b0-abdf-4a7a-9805-6099d74923ff" />
+
+<img width="816" height="826" alt="4" src="https://github.com/user-attachments/assets/edcdcf43-aced-47d4-9ba8-4bd475e11e6c" />
 
 
 
