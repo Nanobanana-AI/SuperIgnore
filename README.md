@@ -71,12 +71,12 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ### 🌟 v1.3.0 - (2026.07.06)
 
-**[English]**
+
 * ✨ **New Smart Filters:** Introduced 5 intelligent chat filters to drastically clean up your chat window. You can now block messages from DND/AFK players (applies to Whisper, Say, Yell, Party, and Raid channels), prevent repeat message spam, merge duplicate guild/party achievements, mute repetitive NPC dialogues, and hide trivial quest progress announcements.
 * 🛡️ **New Whitelist System & UI:** Added dedicated "Filters" and "Whitelist" tabs to the options panel. You can now easily exempt trusted players (like crafters) from the DND/AFK filter via the right-click menu or the new interface.
 * 🔧 **Compatibility Improvements:** Added alternative slash commands (`/sig` and `/superignore`) to seamlessly resolve command conflicts with other popular addons (such as *SavedInstances*).
 
-**[简体中文]**
+
 * ✨ **全新智能过滤器：** 重磅上线 5 大实用聊天过滤功能！支持一键拦截“暂离/忙碌”状态玩家的发言（包含私聊、说、大喊、小队、团队频道），过滤重复刷屏信息、智能合并多人同款成就防霸屏、屏蔽 NPC 重复啰嗦台词，以及过滤毫无意义的队伍任务进度通告。
 * 🛡️ **白名单系统与面板升级：** 设置面板新增专属的“扩展过滤”与“白名单”独立页签。现在你可以通过右键菜单，快捷将信任的玩家（如公益工匠）加入白名单，使其无视暂离拦截规则，彻底告别误伤！
 * 🔧 **兼容性优化：** 完美解决了与 *SavedInstances* 等热门插件的斜杠命令冲突问题，新增 `/sig` 和 `/superignore` 作为备用呼出指令，使用更加顺畅。
@@ -85,22 +85,22 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ### 🌟 v1.2.0 - (2026.07.05)
 
-**[English]**
+
 * 🌐 **Localization Support:** Added full multi-language support (Simplified Chinese, Traditional Chinese, English). The addon now automatically adapts to your game client's language across all regional servers.
 
-**[简体中文]**
+
 * 🌐 **多语言支持：** 新增全面的多语言支持（简体中文、繁体中文、英文），全自动无缝适配全球各区域服务器的客户端语言设置。
 
 ---
 
 ### 🌟 v1.1.0 - (2026.07.05)
 
-**[English]**
+
 * ✨ **New Feature:** Added one-click and automatic sync with the NetEase Meeting Stone ignore list. Converts your temporary group-finder ignores into permanent, account-wide blacklists.
 * ⚡ **Optimization:** Improved data cleaning logic to enhance cross-realm matching accuracy.
 * 🎨 **UI Polish:** Added a dedicated "About" tab and real-time data statistics.
 
-**[简体中文]**
+
 * ✨ **新增功能：** 新增一键全自动同步网易集合石黑名单功能，将您在集合石屏蔽的玩家账号，瞬间转化为永久的战网通用黑名单。
 * ⚡ **底层优化：** 优化底层数据清洗逻辑，提升跨服匹配精度。
 * 🎨 **界面升级：** 新增“关于”独立页签与实时数据统计显示。
