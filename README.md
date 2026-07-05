@@ -18,6 +18,12 @@ SuperIgnore is a lightweight, high-performance addon designed to provide a compr
 
 
 📝 Changelog / 更新日志<br>
+
+v1.2.0 - (2026.07.05)
+
+Localization / 多语言支持: Added full multi-language support (Simplified Chinese,Traditional Chinese,English). The addon now automatically adapts to your game client's language across all regional servers. 
+新增全面的多语言支持（简体中文、繁体中文、英文），全自动无缝适配全球各区域服务器的客户端语言设置。
+
   v1.1.0  - （2026.07.05）
 
 New Feature / 新增功能: Added one-click and automatic sync with the NetEase Meeting Stone ignore list. Converts your temporary group-finder ignores into permanent, account-wide blacklists.<br>
