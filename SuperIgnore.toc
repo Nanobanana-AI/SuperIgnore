@@ -6,7 +6,7 @@
 ## Notes-zhCN: 突破系统限制的战网通用黑名单。
 ## Notes-zhTW: 突破系統限制的戰網通用黑名單。
 ## Author: okqiyi
-## Version: 1.2.0
+## Version: 1.3.0
 ## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB
 ## IconTexture: 136813
 
