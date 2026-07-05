@@ -1,36 +1,212 @@
--- SuperIgnore v1.1.0
+-- SuperIgnore v1.2.0
 -- A lightweight, account-wide ignore list management tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
--- 1. 初始化数据库 (新增关键词库)
+-- ==========================================
+-- 0. 多语言字典 (Localization)
+-- ==========================================
+local L = {
+    -- [Default: English]
+    UI_ADD_TITLE = "Add to SuperIgnore",
+    UI_TARGET_NONE = "Target: None",
+    UI_TARGET_PREFIX = "Target: |cff00ff00",
+    UI_BTN_CONFIRM = "Confirm",
+    UI_BTN_CANCEL = "Cancel",
+    
+    BTN_R1 = "Boosting",
+    BTN_R2 = "Ad",
+    BTN_R3 = "Toxic",
+    BTN_R4 = "Bot",
+    
+    MENU_ADD = "Add to SuperIgnore",
+    REASON_MANUAL = "Manual Add",
+    REASON_IMPORT = "Imported",
+    REASON_MS = "MeetingStone Sync",
+    UNKNOWN_VERSION = "Unknown Version",
+    
+    PANEL_DESC1 = "SuperIgnore is a lightweight, high-performance chat filtering & ignore list addon.",
+    PANEL_DESC2 = "Account-wide ignore. Block once, clean chat on all characters!",
+    
+    TAB_PLAYER = "Block Player",
+    TAB_KEYWORD = "Block Keyword",
+    TAB_DATA = "Data/Sync",
+    TAB_ABOUT = "About",
+    
+    UI_PLAYER_INPUT = "Player-Realm:",
+    UI_REASON_INPUT = "Note:",
+    UI_BTN_ADD = "Add",
+    UI_KEYWORD_INPUT = "New Keyword (Regex):",
+    
+    UI_SEARCH = "Search:",
+    UI_BTN_EXPORT = "Export Data",
+    UI_BTN_IMPORT = "Import & Merge",
+    UI_BTN_SYNC = "Sync MeetingStone",
+    UI_CHK_AUTOSYNC = "Auto-sync on panel open",
+    
+    STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
+    ABOUT_TITLE = "SuperIgnore",
+    ABOUT_TEXT = "Author: okqiyi \nVersion: v1.2.0\n\n【v1.2.0 Updates】\n- Added multi-language support (EN, zhCN, zhTW).\n- Optimized cross-realm detection.\n\nFeedback is welcome on CurseForge or NGA!",
+    ABOUT_NGA = "NGA (Ctrl+C to copy):",
+    ABOUT_CF = "CurseForge (Ctrl+C to copy):",
+    
+    LIST_REASON_NONE = "None",
+    LIST_ADD_TIME = "Added: ",
+    LIST_BTN_REMOVE = "Remove",
+    
+    -- Chat Messages
+    MSG_GROUP_DECLINED = "|cffff0000[SuperIgnore]|r Auto-declined group invite from blocked player %s.",
+    MSG_TRADE_DECLINED = "|cffff0000[SuperIgnore]|r Auto-declined trade request from blocked player %s.",
+    MSG_BLACKLISTED = "|cffff0000[SuperIgnore]|r Blocked %s. Reason: %s",
+    MSG_ADDED_KEYWORD = "|cffff0000[SuperIgnore]|r Added keyword: %s",
+    MSG_EXPORTED = "|cffff0000[SuperIgnore]|r Code generated. Press Ctrl+C to copy.",
+    MSG_IMPORT_SUCCESS = "|cff00ff00[SuperIgnore]|r Import complete. Added: %d Players, %d Keywords.",
+    MSG_IMPORT_FILTERED = " |cffffff00Auto-filtered %d invalid entries without realm.|r",
+    MSG_MS_SUCCESS = "|cff00ff00[SuperIgnore]|r Auto-sync triggered! Silently added %d new players to global list.",
+    
+    -- Error Messages
+    MSG_ERR_NO_REALM = "|cffff0000[SuperIgnore]|r Failed to get realm info, block failed!",
+    MSG_ERR_COMBAT = "|cffff0000[SuperIgnore]|r Cannot open settings in combat.",
+    MSG_ERR_NO_PANEL = "|cffff0000[SuperIgnore]|r Error: Settings panel not initialized.",
+    MSG_ERR_FORMAT = "|cffff0000[SuperIgnore]|r Error: Must include realm name (e.g., Player-Realm)!",
+    MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r Invalid format! Must include --SuperIgnoreDataV1",
+    MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone addon not found or list empty.",
+    MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone list already synced. No new players found."
+}
+
+local locale = GetLocale()
+if locale == "zhCN" then
+    L.UI_ADD_TITLE = "添加超级黑名单"
+    L.UI_TARGET_NONE = "目标：无"
+    L.UI_TARGET_PREFIX = "目标：|cff00ff00"
+    L.UI_BTN_CONFIRM = "确认"
+    L.UI_BTN_CANCEL = "取消"
+    L.BTN_R1 = "代练"
+    L.BTN_R2 = "广告"
+    L.BTN_R3 = "喷子"
+    L.BTN_R4 = "SB"
+    L.MENU_ADD = "加入超级黑名单"
+    L.REASON_MANUAL = "手动添加"
+    L.REASON_IMPORT = "导入"
+    L.REASON_MS = "集合石同步"
+    L.UNKNOWN_VERSION = "未知版本"
+    L.PANEL_DESC1 = "SuperIgnore (超级黑名单) 是一款极简、轻量、高性能的聊天过滤与黑名单管理插件。"
+    L.PANEL_DESC2 = "一次拉黑，全战网所有角色共同生效，还你清净的艾泽拉斯！"
+    L.TAB_PLAYER = "屏蔽玩家"
+    L.TAB_KEYWORD = "屏蔽关键词"
+    L.TAB_DATA = "数据/同步"
+    L.TAB_ABOUT = "关于"
+    L.UI_PLAYER_INPUT = "玩家-服务器:"
+    L.UI_REASON_INPUT = "备注:"
+    L.UI_BTN_ADD = "添加"
+    L.UI_KEYWORD_INPUT = "新增屏蔽词 (支持正则):"
+    L.UI_SEARCH = "搜索:"
+    L.UI_BTN_EXPORT = "生成导出代码"
+    L.UI_BTN_IMPORT = "导入并覆盖合并"
+    L.UI_BTN_SYNC = "同步集合石屏蔽列表"
+    L.UI_CHK_AUTOSYNC = "打开面板自动同步"
+    L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
+    L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
+    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.2.0\n\n【v1.2.0 核心更新】\n- 全面支持多语言 (简中/繁中/英文)。\n- 优化底层数据清洗逻辑，提升跨服匹配精度。\n\n如果遇到 Bug 或有功能建议，欢迎在 NGA 原创插件区反馈！"
+    L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
+    L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
+    L.LIST_REASON_NONE = "无"
+    L.LIST_ADD_TIME = "添加时间: "
+    L.LIST_BTN_REMOVE = "移除"
+    
+    L.MSG_GROUP_DECLINED = "|cffff0000[SuperIgnore]|r 已自动拒绝黑名单玩家 %s 的组队邀请。"
+    L.MSG_TRADE_DECLINED = "|cffff0000[SuperIgnore]|r 已自动拒绝黑名单玩家 %s 的交易请求。"
+    L.MSG_BLACKLISTED = "|cffff0000[SuperIgnore]|r 已拉黑 %s。原因：%s"
+    L.MSG_ADDED_KEYWORD = "|cffff0000[SuperIgnore]|r 已添加屏蔽词：%s"
+    L.MSG_EXPORTED = "|cffff0000[SuperIgnore]|r 代码已生成，请按 Ctrl+C 复制。"
+    L.MSG_IMPORT_SUCCESS = "|cff00ff00[SuperIgnore]|r 导入合并完成。新增: 玩家%d, 关键词%d"
+    L.MSG_IMPORT_FILTERED = "。|cffffff00已自动过滤 %d 条无服务器的无效数据。|r"
+    L.MSG_MS_SUCCESS = "|cff00ff00[SuperIgnore]|r 集合石自动同步触发！已静默抓取 %d 名新名单加入通用黑名单。"
+    
+    L.MSG_ERR_NO_REALM = "|cffff0000[SuperIgnore]|r 无法获取该玩家的服务器信息，拉黑失败！"
+    L.MSG_ERR_COMBAT = "|cffff0000[SuperIgnore]|r 战斗中系统限制，无法打开设置面板，请脱战后再试。"
+    L.MSG_ERR_NO_PANEL = "|cffff0000[SuperIgnore]|r 错误：设置面板未初始化。"
+    L.MSG_ERR_FORMAT = "|cffff0000[SuperIgnore]|r 错误：必须输入包含服务器的完整名字（如：张三-燃烧之刃）！"
+    L.MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r 数据格式不对！请确保包含了 --SuperIgnoreDataV1"
+    L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。"
+    L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。"
+
+elseif locale == "zhTW" then
+    L.UI_ADD_TITLE = "加入超級黑名單"
+    L.UI_TARGET_NONE = "目標：無"
+    L.UI_TARGET_PREFIX = "目標：|cff00ff00"
+    L.UI_BTN_CONFIRM = "確認"
+    L.UI_BTN_CANCEL = "取消"
+    L.BTN_R1 = "代打"
+    L.BTN_R2 = "廣告"
+    L.BTN_R3 = "屁孩"
+    L.BTN_R4 = "外掛"
+    L.MENU_ADD = "加入超級黑名單"
+    L.REASON_MANUAL = "手動加入"
+    L.REASON_IMPORT = "匯入"
+    L.REASON_MS = "集合石同步"
+    L.UNKNOWN_VERSION = "未知版本"
+    L.PANEL_DESC1 = "SuperIgnore (超級黑名單) 是一款極簡、輕量、高效能的聊天過濾與黑名單管理插件。"
+    L.PANEL_DESC2 = "一次黑單，全戰網所有角色共同生效，還你清淨的艾澤拉斯！"
+    L.TAB_PLAYER = "封鎖玩家"
+    L.TAB_KEYWORD = "封鎖關鍵字"
+    L.TAB_DATA = "資料/同步"
+    L.TAB_ABOUT = "關於"
+    L.UI_PLAYER_INPUT = "玩家-伺服器:"
+    L.UI_REASON_INPUT = "備註:"
+    L.UI_BTN_ADD = "加入"
+    L.UI_KEYWORD_INPUT = "新增封鎖詞 (支援正則):"
+    L.UI_SEARCH = "搜尋:"
+    L.UI_BTN_EXPORT = "產生匯出代碼"
+    L.UI_BTN_IMPORT = "匯入並覆蓋合併"
+    L.UI_BTN_SYNC = "同步集合石黑名單"
+    L.UI_CHK_AUTOSYNC = "開啟面板自動同步"
+    L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
+    L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
+    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.2.0\n\n【v1.2.0 核心更新】\n- 全面支援多國語言 (簡中/繁中/英文)。\n- 優化底層資料清洗邏輯，提升跨服匹配精度。\n\n如果有任何 Bug 或建議，歡迎到 CurseForge 反饋！"
+    L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
+    L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
+    L.LIST_REASON_NONE = "無"
+    L.LIST_ADD_TIME = "加入時間: "
+    L.LIST_BTN_REMOVE = "移除"
+    
+    L.MSG_GROUP_DECLINED = "|cffff0000[SuperIgnore]|r 已自動拒絕黑名單玩家 %s 的組隊邀請。"
+    L.MSG_TRADE_DECLINED = "|cffff0000[SuperIgnore]|r 已自動拒絕黑名單玩家 %s 的交易請求。"
+    L.MSG_BLACKLISTED = "|cffff0000[SuperIgnore]|r 已封鎖 %s。原因：%s"
+    L.MSG_ADDED_KEYWORD = "|cffff0000[SuperIgnore]|r 已加入封鎖詞：%s"
+    L.MSG_EXPORTED = "|cffff0000[SuperIgnore]|r 代碼已產生，請按 Ctrl+C 複製。"
+    L.MSG_IMPORT_SUCCESS = "|cff00ff00[SuperIgnore]|r 匯入合併完成。新增: 玩家%d, 關鍵字%d"
+    L.MSG_IMPORT_FILTERED = "。|cffffff00已自動過濾 %d 筆無伺服器的無效資料。|r"
+    L.MSG_MS_SUCCESS = "|cff00ff00[SuperIgnore]|r 集合石自動同步觸發！已靜默抓取 %d 名新名單加入通用黑名單。"
+    
+    L.MSG_ERR_NO_REALM = "|cffff0000[SuperIgnore]|r 無法獲取該玩家的伺服器資訊，封鎖失敗！"
+    L.MSG_ERR_COMBAT = "|cffff0000[SuperIgnore]|r 戰鬥中系統限制，無法開啟設定面板，請脫戰後再試。"
+    L.MSG_ERR_NO_PANEL = "|cffff0000[SuperIgnore]|r 錯誤：設定面板未初始化。"
+    L.MSG_ERR_FORMAT = "|cffff0000[SuperIgnore]|r 錯誤：必須輸入包含伺服器的完整名字（如：張三-燃燒之刃）！"
+    L.MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r 資料格式錯誤！請確保包含了 --SuperIgnoreDataV1"
+    L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未偵測到網易集合石插件，或目前沒有集合石黑名單資料。"
+    L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步過，沒有發現新的黑名單。"
+end
+
+-- 1. 初始化数据库
 SuperIgnoreDB = SuperIgnoreDB or {}
 SuperIgnoreKeywordsDB = SuperIgnoreKeywordsDB or {}
 
 -- 2. 聊天过滤模块：屏蔽喊话和私聊
 local function ChatFilter(self, event, msg, author, ...)
-    -- 【新增】关键词/正则匹配拦截
     if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
-            -- 使用 Lua 的 find 进行正则/字符串匹配
             if msg:find(keyword) then
-                return true -- 只要触发关键词，整条消息直接蒸发
+                return true
             end
         end
     end
-
     
-    -- 将 author 拆分为名字和服务器
     local name, realm = strsplit("-", author)
-    
-    -- 如果拆分后没有服务器名（说明是同服玩家喊话），自动获取并补全当前服务器
     if not realm or realm == "" then
         realm = GetNormalizedRealmName()
     end
     
-    -- 拼接成和数据库里一模一样的 "名字-服务器" 绝对标准格式
     local fullName = name .. "-" .. realm
-
-    -- 直接用补全后的完整名字去匹配黑名单（为了保险，保留对原始 author 的回退检查）
     if SuperIgnoreDB[fullName] or SuperIgnoreDB[author] then
         return true 
     end
@@ -38,8 +214,6 @@ local function ChatFilter(self, event, msg, author, ...)
     return false
 end
 
-
--- 注册需要过滤的聊天频道
 ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ChatFilter)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ChatFilter)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", ChatFilter)
@@ -50,116 +224,99 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", ChatFilter)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", ChatFilter)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", ChatFilter)
 
--- 3. 组队与交易拦截模块：自动拒绝邀请
+-- 3. 组队与交易拦截模块
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PARTY_INVITE_REQUEST")
-frame:RegisterEvent("TRADE_REQUEST") -- 【新增】监听交易请求
+frame:RegisterEvent("TRADE_REQUEST")
 frame:SetScript("OnEvent", function(self, event, sender, ...)
     if event == "PARTY_INVITE_REQUEST" then
         local cleanSender = Ambiguate(sender, "none")
         if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
             DeclineGroup()
             StaticPopup_Hide("PARTY_INVITE")
-            print("|cffff0000[SuperIgnore]|r 已自动拒绝黑名单玩家 " .. sender .. " 的组队邀请。")
+            print(string.format(L.MSG_GROUP_DECLINED, sender))
         end
     elseif event == "TRADE_REQUEST" then
         local cleanSender = Ambiguate(sender, "none")
         if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
-            CancelTrade() -- 【新增】强行取消交易弹窗
-            print("|cffff0000[SuperIgnore]|r 已自动拒绝黑名单玩家 " .. sender .. " 的交易请求。")
+            CancelTrade()
+            print(string.format(L.MSG_TRADE_DECLINED, sender))
         end
     end
 end)
 
 
--- 4. 独立 UI 窗口 (带目标名字确认与防呆设计)
+-- 4. 独立 UI 窗口
 local f = CreateFrame("Frame", "SuperIgnoreUI", UIParent, "BasicFrameTemplateWithInset")
--- 高度从 160 增加到 180，给上方显示名字腾出空间
 f:SetSize(300, 180) 
 f:SetPoint("CENTER")
 f:Hide()
 f.title = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 f.title:SetPoint("CENTER", f.TitleBg, "CENTER", 0, 0)
-f.title:SetText("添加超级黑名单")
+f.title:SetText(L.UI_ADD_TITLE)
 
--- 【新增】目标玩家名字显示区域
 f.targetNameText = f:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
 f.targetNameText:SetPoint("TOP", 0, -35)
-f.targetNameText:SetText("目标：无")
+f.targetNameText:SetText(L.UI_TARGET_NONE)
 
--- 输入框
 f.editBox = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
 f.editBox:SetSize(260, 30)
--- 往下挪到了 -65 的位置，给上面的名字让位
 f.editBox:SetPoint("TOP", 0, -65) 
 f.editBox:SetAutoFocus(true)
 
--- 确认按钮
 f.confirm = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
 f.confirm:SetSize(80, 25)
 f.confirm:SetPoint("BOTTOMLEFT", 40, 20)
-f.confirm:SetText("确认")
+f.confirm:SetText(L.UI_BTN_CONFIRM)
 
--- 【新增】取消按钮 (防手滑)
 f.cancel = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
 f.cancel:SetSize(80, 25)
 f.cancel:SetPoint("BOTTOMRIGHT", -40, 20)
-f.cancel:SetText("取消")
+f.cancel:SetText(L.UI_BTN_CANCEL)
 f.cancel:SetScript("OnClick", function() f:Hide() end)
 
--- 快捷按钮逻辑
-local reasons = {"代练", "广告", "喷子", "SB"}
+local reasons = {L.BTN_R1, L.BTN_R2, L.BTN_R3, L.BTN_R4}
 for i, reason in ipairs(reasons) do
     local btn = CreateFrame("Button", nil, f, "UIPanelButtonTemplate")
     btn:SetSize(60, 22)
     btn:SetText(reason)
-    -- 动态排布
     btn:SetPoint("TOPLEFT", f.editBox, "BOTTOMLEFT", (i-1)*65, -5)
     btn:SetScript("OnClick", function() f.editBox:SetText(reason) end)
 end
 
--- 逻辑处理
-
 f.confirm:SetScript("OnClick", function()
     local name = f.playerName
     local reason = f.editBox:GetText()
-    if reason == "" then reason = "手动添加" end
+    if reason == "" then reason = L.REASON_MANUAL end
     
-    -- 确保库存在，防止极低概率的报错
     SuperIgnoreDB = SuperIgnoreDB or {} 
-    
-    -- 直接写入内存，魔兽引擎会自动负责落盘保存
     SuperIgnoreDB[name] = {reason = reason, time = date("%Y-%m-%d %H:%M")}
     
-    print("|cffff0000[SuperIgnore]|r 已拉黑 " .. name .. "。原因：" .. reason)
+    print(string.format(L.MSG_BLACKLISTED, name, reason))
     f:Hide()
 end)
 
--- 供右键菜单和斜杠命令调用的统一入口
 function ShowSuperIgnoreUI(name)
     if not name or name == "" then return end
 
-    -- 如果右键获取到的名字是个残次品（没带服务器），直接在控制台报错，绝不拉起弹窗！
     if not string.find(name, "-") then
-        print("|cffff0000[SuperIgnore]|r 无法获取该玩家的服务器信息，拉黑失败！")
+        print(L.MSG_ERR_NO_REALM)
         return
     end
 
     f.playerName = name
-    f.targetNameText:SetText("目标：|cff00ff00" .. name .. "|r") 
+    f.targetNameText:SetText(L.UI_TARGET_PREFIX .. name .. "|r") 
     f.editBox:SetText("")
     f:Show()
 end
 
-    
--- 5. 修正后的菜单注入逻辑（终极兼容版，彻底解决跨服与消失问题）
+-- 5. 菜单注入逻辑
 local function InjectSuperIgnore(ownerRegion, rootDescription, contextData)
     if not contextData then return end
     
     local finalName = nil
     local myRealm = GetNormalizedRealmName() or ""
     
-    -- 1. 头像右键 (最高优先级，解决跨服副本里只有名字没有服务器的 Bug)
     if contextData.unit and type(contextData.unit) == "string" then
         local name, realm = UnitName(contextData.unit)
         if name then
@@ -171,43 +328,35 @@ local function InjectSuperIgnore(ownerRegion, rootDescription, contextData)
         end
     end
     
-    -- 2. 聊天频道右键 (如果不是点头像，而是点聊天频道)
     if not finalName and contextData.name then
         finalName = contextData.name
-        -- 跨服聊天时，原生系统可能会把服务器单独放在 contextData.server 里
         if not string.find(finalName, "-") and contextData.server and contextData.server ~= "" then
             finalName = finalName .. "-" .. contextData.server
         end
     end
     
-    -- 3. 聊天链接提取 (保底)
     if not finalName and contextData.link then
         local linkName = string.match(contextData.link, "player:([^:]+)")
         if linkName then finalName = linkName end
     end
     
-    -- 4. 终极格式化与生成菜单
     if finalName and finalName ~= "" then
-        -- 暴雪API返回的服务器名常常带隐形空格，必须干掉
         finalName = string.gsub(finalName, "%s+", "")
         
-        -- 最终防呆：如果到这一步还没有 "-"，只能补全当前服务器
         if not string.find(finalName, "-") and myRealm ~= "" then
             finalName = finalName .. "-" .. myRealm
         end
         
-        -- 防手滑设计：不在自己的头像上生成拉黑按钮
         local myName = UnitName("player")
         if finalName == (myName .. "-" .. myRealm) then return end
         
         rootDescription:CreateDivider()
-        rootDescription:CreateButton("加入超级黑名单", function()
+        rootDescription:CreateButton(L.MENU_ADD, function()
             ShowSuperIgnoreUI(finalName)
         end)
     end
 end
 
--- 保持菜单注册逻辑不变
 if Menu and Menu.ModifyMenu then
     local menuList = {"MENU_UNIT_PLAYER", "MENU_UNIT_TARGET", "MENU_UNIT_PARTY", "MENU_UNIT_RAID_PLAYER", "MENU_CHAT_PLAYER", "MENU_CHAT_LINK", "MENU_CHAT_ROSTER", "MENU_UNIT_FRIEND"}
     for _, menuID in ipairs(menuList) do
@@ -215,90 +364,68 @@ if Menu and Menu.ModifyMenu then
     end
 end
 
--- 6. 斜杠命令 (极简路由版：只负责打开面板)
+-- 6. 斜杠命令
 SLASH_SUPERIGNORE1 = "/si"
 SlashCmdList["SUPERIGNORE"] = function()
-    -- 【新增】战斗状态安全拦截
     if InCombatLockdown() then
-        print("|cffff0000[SuperIgnore]|r 战斗中系统限制，无法打开设置面板，请脱战后再试。")
+        print(L.MSG_ERR_COMBAT)
         return
     end
 
     if SuperIgnoreCategory then
-        -- 直接翻页到我们的插件管理面板
         Settings.OpenToCategory(SuperIgnoreCategory:GetID())
     else
-        print("|cffff0000[SuperIgnore]|r 错误：设置面板未初始化。")
+        print(L.MSG_ERR_NO_PANEL)
     end
 end
 
-
-
-
-
--- 7. 插件管理面板 (带玩家/关键词/导出导入 三大模块)
+-- 7. 插件管理面板
 local panel = CreateFrame("Frame", "SuperIgnoreOptionsPanel")
-
--- 动态读取 TOC 文件中的版本号 (纯净版)
 local addonVersion = C_AddOns.GetAddOnMetadata("SuperIgnore", "Version")
 
 panel.name = "SuperIgnore" 
 
--- ==========================================
--- 标题与简介区域
--- ==========================================
--- 1. 主标题
 local panelTitle = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 panelTitle:SetPoint("TOPLEFT", 16, -16)
-panelTitle:SetText("SuperIgnore v" .. (addonVersion or "未知版本"))
+panelTitle:SetText("SuperIgnore v" .. (addonVersion or L.UNKNOWN_VERSION))
 
--- 2. 新增简介文字 (第一行)
 local panelDesc1 = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 panelDesc1:SetPoint("TOPLEFT", panelTitle, "BOTTOMLEFT", 0, -10)
-panelDesc1:SetText("SuperIgnore (超级黑名单) 是一款极简、轻量、高性能的聊天过滤与黑名单管理插件。")
+panelDesc1:SetText(L.PANEL_DESC1)
 
--- 3. 新增简介文字 (第二行)
 local panelDesc2 = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 panelDesc2:SetPoint("TOPLEFT", panelDesc1, "BOTTOMLEFT", 0, -6)
-panelDesc2:SetText("一次拉黑，全战网所有角色共同生效，还你清净的艾泽拉斯！")
+panelDesc2:SetText(L.PANEL_DESC2)
 
 local currentMode = "PLAYER" 
 
--- ==========================================
--- 顶部页签按钮
--- ==========================================
 local btnPlayers = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnPlayers:SetSize(100, 25)
-
 btnPlayers:SetPoint("TOPLEFT", 16, -95)
-btnPlayers:SetText("屏蔽玩家")
+btnPlayers:SetText(L.TAB_PLAYER)
 
 local btnKeywords = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnKeywords:SetSize(100, 25)
 btnKeywords:SetPoint("LEFT", btnPlayers, "RIGHT", 10, 0)
-btnKeywords:SetText("屏蔽关键词")
+btnKeywords:SetText(L.TAB_KEYWORD)
 
 local btnData = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnData:SetSize(100, 25)
 btnData:SetPoint("LEFT", btnKeywords, "RIGHT", 10, 0)
-btnData:SetText("数据/同步")
+btnData:SetText(L.TAB_DATA)
 
--- 【新增】：“关于”按钮
 local btnAbout = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnAbout:SetSize(80, 25)
 btnAbout:SetPoint("LEFT", btnData, "RIGHT", 10, 0)
-btnAbout:SetText("关于")
+btnAbout:SetText(L.TAB_ABOUT)
 
--- ==========================================
--- 玩家模式组件
--- ==========================================
 local addPlayerNameBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 addPlayerNameBox:SetSize(130, 30)
 addPlayerNameBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 5, -35)
 addPlayerNameBox:SetAutoFocus(false)
 addPlayerNameBox.title = addPlayerNameBox:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
 addPlayerNameBox.title:SetPoint("BOTTOMLEFT", addPlayerNameBox, "TOPLEFT", 0, 5)
-addPlayerNameBox.title:SetText("玩家-服务器:")
+addPlayerNameBox.title:SetText(L.UI_PLAYER_INPUT)
 
 local addPlayerReasonBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 addPlayerReasonBox:SetSize(100, 30)
@@ -306,10 +433,9 @@ addPlayerReasonBox:SetPoint("LEFT", addPlayerNameBox, "RIGHT", 15, 0)
 addPlayerReasonBox:SetAutoFocus(false)
 addPlayerReasonBox.title = addPlayerReasonBox:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
 addPlayerReasonBox.title:SetPoint("BOTTOMLEFT", addPlayerReasonBox, "TOPLEFT", 0, 5)
-addPlayerReasonBox.title:SetText("备注:")
+addPlayerReasonBox.title:SetText(L.UI_REASON_INPUT)
 
 local quickBtns = {}
-local reasons = {"代练", "广告", "喷子", "SB"}
 for i, r in ipairs(reasons) do
     local btn = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
     btn:SetSize(40, 22)
@@ -326,52 +452,54 @@ end
 local btnAddPlayer = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnAddPlayer:SetSize(60, 25)
 btnAddPlayer:SetPoint("LEFT", quickBtns[#quickBtns], "RIGHT", 10, 0)
-btnAddPlayer:SetText("添加")
+btnAddPlayer:SetText(L.UI_BTN_ADD)
 
--- ==========================================
--- 关键词模式组件
--- ==========================================
 local addWordBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 addWordBox:SetSize(180, 30)
 addWordBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 5, -35)
 addWordBox:SetAutoFocus(false)
 addWordBox.title = addWordBox:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
 addWordBox.title:SetPoint("BOTTOMLEFT", addWordBox, "TOPLEFT", 0, 5)
-addWordBox.title:SetText("新增屏蔽词 (支持正则):")
+addWordBox.title:SetText(L.UI_KEYWORD_INPUT)
 
 local btnAddWord = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
 btnAddWord:SetSize(60, 25)
 btnAddWord:SetPoint("LEFT", addWordBox, "RIGHT", 10, 0)
-btnAddWord:SetText("添加")
+btnAddWord:SetText(L.UI_BTN_ADD)
 
--- ==========================================
--- 列表 UI 组件 (服务于玩家和关键词模式)
--- ==========================================
 local searchBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 searchBox:SetSize(200, 30)
-
 searchBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 45, -90)
 searchBox:SetAutoFocus(false)
-
 searchBox.title = searchBox:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
-
 searchBox.title:SetPoint("RIGHT", searchBox, "LEFT", -5, 0)
-searchBox.title:SetText("搜索:")
+searchBox.title:SetText(L.UI_SEARCH)
 
 local scrollFrame = CreateFrame("ScrollFrame", nil, panel, "UIPanelScrollFrameTemplate")
-
 scrollFrame:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -5, -10)
 scrollFrame:SetPoint("BOTTOMRIGHT", -30, 20)
+
+
+scrollFrame:EnableMouseWheel(true)
+scrollFrame:SetScript("OnMouseWheel", function(self, delta)
+    local currentScroll = self:GetVerticalScroll()
+    local maxScroll = self:GetVerticalScrollRange()
+    local step = 30 
+    
+    local newScroll = currentScroll - (delta * step)
+    if newScroll < 0 then newScroll = 0 end
+    if newScroll > maxScroll then newScroll = maxScroll end
+    
+    self:SetVerticalScroll(newScroll)
+end)
 
 local scrollChild = CreateFrame("Frame", nil, scrollFrame)
 scrollChild:SetSize(550, 1) 
 scrollFrame:SetScrollChild(scrollChild)
 
+
 local rows = {}
 
--- ==========================================
--- 导入/导出 UI 组件
--- ==========================================
 local dataFrame = CreateFrame("Frame", nil, panel)
 dataFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
 dataFrame:SetPoint("BOTTOMRIGHT", -30, 20)
@@ -380,46 +508,48 @@ dataFrame:Hide()
 local btnGenerate = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnGenerate:SetSize(120, 25)
 btnGenerate:SetPoint("TOPLEFT", 5, 0)
-btnGenerate:SetText("生成导出代码")
+btnGenerate:SetText(L.UI_BTN_EXPORT)
 
 local btnImportData = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnImportData:SetSize(130, 25)
 btnImportData:SetPoint("LEFT", btnGenerate, "RIGHT", 20, 0)
-btnImportData:SetText("导入并覆盖合并")
+btnImportData:SetText(L.UI_BTN_IMPORT)
 
--- 【新增】：集合石同步按钮
 local btnSyncMS = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnSyncMS:SetSize(160, 25)
--- 定位在“导入并覆盖合并”按钮的右侧
 btnSyncMS:SetPoint("LEFT", btnImportData, "RIGHT", 20, 0) 
-btnSyncMS:SetText("同步集合石屏蔽列表")
+btnSyncMS:SetText(L.UI_BTN_SYNC)
 
--- 【新增】：自动同步复选框
 local chkAutoSync = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
--- 将它定位在“同步集合石列表”按钮的右侧
 chkAutoSync:SetPoint("LEFT", btnSyncMS, "RIGHT", 15, 0)
-chkAutoSync.Text:SetText("打开面板自动同步")
+chkAutoSync.Text:SetText(L.UI_CHK_AUTOSYNC)
 chkAutoSync.Text:SetFontObject("GameFontHighlightSmall")
-
--- 点击复选框时，保存状态到数据库
 chkAutoSync:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC__"] = self:GetChecked()
 end)
 
-
-
--- 【新增】：数据统计显示文本
 local dataStatsText = dataFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
--- 定位在代码框的左上角，三个按钮的下方
 dataStatsText:SetPoint("TOPLEFT", btnGenerate, "BOTTOMLEFT", 5, -8)
 
 local dataScroll = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
-
 dataScroll:SetPoint("TOPLEFT", btnGenerate, "BOTTOMLEFT", 0, -25)
 dataScroll:SetPoint("BOTTOMRIGHT", 0, 0)
 
--- 使用原生底板使其看起来像个真正的代码框
+
+dataScroll:EnableMouseWheel(true)
+dataScroll:SetScript("OnMouseWheel", function(self, delta)
+    local currentScroll = self:GetVerticalScroll()
+    local maxScroll = self:GetVerticalScrollRange()
+    local step = 50 
+    
+    local newScroll = currentScroll - (delta * step)
+    if newScroll < 0 then newScroll = 0 end
+    if newScroll > maxScroll then newScroll = maxScroll end
+    
+    self:SetVerticalScroll(newScroll)
+end)
+
 local dataBackdrop = CreateFrame("Frame", nil, dataScroll, "TooltipBackdropTemplate")
 dataBackdrop:SetPoint("TOPLEFT", -5, 5)
 dataBackdrop:SetPoint("BOTTOMRIGHT", 25, -5)
@@ -432,38 +562,23 @@ dataEditBox:SetWidth(520)
 dataEditBox:SetAutoFocus(false)
 dataScroll:SetScrollChild(dataEditBox)
 
-
--- ==========================================
--- 关于 (About) UI 组件
--- ==========================================
 local aboutFrame = CreateFrame("Frame", nil, panel)
 aboutFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
 aboutFrame:SetPoint("BOTTOMRIGHT", -30, 20)
 aboutFrame:Hide()
 
--- 作者与版本信息
 local aboutTitle = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 aboutTitle:SetPoint("TOPLEFT", 10, -10)
-aboutTitle:SetText("SuperIgnore (超级黑名单)")
+aboutTitle:SetText(L.ABOUT_TITLE)
 
 local aboutAuthor = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 aboutAuthor:SetPoint("TOPLEFT", aboutTitle, "BOTTOMLEFT", 0, -15)
-aboutAuthor:SetText("作者: okqiyi \n" ..
-                    "版本: v1.1.0\n\n" ..
-                    "【v1.1.0 核心更新】\n" ..
-                    "- 新增自动同步网易集合石黑名单功能。\n" ..
-                    "- 优化底层数据清洗逻辑，提升跨服匹配精度。\n\n" ..
-                    "如果遇到 Bug 或有功能建议，欢迎在 NGA 原创插件区反馈！")
+aboutAuthor:SetText(L.ABOUT_TEXT)
 aboutAuthor:SetJustifyH("LEFT") 
 
-
--- ==========================================
--- 【新增】NGA 帖子链接
--- ==========================================
 local ngaTitle = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-
 ngaTitle:SetPoint("TOPLEFT", aboutAuthor, "BOTTOMLEFT", 0, -20)
-ngaTitle:SetText("NGA  (请按 Ctrl+C 复制):")
+ngaTitle:SetText(L.ABOUT_NGA)
 
 local ngaBox = CreateFrame("EditBox", nil, aboutFrame, "InputBoxTemplate")
 ngaBox:SetSize(420, 30)
@@ -471,21 +586,15 @@ ngaBox:SetPoint("TOPLEFT", ngaTitle, "BOTTOMLEFT", 5, -5)
 ngaBox:SetAutoFocus(false)
 ngaBox:SetText("https://bbs.nga.cn/read.php?tid=47106371")
 ngaBox:SetCursorPosition(0)
--- 阻止玩家修改网址
 ngaBox:SetScript("OnTextChanged", function(self)
     if self:GetText() ~= "https://bbs.nga.cn/read.php?tid=47106371" then
         self:SetText("https://bbs.nga.cn/read.php?tid=47106371")
     end
 end)
 
-
--- ==========================================
--- CurseForge 下载链接
--- ==========================================
 local urlTitle = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-
 urlTitle:SetPoint("TOPLEFT", ngaBox, "BOTTOMLEFT", -5, -15)
-urlTitle:SetText("CurseForge  (请按 Ctrl+C 复制):")
+urlTitle:SetText(L.ABOUT_CF)
 
 local urlBox = CreateFrame("EditBox", nil, aboutFrame, "InputBoxTemplate")
 urlBox:SetSize(420, 30)
@@ -493,31 +602,24 @@ urlBox:SetPoint("TOPLEFT", urlTitle, "BOTTOMLEFT", 5, -5)
 urlBox:SetAutoFocus(false)
 urlBox:SetText("https://www.curseforge.com/wow/addons/superignore")
 urlBox:SetCursorPosition(0)
--- 阻止玩家修改网址
 urlBox:SetScript("OnTextChanged", function(self)
     if self:GetText() ~= "https://www.curseforge.com/wow/addons/superignore" then
         self:SetText("https://www.curseforge.com/wow/addons/superignore")
     end
 end)
 
-
--- ==========================================
--- 核心刷新与界面切换逻辑
--- ==========================================
 local function RefreshList()
-    -- 隐藏所有面板组件
     addPlayerNameBox:Hide(); addPlayerReasonBox:Hide(); btnAddPlayer:Hide()
     for _, b in ipairs(quickBtns) do b:Hide() end
     addWordBox:Hide(); btnAddWord:Hide()
     dataFrame:Hide()
-	aboutFrame:Hide()
+    aboutFrame:Hide()
     
     btnPlayers:UnlockHighlight()
     btnKeywords:UnlockHighlight()
     btnData:UnlockHighlight()
-	btnAbout:UnlockHighlight()
+    btnAbout:UnlockHighlight()
 
-    -- 根据当前模式展示对应的组件
     if currentMode == "PLAYER" then
         btnPlayers:LockHighlight()
         addPlayerNameBox:Show(); addPlayerReasonBox:Show(); btnAddPlayer:Show()
@@ -530,21 +632,21 @@ local function RefreshList()
     elseif currentMode == "DATA" then
         btnData:LockHighlight()
         dataFrame:Show()
-        aboutFrame:Hide()
         
-        -- 让自动同步默认打勾。只有明确被玩家关掉 (false) 时才取消勾选
         if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC__"] == false then
             chkAutoSync:SetChecked(false)
         else
             chkAutoSync:SetChecked(true)
         end
         
-        -- 数据统计逻辑
         local pCount, kCount = 0, 0
-        for _ in pairs(SuperIgnoreDB or {}) do pCount = pCount + 1 end
+        for k, _ in pairs(SuperIgnoreDB or {}) do 
+            if k ~= "__CONFIG_AUTOSYNC__" then pCount = pCount + 1 end 
+        end
         for _ in pairs(SuperIgnoreKeywordsDB or {}) do kCount = kCount + 1 end
+        
         if dataStatsText then
-            dataStatsText:SetText(string.format("当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个", pCount, kCount))
+            dataStatsText:SetText(string.format(L.STATS_TEXT, pCount, kCount))
         end
         
         searchBox:Hide(); scrollFrame:Hide()
@@ -553,20 +655,15 @@ local function RefreshList()
     elseif currentMode == "ABOUT" then
         btnAbout:LockHighlight()
         aboutFrame:Show()
-        dataFrame:Hide() 
         
         searchBox:Hide(); scrollFrame:Hide()
         return
     end
     
-    -- 确保切回 PLAYER 或 KEYWORD 时，搜索框能正常显示
     if currentMode ~= "DATA" and currentMode ~= "ABOUT" then
         searchBox:Show(); scrollFrame:Show()
     end
-			
-	
 
-    -- 渲染列表逻辑
     local filter = searchBox:GetText():lower()
     for _, row in ipairs(rows) do row:Hide() end
     
@@ -575,84 +672,96 @@ local function RefreshList()
     local targetDB = (currentMode == "PLAYER") and SuperIgnoreDB or SuperIgnoreKeywordsDB
     local myRealm = GetNormalizedRealmName()
 
+    -- 【修改1】：将无序的哈希表转为数组，以便进行时间排序
+    local sortedItems = {}
     if targetDB then
         for key, data in pairs(targetDB) do
-            local displayKey = key
-            local subText = ""
-
-            if currentMode == "PLAYER" then
-                local reason = data.reason or "无"
-                local timeStr = data.time or ""
-                subText = reason .. " (" .. timeStr .. ")"
-                if not displayKey:find("-") then displayKey = displayKey .. "-" .. myRealm end
-            else
-                subText = "添加时间: " .. tostring(data)
-            end
-
-            if filter == "" or displayKey:lower():find(filter) or subText:lower():find(filter) then
-                local row = rows[rowIndex]
-                if not row then
-                    row = CreateFrame("Frame", nil, scrollChild)
-                    row:SetSize(550, 30) 
-                    
-                    row.nameText = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-                    row.nameText:SetPoint("LEFT", 5, 0)
-                    row.nameText:SetWidth(180)
-                    row.nameText:SetJustifyH("LEFT")
-                    row.nameText:SetTextColor(1, 0.8, 0)
-                    
-                    row.reasonText = row:CreateFontString(nil, "ARTWORK", "GameFontDisable")
-                    row.reasonText:SetPoint("LEFT", row.nameText, "RIGHT", 10, 0)
-                    row.reasonText:SetWidth(250)
-                    row.reasonText:SetJustifyH("LEFT")
-                    
-                    row.removeBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
-                    row.removeBtn:SetSize(60, 22)
-                    row.removeBtn:SetPoint("RIGHT", row, "RIGHT", -10, 0)
-                    row.removeBtn:SetText("移除")
-                    
-                    rows[rowIndex] = row
-                end
-                
-                row.nameText:SetText(displayKey)
-                row.reasonText:SetText(subText)
-                
-                row.removeBtn:SetScript("OnClick", function()
-                    targetDB[key] = nil
-                    
-                    RefreshList()
-                end)
-                
-                row:ClearAllPoints()
-                row:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
-                row:Show()
-                
-                yOffset = yOffset + 30
-                rowIndex = rowIndex + 1
+            if key ~= "__CONFIG_AUTOSYNC__" then
+                table.insert(sortedItems, {key = key, data = data})
             end
         end
+        
+        -- 【修改2】：按照时间进行降序排序（最新的在前面）
+        table.sort(sortedItems, function(a, b)
+            local timeA = (currentMode == "PLAYER") and (type(a.data) == "table" and a.data.time or "") or tostring(a.data)
+            local timeB = (currentMode == "PLAYER") and (type(b.data) == "table" and b.data.time or "") or tostring(b.data)
+            return timeA > timeB 
+        end)
     end
+
+    -- 【修改3】：改用 ipairs 遍历排好序的数组
+    for _, item in ipairs(sortedItems) do
+        local key = item.key
+        local data = item.data
+        local displayKey = key
+        local subText = ""
+
+        if currentMode == "PLAYER" then
+            local reason = data.reason or L.LIST_REASON_NONE
+            local timeStr = data.time or ""
+            -- 【修改4】：将格式重组为 “时间    备注” 
+            subText = timeStr .. "    " .. reason
+            if not displayKey:find("-") then displayKey = displayKey .. "-" .. myRealm end
+        else
+            subText = L.LIST_ADD_TIME .. tostring(data)
+        end
+
+        if filter == "" or displayKey:lower():find(filter) or subText:lower():find(filter) then
+            local row = rows[rowIndex]
+            if not row then
+                row = CreateFrame("Frame", nil, scrollChild)
+                row:SetSize(550, 30) 
+                
+                row.nameText = row:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+                row.nameText:SetPoint("LEFT", 5, 0)
+                row.nameText:SetWidth(180)
+                row.nameText:SetJustifyH("LEFT")
+                row.nameText:SetTextColor(1, 0.8, 0)
+                
+                row.reasonText = row:CreateFontString(nil, "ARTWORK", "GameFontDisable")
+                row.reasonText:SetPoint("LEFT", row.nameText, "RIGHT", 10, 0)
+                row.reasonText:SetWidth(250)
+                row.reasonText:SetJustifyH("LEFT")
+                
+                row.removeBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
+                row.removeBtn:SetSize(60, 22)
+                row.removeBtn:SetPoint("RIGHT", row, "RIGHT", -10, 0)
+                row.removeBtn:SetText(L.LIST_BTN_REMOVE)
+                
+                rows[rowIndex] = row
+            end
+            
+            row.nameText:SetText(displayKey)
+            row.reasonText:SetText(subText)
+            
+            row.removeBtn:SetScript("OnClick", function()
+                targetDB[key] = nil
+                RefreshList()
+            end)
+            
+            row:ClearAllPoints()
+            row:SetPoint("TOPLEFT", scrollChild, "TOPLEFT", 0, -yOffset)
+            row:Show()
+            
+            yOffset = yOffset + 30
+            rowIndex = rowIndex + 1
+        end
+    end
+    
     scrollChild:SetHeight(math.max(yOffset + 10, 1))
 end
 
--- ==========================================
--- 绑定点击与输入事件
--- ==========================================
 btnPlayers:SetScript("OnClick", function() currentMode = "PLAYER"; RefreshList() end)
 btnKeywords:SetScript("OnClick", function() currentMode = "KEYWORD"; RefreshList() end)
 btnData:SetScript("OnClick", function() currentMode = "DATA"; RefreshList() end)
 btnAbout:SetScript("OnClick", function() currentMode = "ABOUT"; RefreshList() end) 
 
-
--- 手动添加玩家事件 (恢复自动补全与防呆清理)
 btnAddPlayer:SetScript("OnClick", function()
     local name = addPlayerNameBox:GetText()
     if not name or name == "" then return end
     
-    -- 清理复制粘贴时可能带入的首尾空格
     name = string.match(name, "^%s*(.-)%s*$")
     
-    -- 【核心修复】：如果发现名字没带 "-", 自动拿当前服务器补全
     if not string.find(name, "-") then
         local myRealm = GetNormalizedRealmName() or ""
         if myRealm ~= "" then
@@ -660,22 +769,20 @@ btnAddPlayer:SetScript("OnClick", function()
         end
     end
     
-    -- 终极防呆：如果系统抽风没取到服务器，再进行红字拦截
     if not string.find(name, "-") then
-        print("|cffff0000[SuperIgnore]|r 错误：必须输入包含服务器的完整名字（如：张三-燃烧之刃）！")
+        print(L.MSG_ERR_FORMAT)
         return
     end
     
     local reason = addPlayerReasonBox:GetText()
-    if reason == "" then reason = "手动添加" end
+    if reason == "" then reason = L.REASON_MANUAL end
     
     SuperIgnoreDB[name] = {reason = reason, time = date("%Y-%m-%d %H:%M")}
-    -- 这里已经清除了引发报错的 SaveVariables
     
     addPlayerNameBox:SetText("")
     addPlayerReasonBox:SetText("")
     RefreshList()
-    print("|cffff0000[SuperIgnore]|r 已拉黑：" .. name)
+    print(string.format(L.MSG_BLACKLISTED, name, reason))
 end)
 
 btnAddWord:SetScript("OnClick", function()
@@ -685,18 +792,14 @@ btnAddWord:SetScript("OnClick", function()
         
         addWordBox:SetText("")
         RefreshList()
-        print("|cffff0000[SuperIgnore]|r 已添加屏蔽词：" .. word)
+        print(string.format(L.MSG_ADDED_KEYWORD, word))
     end
 end)
 
-
-
--- 生成导出数据 
 btnGenerate:SetScript("OnClick", function()
     local lines = {"--SuperIgnoreDataV1"}
     
     for k, v in pairs(SuperIgnoreDB or {}) do
-        -- 数据库里存的是什么标准格式，就原封不动地导出什么
         table.insert(lines, "P^" .. k .. "^" .. (v.reason or "") .. "^" .. (v.time or ""))
     end
     
@@ -706,27 +809,24 @@ btnGenerate:SetScript("OnClick", function()
     
     dataEditBox:SetText(table.concat(lines, "\n"))
     dataEditBox:HighlightText()
-    print("|cffff0000[SuperIgnore]|r 代码已生成，请按 Ctrl+C 复制。")
+    print(L.MSG_EXPORTED)
 end)
 
-
--- 导入解析数据 (脏数据清洗模式)
 btnImportData:SetScript("OnClick", function()
     local str = dataEditBox:GetText()
     
     if not str or str == "" then return end
     if not string.find(str, "--SuperIgnoreDataV1", 1, true) then
-        print("|cffff0000[SuperIgnore]|r 数据格式不对！请确保包含了 --SuperIgnoreDataV1")
+        print(L.MSG_ERR_IMPORT)
         return
     end
     
     local pCount, kCount = 0, 0
-    local skipCount = 0 -- 记录被清洗掉的无效数据
+    local skipCount = 0
     
     for line in str:gmatch("[^\r\n]+") do
         line = string.match(line, "^%s*(.-)%s*$")
         if line and line ~= "" and string.sub(line, 1, 2) ~= "--" then
-            -- ... (中间的字符串拆解逻辑保持不变，直到执行存入的部分) ...
             local typeTag, nameOrWord, reason, time = "", "", "", ""
             
             local i1 = string.find(line, "%^")
@@ -749,11 +849,10 @@ btnImportData:SetScript("OnClick", function()
                 end
             end
             
-            -- 【核心清洗逻辑】：执行存入前进行铁血安检
             if typeTag == "P" and nameOrWord ~= "" then
                 if string.find(nameOrWord, "-") then
                     SuperIgnoreDB = SuperIgnoreDB or {}
-                    SuperIgnoreDB[nameOrWord] = { reason = reason ~= "" and reason or "导入", time = time ~= "" and time or date("%Y-%m-%d %H:%M") }
+                    SuperIgnoreDB[nameOrWord] = { reason = reason ~= "" and reason or L.REASON_IMPORT, time = time ~= "" and time or date("%Y-%m-%d %H:%M") }
                     pCount = pCount + 1
                 else
                     skipCount = skipCount + 1
@@ -766,9 +865,9 @@ btnImportData:SetScript("OnClick", function()
         end
     end 
 
-    local msg = string.format("|cff00ff00[SuperIgnore]|r 导入合并完成。新增: 玩家%d, 关键词%d", pCount, kCount)
+    local msg = string.format(L.MSG_IMPORT_SUCCESS, pCount, kCount)
     if skipCount > 0 then
-        msg = msg .. string.format("。|cffffff00已自动过滤 %d 条无服务器的无效数据。|r", skipCount)
+        msg = msg .. string.format(L.MSG_IMPORT_FILTERED, skipCount)
     end
     print(msg)
     
@@ -776,14 +875,10 @@ btnImportData:SetScript("OnClick", function()
     pcall(RefreshList)
 end) 
 
--- ==========================================
--- 核心逻辑：执行集合石同步
--- ==========================================
--- 参数 isAuto: 如果为 true，代表是系统自动触发的，不需要在没抓到人时报黄字打扰玩家
 local function DoSyncMeetingStone(isAuto)
     if not MEETINGSTONE_UI_DB or not MEETINGSTONE_UI_DB.global or not MEETINGSTONE_UI_DB.global.UIMemory or not MEETINGSTONE_UI_DB.global.UIMemory.IGNORE_LIST then
         if not isAuto then
-            print("|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。")
+            print(L.MSG_ERR_NO_MS)
         end
         return
     end
@@ -794,7 +889,7 @@ local function DoSyncMeetingStone(isAuto)
 
     for _, data in ipairs(msList) do
         local name = data.leader
-        local reason = data.dep or "集合石同步"
+        local reason = data.dep or L.REASON_MS
         local timeStr = data.time or date("%Y-%m-%d %H:%M")
 
         if name and name ~= "" and string.find(name, "-") and not SuperIgnoreDB[name] then
@@ -804,27 +899,22 @@ local function DoSyncMeetingStone(isAuto)
     end
 
     if count > 0 then
-        print("|cff00ff00[SuperIgnore]|r 集合石自动同步触发！已静默抓取 " .. count .. " 名新名单加入通用黑名单。")
+        print(string.format(L.MSG_MS_SUCCESS, count))
         if RefreshList then RefreshList() end
     else
-        -- 只有玩家手动点击按钮时，如果没有新数据，才提示黄字
         if not isAuto then
-            print("|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。")
+            print(L.MSG_MS_EMPTY)
         end
     end
 end
 
--- 绑定手动同步按钮
 btnSyncMS:SetScript("OnClick", function() 
-    DoSyncMeetingStone(false) -- 手动点击，isAuto = false
+    DoSyncMeetingStone(false)
 end)
-
 
 searchBox:SetScript("OnTextChanged", RefreshList)
 
--- 面板显示事件
 panel:SetScript("OnShow", function()
-    -- 【修改】：只要不是明确手动关掉的 (false)，就默认执行静默同步
     if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC__"] ~= false then
         if DoSyncMeetingStone then 
             DoSyncMeetingStone(true) 
