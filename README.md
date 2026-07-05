@@ -88,11 +88,15 @@ Here you can manage your blocked players, keywords, whitelist, smart filters, an
 
 🔗 [CurseForge 官方页面直达](https://www.curseforge.com/wow/addons/superignore)
 
-<img width="819" height="830" alt="2" src="https://github.com/user-attachments/assets/7767c8fe-d260-4c07-9105-bf9eef3f0daa" />
 
-<img width="821" height="822" alt="3" src="https://github.com/user-attachments/assets/48e1c7b0-abdf-4a7a-9805-6099d74923ff" />
 
-<img width="816" height="826" alt="4" src="https://github.com/user-attachments/assets/edcdcf43-aced-47d4-9ba8-4bd475e11e6c" />
+
+<img width="815" height="820" alt="1" src="https://github.com/user-attachments/assets/2b67183b-06b4-4f25-9dbf-b34e788b1d20" />
+<img width="812" height="819" alt="2" src="https://github.com/user-attachments/assets/274ad1d0-7ab0-4f01-a24a-fbce5912f616" />
+<img width="812" height="822" alt="3" src="https://github.com/user-attachments/assets/b568429d-1d6f-47f5-81e2-700d0e21040d" />
+<img width="816" height="814" alt="4" src="https://github.com/user-attachments/assets/0e77c935-3cd6-499b-8551-1656f53e4c35" />
+
+
 
 
 
