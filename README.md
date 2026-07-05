@@ -17,7 +17,7 @@ SuperIgnore is a lightweight, high-performance addon designed to provide a compr
 
 
 
-📝 Changelog / 更新日志
+📝 Changelog / 更新日志<br>
   v1.1.0  - （2026.07.05）
 
 New Feature / 新增功能: Added one-click and automatic sync with the NetEase Meeting Stone ignore list. Converts your temporary group-finder ignores into permanent, account-wide blacklists.<br>
