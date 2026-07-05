@@ -1,5 +1,5 @@
--- SuperIgnore v1.2.0
--- A lightweight, account-wide ignore list management tool.
+-- SuperIgnore v1.3.0
+-- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
 -- ==========================================
@@ -19,19 +19,26 @@ local L = {
     BTN_R4 = "Bot",
     
     MENU_ADD = "Add to SuperIgnore",
+	MENU_WHITELIST = "Add to Whitelist",  
     REASON_MANUAL = "Manual Add",
     REASON_IMPORT = "Imported",
     REASON_MS = "MeetingStone Sync",
     UNKNOWN_VERSION = "Unknown Version",
     
+		
     PANEL_DESC1 = "SuperIgnore is a lightweight, high-performance chat filtering & ignore list addon.",
     PANEL_DESC2 = "Account-wide ignore. Block once, clean chat on all characters!",
     
     TAB_PLAYER = "Block Player",
     TAB_KEYWORD = "Block Keyword",
+    TAB_FILTERS = "Filters",
     TAB_DATA = "Data/Sync",
     TAB_ABOUT = "About",
     
+	TAB_WHITELIST = "Whitelist",
+    UI_WHITELIST_INPUT = "Whitelist Player-Realm:",
+    MSG_WHITELISTED = "|cff00ff00[SuperIgnore]|r Whitelisted: %s",
+	
     UI_PLAYER_INPUT = "Player-Realm:",
     UI_REASON_INPUT = "Note:",
     UI_BTN_ADD = "Add",
@@ -41,11 +48,17 @@ local L = {
     UI_BTN_EXPORT = "Export Data",
     UI_BTN_IMPORT = "Import & Merge",
     UI_BTN_SYNC = "Sync MeetingStone",
+    
     UI_CHK_AUTOSYNC = "Auto-sync on panel open",
+    UI_CHK_DND = "Block AFK/DND player messages",
+    UI_CHK_REPEAT = "Block repeated messages (Anti-spam)",
+    UI_CHK_ACHV = "Merge duplicate achievements",
+    UI_CHK_NPC = "Block repetitive NPC dialogues",
+    UI_CHK_QUEST = "Block quest/instance progress spam",
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
-    ABOUT_TEXT = "Author: okqiyi \nVersion: v1.2.0\n\n【v1.2.0 Updates】\n- Added multi-language support (EN, zhCN, zhTW).\n- Optimized cross-realm detection.\n\nFeedback is welcome on CurseForge or NGA!",
+    ABOUT_TEXT = "Author: okqiyi \nVersion: v1.3.0\n\n【v1.3.0 Updates】\n- Added advanced intelligent chat filters.\n- Added dedicated 'Advanced Filters' and 'Whitelist' tabs.\n\nFeedback and bug reports are always welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
     
@@ -53,7 +66,6 @@ local L = {
     LIST_ADD_TIME = "Added: ",
     LIST_BTN_REMOVE = "Remove",
     
-    -- Chat Messages
     MSG_GROUP_DECLINED = "|cffff0000[SuperIgnore]|r Auto-declined group invite from blocked player %s.",
     MSG_TRADE_DECLINED = "|cffff0000[SuperIgnore]|r Auto-declined trade request from blocked player %s.",
     MSG_BLACKLISTED = "|cffff0000[SuperIgnore]|r Blocked %s. Reason: %s",
@@ -63,7 +75,6 @@ local L = {
     MSG_IMPORT_FILTERED = " |cffffff00Auto-filtered %d invalid entries without realm.|r",
     MSG_MS_SUCCESS = "|cff00ff00[SuperIgnore]|r Auto-sync triggered! Silently added %d new players to global list.",
     
-    -- Error Messages
     MSG_ERR_NO_REALM = "|cffff0000[SuperIgnore]|r Failed to get realm info, block failed!",
     MSG_ERR_COMBAT = "|cffff0000[SuperIgnore]|r Cannot open settings in combat.",
     MSG_ERR_NO_PANEL = "|cffff0000[SuperIgnore]|r Error: Settings panel not initialized.",
@@ -85,16 +96,24 @@ if locale == "zhCN" then
     L.BTN_R3 = "喷子"
     L.BTN_R4 = "SB"
     L.MENU_ADD = "加入超级黑名单"
+	L.MENU_WHITELIST = "加入超级白名单"  
     L.REASON_MANUAL = "手动添加"
     L.REASON_IMPORT = "导入"
     L.REASON_MS = "集合石同步"
     L.UNKNOWN_VERSION = "未知版本"
     L.PANEL_DESC1 = "SuperIgnore (超级黑名单) 是一款极简、轻量、高性能的聊天过滤与黑名单管理插件。"
     L.PANEL_DESC2 = "一次拉黑，全战网所有角色共同生效，还你清净的艾泽拉斯！"
+	
+	L.TAB_WHITELIST = "白名单"
+    L.UI_WHITELIST_INPUT = "白名单玩家-服务器:"
+    L.MSG_WHITELISTED = "|cff00ff00[SuperIgnore]|r 已将 %s 加入超级白名单。"
+    
     L.TAB_PLAYER = "屏蔽玩家"
     L.TAB_KEYWORD = "屏蔽关键词"
+    L.TAB_FILTERS = "扩展过滤"
     L.TAB_DATA = "数据/同步"
     L.TAB_ABOUT = "关于"
+    
     L.UI_PLAYER_INPUT = "玩家-服务器:"
     L.UI_REASON_INPUT = "备注:"
     L.UI_BTN_ADD = "添加"
@@ -103,10 +122,17 @@ if locale == "zhCN" then
     L.UI_BTN_EXPORT = "生成导出代码"
     L.UI_BTN_IMPORT = "导入并覆盖合并"
     L.UI_BTN_SYNC = "同步集合石屏蔽列表"
+    
     L.UI_CHK_AUTOSYNC = "打开面板自动同步"
+    L.UI_CHK_DND = "拦截 暂离/忙碌 玩家发言"
+    L.UI_CHK_REPEAT = "拦截玩家连续重复发言 (防刷屏)"
+    L.UI_CHK_ACHV = "合并公会/队伍同款成就 (防霸屏)"
+    L.UI_CHK_NPC = "拦截 NPC 高频重复台词"
+    L.UI_CHK_QUEST = "拦截队伍/副本任务进度通告"
+    
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
-    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.2.0\n\n【v1.2.0 核心更新】\n- 全面支持多语言 (简中/繁中/英文)。\n- 优化底层数据清洗逻辑，提升跨服匹配精度。\n\n如果遇到 Bug 或有功能建议，欢迎在 NGA 原创插件区反馈！"
+    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.3.0\n\n【v1.3.0 核心更新】\n- 新增多项高级智能聊天过滤器。\n- 新增专属的“扩展过滤”与“白名单”独立页签。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
     L.LIST_REASON_NONE = "无"
@@ -141,16 +167,24 @@ elseif locale == "zhTW" then
     L.BTN_R3 = "屁孩"
     L.BTN_R4 = "外掛"
     L.MENU_ADD = "加入超級黑名單"
+	L.MENU_WHITELIST = "加入超級白名單"  
     L.REASON_MANUAL = "手動加入"
     L.REASON_IMPORT = "匯入"
     L.REASON_MS = "集合石同步"
     L.UNKNOWN_VERSION = "未知版本"
     L.PANEL_DESC1 = "SuperIgnore (超級黑名單) 是一款極簡、輕量、高效能的聊天過濾與黑名單管理插件。"
     L.PANEL_DESC2 = "一次黑單，全戰網所有角色共同生效，還你清淨的艾澤拉斯！"
+	
+	L.TAB_WHITELIST = "白名單"
+    L.UI_WHITELIST_INPUT = "白名單玩家-伺服器:"
+    L.MSG_WHITELISTED = "|cff00ff00[SuperIgnore]|r 已將 %s 加入超級白名單。"
+    
     L.TAB_PLAYER = "封鎖玩家"
     L.TAB_KEYWORD = "封鎖關鍵字"
+    L.TAB_FILTERS = "擴展過濾"
     L.TAB_DATA = "資料/同步"
     L.TAB_ABOUT = "關於"
+    
     L.UI_PLAYER_INPUT = "玩家-伺服器:"
     L.UI_REASON_INPUT = "備註:"
     L.UI_BTN_ADD = "加入"
@@ -159,10 +193,17 @@ elseif locale == "zhTW" then
     L.UI_BTN_EXPORT = "產生匯出代碼"
     L.UI_BTN_IMPORT = "匯入並覆蓋合併"
     L.UI_BTN_SYNC = "同步集合石黑名單"
+    
     L.UI_CHK_AUTOSYNC = "開啟面板自動同步"
+    L.UI_CHK_DND = "攔截 暫離/忙碌 玩家發言"
+    L.UI_CHK_REPEAT = "攔截玩家連續重複發言 (防洗頻)"
+    L.UI_CHK_ACHV = "合併公會/隊伍同款成就 (防霸屏)"
+    L.UI_CHK_NPC = "攔截 NPC 高頻重複台詞"
+    L.UI_CHK_QUEST = "攔截隊伍/副本任務進度通告"
+    
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
-    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.2.0\n\n【v1.2.0 核心更新】\n- 全面支援多國語言 (簡中/繁中/英文)。\n- 優化底層資料清洗邏輯，提升跨服匹配精度。\n\n如果有任何 Bug 或建議，歡迎到 CurseForge 反饋！"
+    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.3.0\n\n【v1.3.0 核心更新】\n- 新增多項高級智能聊天過濾器。\n- 新增專屬的「高級過濾」與「白名單」獨立頁籤。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
     L.LIST_REASON_NONE = "無"
@@ -190,9 +231,38 @@ end
 -- 1. 初始化数据库
 SuperIgnoreDB = SuperIgnoreDB or {}
 SuperIgnoreKeywordsDB = SuperIgnoreKeywordsDB or {}
+SuperIgnoreWhiteListDB = SuperIgnoreWhiteListDB or {} -- 【新增】：独立的白名单库
 
--- 2. 聊天过滤模块：屏蔽喊话和私聊
+-- 【新增】内存级防抖缓存表 (重启游戏即清空，零负担)
+local repeatCache = {}
+local achvCache = {}
+local npcCache = {}
+
+
+
+
+-- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
+    local name = Ambiguate(author, "none")
+    
+    -- 【新增】：最高优先级 -> 白名单检测
+    if SuperIgnoreWhiteListDB and SuperIgnoreWhiteListDB[name] then
+        return false -- 白名单玩家，直接无条件放行
+    end
+
+    -- 【修复后的强硬过滤逻辑】：不再直接调用 UnitAFK(author)
+    if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false then
+        if name ~= UnitName("player") then
+            -- 排除公共大频道（CHAT_MSG_CHANNEL），其他频道（私聊/说/大喊/小队/团队）全部生效
+            if event ~= "CHAT_MSG_CHANNEL" then
+                if UnitIsAFK(author) or UnitIsDND(author) then
+                    return true
+                end
+            end
+        end
+    end
+    
+    -- A. 关键词/正则匹配拦截
     if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
             if msg:find(keyword) then
@@ -201,28 +271,90 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
     
+    -- B. 超级黑名单拦截
     local name, realm = strsplit("-", author)
     if not realm or realm == "" then
         realm = GetNormalizedRealmName()
     end
-    
     local fullName = name .. "-" .. realm
     if SuperIgnoreDB[fullName] or SuperIgnoreDB[author] then
         return true 
     end
     
+    -- C. 【新增】智能过滤器：重复信息防刷屏 (15秒内同一个人发一模一样的话)
+    if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false then
+        local now = GetTime()
+        if repeatCache[author] and repeatCache[author].msg == msg and (now - repeatCache[author].time < 15) then
+            return true -- 拦截重复刷屏
+        end
+        repeatCache[author] = {msg = msg, time = now}
+    end
+    
+    -- D. 【新增】智能过滤器：任务组队通告过滤 (匹配典型的任务进度播报)
+    if SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false then
+        if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT" then
+            -- 匹配 "1/10" 或者包含 "任务进度" 等常见通告特征
+            if string.find(msg, "%d+/%d+") or string.find(msg, "任务") or string.find(msg, "进度") or string.find(msg, "Quest") then
+                return true
+            end
+        end
+    end
+    
     return false
 end
 
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", ChatFilter)
-ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", ChatFilter)
+-- 注册常规聊天频道
+local chatEvents = {
+    "CHAT_MSG_CHANNEL", "CHAT_MSG_SAY", "CHAT_MSG_YELL", "CHAT_MSG_WHISPER",
+    "CHAT_MSG_INSTANCE_CHAT", "CHAT_MSG_PARTY", "CHAT_MSG_PARTY_LEADER",
+    "CHAT_MSG_RAID", "CHAT_MSG_RAID_LEADER"
+}
+for _, ev in ipairs(chatEvents) do
+    ChatFrame_AddMessageEventFilter(ev, ChatFilter)
+end
+
+-- 【新增】智能过滤器：DND/AFK 自动回复拦截
+local function FilterDND(self, event, msg, ...)
+    if SuperIgnoreDB["__CONFIG_FILTER_DND__"] ~= false then
+        return true
+    end
+    return false
+end
+ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", FilterDND)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", FilterDND)
+
+-- 【新增】智能过滤器：成就防霸屏 (10秒内同一个成就只显示一次)
+local function FilterAchv(self, event, msg, ...)
+    if SuperIgnoreDB["__CONFIG_FILTER_ACHV__"] ~= false then
+        local achvLink = string.match(msg, "(|Hachievement.-|h)")
+        if achvLink then
+            local now = GetTime()
+            if achvCache[achvLink] and (now - achvCache[achvLink] < 10) then
+                return true 
+            end
+            achvCache[achvLink] = now
+        end
+    end
+    return false
+end
+ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", FilterAchv)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", FilterAchv)
+
+-- 【新增】智能过滤器：NPC 重复说话过滤 (60秒内同一台词只显示一次)
+local function FilterNPC(self, event, msg, author, ...)
+    if SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false then
+        local now = GetTime()
+        local key = (author or "NPC") .. msg
+        if npcCache[key] and (now - npcCache[key] < 60) then
+            return true
+        end
+        npcCache[key] = now
+    end
+    return false
+end
+ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_SAY", FilterNPC)
+ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
+
 
 -- 3. 组队与交易拦截模块
 local frame = CreateFrame("Frame")
@@ -354,6 +486,17 @@ local function InjectSuperIgnore(ownerRegion, rootDescription, contextData)
         rootDescription:CreateButton(L.MENU_ADD, function()
             ShowSuperIgnoreUI(finalName)
         end)
+		
+		-- 【修改】：加入白名单按钮，调用多语言字典
+        rootDescription:CreateButton(L.MENU_WHITELIST, function()
+            SuperIgnoreWhiteListDB = SuperIgnoreWhiteListDB or {}
+            local cleanName = Ambiguate(finalName, "none")
+            
+            SuperIgnoreWhiteListDB[cleanName] = date("%Y-%m-%d %H:%M")
+            print(string.format(L.MSG_WHITELISTED, cleanName))
+        end)
+		
+		
     end
 end
 
@@ -365,7 +508,10 @@ if Menu and Menu.ModifyMenu then
 end
 
 -- 6. 斜杠命令
-SLASH_SUPERIGNORE1 = "/si"
+SLASH_SUPERIGNORE1 = "/si"             -- 保留原有的（抢不抢得到随缘）
+SLASH_SUPERIGNORE2 = "/superignore"    -- 新增：绝对不会冲突的全拼
+SLASH_SUPERIGNORE3 = "/sig"            -- 新增：备用简写 (Super IGnore)
+
 SlashCmdList["SUPERIGNORE"] = function()
     if InCombatLockdown() then
         print(L.MSG_ERR_COMBAT)
@@ -399,26 +545,41 @@ panelDesc2:SetText(L.PANEL_DESC2)
 
 local currentMode = "PLAYER" 
 
+
+-- ==========================================
+-- 调整顶部页签按钮宽度与排版 (新增白名单)
+-- ==========================================
 local btnPlayers = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnPlayers:SetSize(100, 25)
+btnPlayers:SetSize(85, 25) -- 宽度由 75 改为 85
 btnPlayers:SetPoint("TOPLEFT", 16, -95)
 btnPlayers:SetText(L.TAB_PLAYER)
 
 local btnKeywords = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnKeywords:SetSize(100, 25)
-btnKeywords:SetPoint("LEFT", btnPlayers, "RIGHT", 10, 0)
+btnKeywords:SetSize(100, 25) -- 宽度由 80 改为 100，给“关键词”留足空间
+btnKeywords:SetPoint("LEFT", btnPlayers, "RIGHT", 5, 0)
 btnKeywords:SetText(L.TAB_KEYWORD)
 
+local btnWhitelist = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+btnWhitelist:SetSize(80, 25) -- 宽度由 75 改为 80
+btnWhitelist:SetPoint("LEFT", btnKeywords, "RIGHT", 5, 0)
+btnWhitelist:SetText(L.TAB_WHITELIST)
+
+local btnFilters = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+btnFilters:SetSize(85, 25) -- 宽度由 75 改为 85
+btnFilters:SetPoint("LEFT", btnWhitelist, "RIGHT", 5, 0)
+btnFilters:SetText(L.TAB_FILTERS)
+
 local btnData = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnData:SetSize(100, 25)
-btnData:SetPoint("LEFT", btnKeywords, "RIGHT", 10, 0)
+btnData:SetSize(90, 25) -- 宽度由 75 改为 90
+btnData:SetPoint("LEFT", btnFilters, "RIGHT", 5, 0)
 btnData:SetText(L.TAB_DATA)
 
 local btnAbout = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnAbout:SetSize(80, 25)
-btnAbout:SetPoint("LEFT", btnData, "RIGHT", 10, 0)
+btnAbout:SetSize(70, 25) -- 宽度由 65 改为 70
+btnAbout:SetPoint("LEFT", btnData, "RIGHT", 5, 0)
 btnAbout:SetText(L.TAB_ABOUT)
 
+-- 玩家模块
 local addPlayerNameBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 addPlayerNameBox:SetSize(130, 30)
 addPlayerNameBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 5, -35)
@@ -438,11 +599,11 @@ addPlayerReasonBox.title:SetText(L.UI_REASON_INPUT)
 local quickBtns = {}
 for i, r in ipairs(reasons) do
     local btn = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-    btn:SetSize(40, 22)
+    btn:SetSize(48, 22)
     if i == 1 then
         btn:SetPoint("LEFT", addPlayerReasonBox, "RIGHT", 5, 0)
     else
-        btn:SetPoint("LEFT", quickBtns[i-1], "RIGHT", 2, 0)
+        btn:SetPoint("LEFT", quickBtns[i-1], "RIGHT", 5, 0)
     end
     btn:SetText(r)
     btn:SetScript("OnClick", function() addPlayerReasonBox:SetText(r) end)
@@ -454,6 +615,7 @@ btnAddPlayer:SetSize(60, 25)
 btnAddPlayer:SetPoint("LEFT", quickBtns[#quickBtns], "RIGHT", 10, 0)
 btnAddPlayer:SetText(L.UI_BTN_ADD)
 
+-- 关键词模块
 local addWordBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 addWordBox:SetSize(180, 30)
 addWordBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 5, -35)
@@ -467,6 +629,22 @@ btnAddWord:SetSize(60, 25)
 btnAddWord:SetPoint("LEFT", addWordBox, "RIGHT", 10, 0)
 btnAddWord:SetText(L.UI_BTN_ADD)
 
+-- 白名单模块
+local addWhitelistNameBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
+addWhitelistNameBox:SetSize(180, 30)
+addWhitelistNameBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 5, -35)
+addWhitelistNameBox:SetAutoFocus(false)
+addWhitelistNameBox.title = addWhitelistNameBox:CreateFontString(nil, "BACKGROUND", "GameFontHighlight")
+addWhitelistNameBox.title:SetPoint("BOTTOMLEFT", addWhitelistNameBox, "TOPLEFT", 0, 5)
+addWhitelistNameBox.title:SetText(L.UI_WHITELIST_INPUT)
+
+local btnAddWhitelist = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
+btnAddWhitelist:SetSize(60, 25)
+btnAddWhitelist:SetPoint("LEFT", addWhitelistNameBox, "RIGHT", 10, 0)
+btnAddWhitelist:SetText(L.UI_BTN_ADD)
+
+
+-- 搜索与列表
 local searchBox = CreateFrame("EditBox", nil, panel, "InputBoxTemplate")
 searchBox:SetSize(200, 30)
 searchBox:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 45, -90)
@@ -478,7 +656,6 @@ searchBox.title:SetText(L.UI_SEARCH)
 local scrollFrame = CreateFrame("ScrollFrame", nil, panel, "UIPanelScrollFrameTemplate")
 scrollFrame:SetPoint("TOPLEFT", searchBox, "BOTTOMLEFT", -5, -10)
 scrollFrame:SetPoint("BOTTOMRIGHT", -30, 20)
-
 
 scrollFrame:EnableMouseWheel(true)
 scrollFrame:SetScript("OnMouseWheel", function(self, delta)
@@ -496,10 +673,35 @@ end)
 local scrollChild = CreateFrame("Frame", nil, scrollFrame)
 scrollChild:SetSize(550, 1) 
 scrollFrame:SetScrollChild(scrollChild)
-
-
 local rows = {}
 
+-- ==========================================
+-- 【新增】扩展过滤页签 (Filters) UI 
+-- ==========================================
+local filtersFrame = CreateFrame("Frame", nil, panel)
+filtersFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
+filtersFrame:SetPoint("BOTTOMRIGHT", -30, 20)
+filtersFrame:Hide()
+
+local function CreateConfigCheck(parent, offsetY, configKey, labelText)
+    local chk = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+    chk:SetPoint("TOPLEFT", 10, offsetY)
+    chk.Text:SetText(labelText)
+    chk.Text:SetFontObject("GameFontHighlight")
+    chk:SetScript("OnClick", function(self)
+        SuperIgnoreDB = SuperIgnoreDB or {}
+        SuperIgnoreDB[configKey] = self:GetChecked()
+    end)
+    return chk
+end
+
+local chkDND = CreateConfigCheck(filtersFrame, -10, "__CONFIG_FILTER_DND__", L.UI_CHK_DND)
+local chkRepeat = CreateConfigCheck(filtersFrame, -50, "__CONFIG_FILTER_REPEAT__", L.UI_CHK_REPEAT)
+local chkAchv = CreateConfigCheck(filtersFrame, -90, "__CONFIG_FILTER_ACHV__", L.UI_CHK_ACHV)
+local chkNPC = CreateConfigCheck(filtersFrame, -130, "__CONFIG_FILTER_NPC__", L.UI_CHK_NPC)
+local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
+
+-- 数据与同步模块
 local dataFrame = CreateFrame("Frame", nil, panel)
 dataFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
 dataFrame:SetPoint("BOTTOMRIGHT", -30, 20)
@@ -535,7 +737,6 @@ dataStatsText:SetPoint("TOPLEFT", btnGenerate, "BOTTOMLEFT", 5, -8)
 local dataScroll = CreateFrame("ScrollFrame", nil, dataFrame, "UIPanelScrollFrameTemplate")
 dataScroll:SetPoint("TOPLEFT", btnGenerate, "BOTTOMLEFT", 0, -25)
 dataScroll:SetPoint("BOTTOMRIGHT", 0, 0)
-
 
 dataScroll:EnableMouseWheel(true)
 dataScroll:SetScript("OnMouseWheel", function(self, delta)
@@ -612,11 +813,15 @@ local function RefreshList()
     addPlayerNameBox:Hide(); addPlayerReasonBox:Hide(); btnAddPlayer:Hide()
     for _, b in ipairs(quickBtns) do b:Hide() end
     addWordBox:Hide(); btnAddWord:Hide()
+    addWhitelistNameBox:Hide(); btnAddWhitelist:Hide() -- 【新增这句】
     dataFrame:Hide()
     aboutFrame:Hide()
+    filtersFrame:Hide()
     
     btnPlayers:UnlockHighlight()
     btnKeywords:UnlockHighlight()
+    btnWhitelist:UnlockHighlight() 
+    btnFilters:UnlockHighlight()
     btnData:UnlockHighlight()
     btnAbout:UnlockHighlight()
 
@@ -626,8 +831,29 @@ local function RefreshList()
         for _, b in ipairs(quickBtns) do b:Show() end
         
     elseif currentMode == "KEYWORD" then
-        btnKeywords:LockHighlight()
+		btnKeywords:LockHighlight()
         addWordBox:Show(); btnAddWord:Show()
+		
+	elseif currentMode == "WHITELIST" then
+        btnWhitelist:LockHighlight()
+        addWhitelistNameBox:Show(); btnAddWhitelist:Show()
+		
+       
+        
+    elseif currentMode == "FILTERS" then
+        btnFilters:LockHighlight()
+        filtersFrame:Show()
+        
+        -- 读取数据库状态刷新UI，如果是 nil 则默认为 true (打勾)
+        SuperIgnoreDB = SuperIgnoreDB or {}
+        chkDND:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_DND__"] ~= false)
+        chkRepeat:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false)
+        chkAchv:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_ACHV__"] ~= false)
+        chkNPC:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false)
+        chkQuest:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false)
+        
+        searchBox:Hide(); scrollFrame:Hide()
+        return
         
     elseif currentMode == "DATA" then
         btnData:LockHighlight()
@@ -641,7 +867,8 @@ local function RefreshList()
         
         local pCount, kCount = 0, 0
         for k, _ in pairs(SuperIgnoreDB or {}) do 
-            if k ~= "__CONFIG_AUTOSYNC__" then pCount = pCount + 1 end 
+            -- 【极简优化】：不再一个个枚举，直接拦截所有 __CONFIG_ 前缀
+            if string.sub(k, 1, 9) ~= "__CONFIG_" then pCount = pCount + 1 end 
         end
         for _ in pairs(SuperIgnoreKeywordsDB or {}) do kCount = kCount + 1 end
         
@@ -660,7 +887,7 @@ local function RefreshList()
         return
     end
     
-    if currentMode ~= "DATA" and currentMode ~= "ABOUT" then
+    if currentMode ~= "DATA" and currentMode ~= "ABOUT" and currentMode ~= "FILTERS" then
         searchBox:Show(); scrollFrame:Show()
     end
 
@@ -669,19 +896,22 @@ local function RefreshList()
     
     local yOffset = 0
     local rowIndex = 1
-    local targetDB = (currentMode == "PLAYER") and SuperIgnoreDB or SuperIgnoreKeywordsDB
+    local targetDB = nil
+    if currentMode == "PLAYER" then targetDB = SuperIgnoreDB
+    elseif currentMode == "KEYWORD" then targetDB = SuperIgnoreKeywordsDB
+    elseif currentMode == "WHITELIST" then targetDB = SuperIgnoreWhiteListDB
+    end
     local myRealm = GetNormalizedRealmName()
 
-    -- 【修改1】：将无序的哈希表转为数组，以便进行时间排序
     local sortedItems = {}
     if targetDB then
         for key, data in pairs(targetDB) do
-            if key ~= "__CONFIG_AUTOSYNC__" then
+            -- 拦截前缀
+            if string.sub(key, 1, 9) ~= "__CONFIG_" then
                 table.insert(sortedItems, {key = key, data = data})
             end
         end
         
-        -- 【修改2】：按照时间进行降序排序（最新的在前面）
         table.sort(sortedItems, function(a, b)
             local timeA = (currentMode == "PLAYER") and (type(a.data) == "table" and a.data.time or "") or tostring(a.data)
             local timeB = (currentMode == "PLAYER") and (type(b.data) == "table" and b.data.time or "") or tostring(b.data)
@@ -689,7 +919,6 @@ local function RefreshList()
         end)
     end
 
-    -- 【修改3】：改用 ipairs 遍历排好序的数组
     for _, item in ipairs(sortedItems) do
         local key = item.key
         local data = item.data
@@ -699,7 +928,6 @@ local function RefreshList()
         if currentMode == "PLAYER" then
             local reason = data.reason or L.LIST_REASON_NONE
             local timeStr = data.time or ""
-            -- 【修改4】：将格式重组为 “时间    备注” 
             subText = timeStr .. "    " .. reason
             if not displayKey:find("-") then displayKey = displayKey .. "-" .. myRealm end
         else
@@ -753,6 +981,7 @@ end
 
 btnPlayers:SetScript("OnClick", function() currentMode = "PLAYER"; RefreshList() end)
 btnKeywords:SetScript("OnClick", function() currentMode = "KEYWORD"; RefreshList() end)
+btnFilters:SetScript("OnClick", function() currentMode = "FILTERS"; RefreshList() end)
 btnData:SetScript("OnClick", function() currentMode = "DATA"; RefreshList() end)
 btnAbout:SetScript("OnClick", function() currentMode = "ABOUT"; RefreshList() end) 
 
@@ -785,6 +1014,34 @@ btnAddPlayer:SetScript("OnClick", function()
     print(string.format(L.MSG_BLACKLISTED, name, reason))
 end)
 
+btnWhitelist:SetScript("OnClick", function() currentMode = "WHITELIST"; RefreshList() end)
+
+btnAddWhitelist:SetScript("OnClick", function()
+    local name = addWhitelistNameBox:GetText()
+    if not name or name == "" then return end
+    
+    name = string.match(name, "^%s*(.-)%s*$")
+    
+    if not string.find(name, "-") then
+        local myRealm = GetNormalizedRealmName() or ""
+        if myRealm ~= "" then
+            name = name .. "-" .. myRealm
+        end
+    end
+    
+    if not string.find(name, "-") then
+        print(L.MSG_ERR_FORMAT)
+        return
+    end
+    
+    SuperIgnoreWhiteListDB = SuperIgnoreWhiteListDB or {}
+    SuperIgnoreWhiteListDB[name] = date("%Y-%m-%d %H:%M")
+    
+    addWhitelistNameBox:SetText("")
+    RefreshList()
+    print(string.format(L.MSG_WHITELISTED, name))
+end)
+
 btnAddWord:SetScript("OnClick", function()
     local word = addWordBox:GetText()
     if word and word ~= "" then
@@ -800,7 +1057,9 @@ btnGenerate:SetScript("OnClick", function()
     local lines = {"--SuperIgnoreDataV1"}
     
     for k, v in pairs(SuperIgnoreDB or {}) do
-        table.insert(lines, "P^" .. k .. "^" .. (v.reason or "") .. "^" .. (v.time or ""))
+        if string.sub(k, 1, 9) ~= "__CONFIG_" then
+            table.insert(lines, "P^" .. k .. "^" .. (v.reason or "") .. "^" .. (v.time or ""))
+        end
     end
     
     for k, v in pairs(SuperIgnoreKeywordsDB or {}) do
