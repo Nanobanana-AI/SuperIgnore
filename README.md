@@ -59,8 +59,8 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ### v1.3.0 - (2026.07.06)
 
-*   **Smart Filters / 智能过滤器: Added 5 new intelligent chat filters, including blocking DND/AFK auto-replies, anti-spam repeat filters, achievement spam merging, NPC dialog filters, and quest progress announcements. Also added a dedicated "Filters" tab for easy management. <br>
-      *新增 5 大实用智能聊天过滤器，包含过滤暂离/忙碌自动回复、重复信息防刷屏、智能合并多人同款成就防霸屏、NPC 重复啰嗦台词过滤以及队伍任务进度通告过滤。同时新增专属的“扩展过滤”独立页签方便管理。*
+*   **Smart Filters / 智能过滤器: Added 5 new intelligent chat filters, including block players in DND/AFK statu, anti-spam repeat filters, achievement spam merging, NPC dialog filters, and quest progress announcements. Also added a dedicated "Filters" tab for easy management. <br>
+      *新增 5 大实用智能聊天过滤器，包含过滤'暂离/忙碌'状态的玩家、重复信息防刷屏、智能合并多人同款成就防霸屏、NPC 重复啰嗦台词过滤以及队伍任务进度通告过滤。同时新增专属的“扩展过滤”独立页签方便管理。*
 
 *   **Compatibility / 兼容性优化: Added alternative slash commands (/sig and /superignore) to resolve potential command conflicts with other popular addons (e.g., SavedInstances).<br>
       *新增了 /sig 和 /superignore 备用呼出指令，彻底解决与其他热门大插件（如 SavedInstances）的斜杠命令冲突问题。*
