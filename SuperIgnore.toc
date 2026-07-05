@@ -1,7 +1,12 @@
 ## Interface: 120005
 ## Title: SuperIgnore
-## Notes: 突破系统限制的战网通用黑名单
-## Version: 1.1.0
+## Title-zhCN: SuperIgnore |cff00ff00超级黑名单|r
+## Title-zhTW: SuperIgnore |cff00ff00超級黑名單|r
+## Notes: A lightweight, high-performance account-wide ignore system.
+## Notes-zhCN: 突破系统限制的战网通用黑名单。
+## Notes-zhTW: 突破系統限制的戰網通用黑名單。
+## Author: okqiyi
+## Version: 1.2.0
 ## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB
 ## IconTexture: 136813
 
