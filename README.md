@@ -50,8 +50,10 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 *   🖱️ **In-game Menu / 游戏内菜单:** Right-click on a player's character portrait or name in chat to add them to your SuperIgnore list.<br>
     *在目标头像或聊天框右键点击玩家名称，即可快速加入超级黑名单。*
-*   ⌨️ **Slash Command / 指令:** Type `/si` to open the configuration panel to manage your players, keywords, and data.<br>
-    *聊天框输入 `/si` 打开配置面板，管理你的数据与自动同步选项。*
+*   ⌨️ **Slash Command / 指令:** Type /si, /sig, or /superignore in the chat to open the configuration panel.
+Here you can manage your blocked players, keywords, whitelist, smart filters, and data sync settings. (Note: If /si conflicts with other addons, please use /sig)<br>
+    *在聊天框输入 /si、/sig 或 /superignore 即可打开配置面板。
+您可以在此面板中便捷地管理黑白名单、屏蔽词、智能过滤选项以及进行集合石数据同步。（注：若 /si 与其他插件冲突失效，请使用备用指令 /sig）*
 
 ---
 
