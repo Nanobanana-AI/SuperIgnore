@@ -1,4 +1,4 @@
--- SuperIgnore v1.3.0
+-- SuperIgnore v1.4.0
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -49,7 +49,7 @@ local L = {
     UI_BTN_IMPORT = "Import & Merge",
     UI_BTN_SYNC = "Sync MeetingStone",
     
-    UI_CHK_AUTOSYNC = "Auto-sync on panel open",
+    UI_CHK_AUTOSYNC = "Auto-sync panel open",
     UI_CHK_DND = "Block AFK/DND player messages",
     UI_CHK_REPEAT = "Block repeated messages (Anti-spam)",
     UI_CHK_ACHV = "Merge duplicate achievements",
@@ -58,7 +58,7 @@ local L = {
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
-    ABOUT_TEXT = "Author: okqiyi \nVersion: v1.3.0\n\n【v1.3.0 Updates】\n- Added advanced intelligent chat filters.\n- Added dedicated 'Advanced Filters' and 'Whitelist' tabs.\n\nFeedback and bug reports are always welcome on CurseForge!",
+	ABOUT_TEXT = "Author: okqiyi \nVersion: v1.4.0\n\n【v1.4.0 Updates】\n- New: Silently decline guild invites and duels from blocked players.\n- Optimized UI layout and zero-bloat performance.\n\nFeedback and bug reports are always welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
     
@@ -85,6 +85,9 @@ local L = {
 }
 
 local locale = GetLocale()
+-- local locale = "enUS"
+
+
 if locale == "zhCN" then
     L.UI_ADD_TITLE = "添加超级黑名单"
     L.UI_TARGET_NONE = "目标：无"
@@ -120,7 +123,7 @@ if locale == "zhCN" then
     L.UI_KEYWORD_INPUT = "新增屏蔽词 (支持正则):"
     L.UI_SEARCH = "搜索:"
     L.UI_BTN_EXPORT = "生成导出代码"
-    L.UI_BTN_IMPORT = "导入并覆盖合并"
+    L.UI_BTN_IMPORT = "导入覆盖合并"
     L.UI_BTN_SYNC = "同步集合石屏蔽列表"
     
     L.UI_CHK_AUTOSYNC = "打开面板自动同步"
@@ -132,7 +135,7 @@ if locale == "zhCN" then
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
-    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.3.0\n\n【v1.3.0 核心更新】\n- 新增多项高级智能聊天过滤器。\n- 新增专属的“扩展过滤”与“白名单”独立页签。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
+	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.4.0\n\n【v1.4.0 核心更新】\n- 新增：全面静默拦截黑名单玩家的公会邀请与决斗请求。\n- 优化：中英双语排版适配，持续保持极简零污染架构。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
     L.LIST_REASON_NONE = "无"
@@ -203,7 +206,7 @@ elseif locale == "zhTW" then
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
-    L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.3.0\n\n【v1.3.0 核心更新】\n- 新增多項高級智能聊天過濾器。\n- 新增專屬的「高級過濾」與「白名單」獨立頁籤。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
+	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.4.0\n\n【v1.4.0 核心更新】\n- 新增：全面靜默攔截黑名單玩家的公會邀請與決鬥請求。\n- 優化：中英雙語排版適配，持續保持極簡零污染架構。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
     L.LIST_REASON_NONE = "無"
@@ -356,23 +359,37 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_SAY", FilterNPC)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
 
 
--- 3. 组队与交易拦截模块
+-- ==========================================
+-- 3. 组队、交易、公会邀请与决斗拦截模块（全面封杀黑名单用户）
+-- ==========================================
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PARTY_INVITE_REQUEST")
 frame:RegisterEvent("TRADE_REQUEST")
+frame:RegisterEvent("GUILD_INVITE_REQUEST") -- 【新增】注册公会邀请事件
+frame:RegisterEvent("DUEL_REQUESTED")        -- 【新增】注册决斗请求事件
+
 frame:SetScript("OnEvent", function(self, event, sender, ...)
-    if event == "PARTY_INVITE_REQUEST" then
-        local cleanSender = Ambiguate(sender, "none")
-        if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
+    local cleanSender = Ambiguate(sender, "none")
+    
+    -- 只要对方在你的通用黑名单里，直接执行全方位全自动拦截
+    if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
+        if event == "PARTY_INVITE_REQUEST" then
             DeclineGroup()
             StaticPopup_Hide("PARTY_INVITE")
             print(string.format(L.MSG_GROUP_DECLINED, sender))
-        end
-    elseif event == "TRADE_REQUEST" then
-        local cleanSender = Ambiguate(sender, "none")
-        if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
+            
+        elseif event == "TRADE_REQUEST" then
             CancelTrade()
             print(string.format(L.MSG_TRADE_DECLINED, sender))
+            
+        elseif event == "GUILD_INVITE_REQUEST" then
+            DeclineGuild() -- 【新增】静默拒绝公会邀请
+            StaticPopup_Hide("GUILD_INVITE") -- 隐藏系统的弹窗
+            
+            
+        elseif event == "DUEL_REQUESTED" then
+            CancelDuel() -- 【新增】静默拒绝决斗请求
+            StaticPopup_Hide("DUEL") -- 隐藏系统的弹窗
         end
     end
 end)
@@ -550,17 +567,17 @@ local currentMode = "PLAYER"
 -- 调整顶部页签按钮宽度与排版 (新增白名单)
 -- ==========================================
 local btnPlayers = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnPlayers:SetSize(85, 25) -- 宽度由 75 改为 85
+btnPlayers:SetSize(100, 25) -- 宽度由 75 改为 85
 btnPlayers:SetPoint("TOPLEFT", 16, -95)
 btnPlayers:SetText(L.TAB_PLAYER)
 
 local btnKeywords = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnKeywords:SetSize(100, 25) -- 宽度由 80 改为 100，给“关键词”留足空间
+btnKeywords:SetSize(120, 25) -- 宽度由 80 改为 100，给“关键词”留足空间
 btnKeywords:SetPoint("LEFT", btnPlayers, "RIGHT", 5, 0)
 btnKeywords:SetText(L.TAB_KEYWORD)
 
 local btnWhitelist = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnWhitelist:SetSize(80, 25) -- 宽度由 75 改为 80
+btnWhitelist:SetSize(90, 25) -- 宽度由 75 改为 80
 btnWhitelist:SetPoint("LEFT", btnKeywords, "RIGHT", 5, 0)
 btnWhitelist:SetText(L.TAB_WHITELIST)
 
@@ -570,7 +587,7 @@ btnFilters:SetPoint("LEFT", btnWhitelist, "RIGHT", 5, 0)
 btnFilters:SetText(L.TAB_FILTERS)
 
 local btnData = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-btnData:SetSize(90, 25) -- 宽度由 75 改为 90
+btnData:SetSize(95, 25) -- 宽度由 75 改为 90
 btnData:SetPoint("LEFT", btnFilters, "RIGHT", 5, 0)
 btnData:SetText(L.TAB_DATA)
 
@@ -599,7 +616,7 @@ addPlayerReasonBox.title:SetText(L.UI_REASON_INPUT)
 local quickBtns = {}
 for i, r in ipairs(reasons) do
     local btn = CreateFrame("Button", nil, panel, "UIPanelButtonTemplate")
-    btn:SetSize(48, 22)
+    btn:SetSize(65, 22)
     if i == 1 then
         btn:SetPoint("LEFT", addPlayerReasonBox, "RIGHT", 5, 0)
     else
@@ -952,7 +969,7 @@ local function RefreshList()
                 row.reasonText:SetJustifyH("LEFT")
                 
                 row.removeBtn = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
-                row.removeBtn:SetSize(60, 22)
+                row.removeBtn:SetSize(75, 22)
                 row.removeBtn:SetPoint("RIGHT", row, "RIGHT", -10, 0)
                 row.removeBtn:SetText(L.LIST_BTN_REMOVE)
                 
