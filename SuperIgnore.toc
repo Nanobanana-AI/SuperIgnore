@@ -1,12 +1,12 @@
-## Interface: 120005
+## Interface: 120007
 ## Title: SuperIgnore
 ## Title-zhCN: SuperIgnore |cff00ff00超级黑名单|r
 ## Title-zhTW: SuperIgnore |cff00ff00超級黑名單|r
-## Notes: A lightweight, high-performance account-wide ignore system.
-## Notes-zhCN: 突破系统限制的战网通用黑名单。
-## Notes-zhTW: 突破系統限制的戰網通用黑名單。
+## Notes: A lightweight, account-wide ignore list that syncs across all characters.
+## Notes-zhCN: 战网全角色共享！一次拉黑，全账号生效的智能黑名单与防刷屏工具。
+## Notes-zhTW: 戰網全角色共享！一次黑單，全帳號生效的智能黑名單與防洗頻工具。
 ## Author: okqiyi
-## Version: 1.3.0
+## Version: 1.4.0
 ## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB
 ## IconTexture: 136813
 
