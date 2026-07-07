@@ -71,11 +71,11 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ### 🌟 v1.4.0 - (2026.07.08)
 
-**English**
+
 * 🛡️ **Silent Guild & Duel Blocking:** Automatically and silently decline guild invitations and duel requests from players on your SuperIgnore blacklist. System popups are entirely hidden in the background, ensuring a zero-harassment, completely uninterrupted gameplay experience.
 * 🎨 **UI & Localization Enhancements:** Optimized the width and layout of tabs and buttons in the options panel for English (enUS) and Traditional Chinese (zhTW) clients, resolving text crowding and overlapping issues for a cleaner look.
 
-**简体中文**
+
 * 🛡️ **静默拦截骚扰请求：** 重磅新增公会邀请与决斗请求的后台静默拦截功能！只要对方在超级黑名单中，系统将自动无情拒绝并强行隐藏暴雪原生的屏幕弹窗。彻底告别工作室无脑弹公会和黑名单玩家点决斗的骚扰，还你极致清净！
 * 🎨 **UI 与排版适配：** 深度重构了英文 (enUS) 和繁体中文 (zhTW) 客户端下的界面适配逻辑，加宽了设置面板的顶部页签与操作按钮，完美解决文字拥挤与重叠问题，视觉体验更加清爽。
 
