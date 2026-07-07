@@ -69,7 +69,7 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
-### 🌟 v1.4.0 - (2026.07.08)
+### 🌟 v1.4.0 - (2026.07.07)
 
 
 * 🛡️ **Silent Guild & Duel Blocking:** Automatically and silently decline guild invitations and duel requests from players on your SuperIgnore blacklist. System popups are entirely hidden in the background, ensuring a zero-harassment, completely uninterrupted gameplay experience.
