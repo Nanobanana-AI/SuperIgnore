@@ -1,4 +1,4 @@
--- SuperIgnore v1.4.0
+-- SuperIgnore v1.5.0
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -58,7 +58,7 @@ local L = {
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
-	ABOUT_TEXT = "Author: okqiyi \nVersion: v1.4.0\n\n【v1.4.0 Updates】\n- New: Silently decline guild invites and duels from blocked players.\n- Optimized UI layout and zero-bloat performance.\n\nFeedback and bug reports are always welcome on CurseForge!",
+	ABOUT_TEXT = "Author: okqiyi \nVersion: v1.5.0\n\n【v1.5.0 Updates】\n- New: One-time alert when a blacklisted player joins your group.\n- Optimized: Underlying logic and performance optimization.\n\nFeedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
     
@@ -81,7 +81,8 @@ local L = {
     MSG_ERR_FORMAT = "|cffff0000[SuperIgnore]|r Error: Must include realm name (e.g., Player-Realm)!",
     MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r Invalid format! Must include --SuperIgnoreDataV1",
     MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone addon not found or list empty.",
-    MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone list already synced. No new players found."
+    MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone list already synced. No new players found.",
+	MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] ALERT: %s (Note: %s) is on your blacklist. Please be cautious!|r",
 }
 
 local locale = GetLocale()
@@ -135,7 +136,7 @@ if locale == "zhCN" then
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
-	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.4.0\n\n【v1.4.0 核心更新】\n- 新增：全面静默拦截黑名单玩家的公会邀请与决斗请求。\n- 优化：中英双语排版适配，持续保持极简零污染架构。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
+	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.5.0\n\n【v1.5.0 核心更新】\n- 新增：当队伍或团队中混入黑名单玩家时，发出一次性高亮预警。\n- 优化：底层逻辑和性能优化。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
     L.LIST_REASON_NONE = "无"
@@ -158,6 +159,7 @@ if locale == "zhCN" then
     L.MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r 数据格式不对！请确保包含了 --SuperIgnoreDataV1"
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。"
+	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警报：%s 备注：%s 在你的黑名单列表中。请注意防范！|r"
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -206,7 +208,7 @@ elseif locale == "zhTW" then
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
-	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.4.0\n\n【v1.4.0 核心更新】\n- 新增：全面靜默攔截黑名單玩家的公會邀請與決鬥請求。\n- 優化：中英雙語排版適配，持續保持極簡零污染架構。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
+	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.5.0\n\n【v1.5.0 核心更新】\n- 新增：當隊伍或團隊中混入黑名單玩家時，發出一次性高亮預警。\n- 優化：底層邏輯與性能優化。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
     L.LIST_REASON_NONE = "無"
@@ -229,6 +231,7 @@ elseif locale == "zhTW" then
     L.MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r 資料格式錯誤！請確保包含了 --SuperIgnoreDataV1"
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未偵測到網易集合石插件，或目前沒有集合石黑名單資料。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步過，沒有發現新的黑名單。"
+	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警報：%s 備註：%s 在你的黑名單列表中。請注意防範！|r"
 end
 
 -- 1. 初始化数据库
@@ -268,8 +271,20 @@ local function ChatFilter(self, event, msg, author, ...)
     -- A. 关键词/正则匹配拦截
     if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
-            if msg:find(keyword) then
+            -- 1. 安全执行：使用 pcall (保护调用) 防止错误的正则语法导致过滤模块崩溃
+            local success, match = pcall(string.find, msg, keyword)
+            
+            -- 如果正则匹配成功，直接拦截
+            if success and match then
                 return true
+            end
+            
+            -- 2. 智能降级：如果正则执行报错 (success为false，通常是因为玩家输入了独立的 "[" 等未转义符号)
+            -- 系统自动降级为“纯文本精确匹配” (第四个参数 true)，确保乱写的屏蔽词依然能作为纯文本拦截生效
+            if not success then
+                if string.find(msg, keyword, 1, true) then
+                    return true
+                end
             end
         end
     end
@@ -326,22 +341,26 @@ end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", FilterDND)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", FilterDND)
 
--- 【新增】智能过滤器：成就防霸屏 (10秒内同一个成就只显示一次)
+-- 【修复】智能过滤器：成就防霸屏 (10秒内同一个成就只显示一次)
 local function FilterAchv(self, event, msg, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_ACHV__"] ~= false then
-        local achvLink = string.match(msg, "(|Hachievement.-|h)")
-        if achvLink then
+        -- 核心修改：不再匹配整个超链接，而是精准提取成就ID (连续的数字)
+        local achvID = string.match(msg, "|Hachievement:(%d+):")
+        
+        if achvID then
             local now = GetTime()
-            if achvCache[achvLink] and (now - achvCache[achvLink] < 10) then
+            -- 用成就ID作为缓存的Key，完美无视不同玩家的GUID差异
+            if achvCache[achvID] and (now - achvCache[achvID] < 10) then
                 return true 
             end
-            achvCache[achvLink] = now
+            achvCache[achvID] = now
         end
     end
     return false
 end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", FilterAchv)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", FilterAchv)
+
 
 -- 【新增】智能过滤器：NPC 重复说话过滤 (60秒内同一台词只显示一次)
 local function FilterNPC(self, event, msg, author, ...)
@@ -390,6 +409,57 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
         elseif event == "DUEL_REQUESTED" then
             CancelDuel() -- 【新增】静默拒绝决斗请求
             StaticPopup_Hide("DUEL") -- 隐藏系统的弹窗
+        end
+    end
+end)
+
+
+-- ==========================================
+-- 8. 队伍/团队黑名单成员静默扫描与防刷屏预警
+-- ==========================================
+local warnedPlayers = {} -- 防刷屏内存缓存
+
+local rosterFrame = CreateFrame("Frame")
+rosterFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+rosterFrame:RegisterEvent("GROUP_LEFT")
+
+rosterFrame:SetScript("OnEvent", function(self, event)
+    -- 只有【你自己】离开队伍时，才清空警告记忆，完美防止别人反复进组刷屏
+    if event == "GROUP_LEFT" then
+        wipe(warnedPlayers)
+        return
+    end
+
+    -- 队伍人员变动时触发扫描
+    if event == "GROUP_ROSTER_UPDATE" then
+        if not IsInGroup() then return end
+        
+        local isRaid = IsInRaid()
+        local prefix = isRaid and "raid" or "party"
+        local numMembers = GetNumGroupMembers()
+        local myRealm = GetNormalizedRealmName()
+
+        for i = 1, numMembers do
+            local unit = prefix .. i
+            -- 如果是在小队中，补全对自己(player)的检查
+            if not isRaid and i == numMembers then 
+                unit = "player" 
+            end
+
+            local name, realm = UnitName(unit)
+            if name then
+                realm = (not realm or realm == "") and myRealm or realm
+                local fullName = name .. "-" .. realm
+                
+                -- 如果在黑名单中，且本次组队期间还未警告过
+                if SuperIgnoreDB[fullName] and not warnedPlayers[fullName] then
+                    warnedPlayers[fullName] = true -- 写入缓存，锁死提示
+                    
+                    local reason = SuperIgnoreDB[fullName].reason or "未知"
+                    -- 按照你要求的格式，弹出且仅弹出一次醒目的红色警告
+                    print(string.format(L.MSG_GROUP_ALERT, fullName, reason))
+                end
+            end
         end
     end
 end)
