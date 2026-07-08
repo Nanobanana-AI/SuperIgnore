@@ -69,6 +69,16 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+🌟 v1.5.0 - (2026.07.10)
+
+🚨 **Group & Raid Infiltration Alert:** Automatically scans party and raid members upon joining. If a blacklisted player is detected, a one-time, prominent red warning (including your note) will be displayed in your local chat box. No intrusive popups, and a smart cache prevents spam from players repeatedly joining and leaving.
+🔧 **Performance & Memory Optimization:** Implemented a highly efficient memory caching mechanism for the new roster scanner. This ensures the new features have absolutely zero impact on game performance, strictly maintaining our "zero-bloatware" philosophy.
+
+🚨 **队伍/团队黑名单潜入预警：** 当队伍或团队中混入黑名单玩家时，系统会在本地聊天框输出一次性防刷屏的醒目红色高亮预警（包含拉黑备注）。无任何屏幕居中弹窗干扰，把“是否退组”的决定权悄无声息地交给你！
+🔧 **底层逻辑与性能优化：** 依托纯原生事件驱动与智能内存缓存机制，完美规避由于坑货反复进退组导致的刷屏警告，持续死守“零污染、零负担”的极简开发底线。
+
+ ---
+
 ### 🌟 v1.4.0 - (2026.07.07)
 
 
