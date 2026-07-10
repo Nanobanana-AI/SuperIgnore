@@ -75,13 +75,13 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 🔔 Cross-Version Update Notifications: Added a discreet, one-time silent version check. Get alerted instantly in chat when a newer version is detected among your group members, keeping your anti-spam defenses always up to date.
 
-✨ Refined UI & Automation: The "Data/Sync" panel has been fully redesigned. MeetingStone and Official sync functions are now independent, each with its own "Auto-sync" toggle, offering complete control with zero manual effort.
+
 
 🚀 官方屏蔽列表同步：新增官方黑名单一键/自动同步功能。精准抓取“玩家-服务器”格式并过滤无效旧数据，完美突破官方好友上限限制！
 
 🔔 版本更新静默提醒：新增版本静默检测机制。当检测到组队成员中有使用新版本插件时，仅在本地聊天框提示一次，助你时刻保持防刷屏防御阵线最新。
 
-✨ UI布局与自动化升级：“数据/同步”面板全新重构。集合石同步与官方同步现已独立拆分，支持双开关独立自动同步，极致解放双手，告别繁琐操作。
+
 
  ---
 
