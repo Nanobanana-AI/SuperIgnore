@@ -21,26 +21,40 @@
 
 ---
 
-## 🚀 Key Features (核心功能)
+## 🚀 Key Features / 核心功能
 
-* **Account-wide Ignore / 账号通用黑名单:** Block players across all your characters. Once a player is added to the SuperIgnore list, they will be blocked on all your characters.<br>
-  *跨角色屏蔽，一次添加，全账号所有角色生效，无需重复拉黑。*
+*   **Account-wide Ignore / 账号通用黑名单**<br>
+    Block players across your entire Battle.net account. Once added to the list, they are permanently blocked on all characters.<br>
+    一次添加，全战网所有角色共同生效，彻底告别重复拉黑的繁琐。
+    
+*   **Official & Third-Party Sync / 双重黑名单同步**<br>
+    Seamlessly syncs ignore lists from Blizzard’s official system and the NetEase Meeting Stone, aggregating all your block data into one powerhouse database.<br>
+    支持一键同步官方屏蔽列表与网易集合石黑名单，实现多来源数据无缝整合，突破官方人数上限。
 
-* **Smart Filtering / 智能聊天过滤:** Supports regex and keyword-based filtering to block annoying chat messages (e.g., boosting, advertising). Advanced filters can mute AFK/DND spam, repeated messages, and achievement spam.<br>
-  *支持正则与关键词模糊匹配，并内置多种智能过滤器（如暂离拦截、防刷屏、防霸屏），强力拦截垃圾信息。*
+*   **Smart Chat Filtering / 智能聊天过滤**<br>
+    Advanced regex-based filtering cleans your chat window by blocking DND/AFK spam, repetitive NPC dialogue, and annoying advertisements.<br>
+    内置 5 大智能过滤器与正则匹配，强力拦截广告推销、暂离刷屏与任务进度通告，还你清净的艾泽拉斯。
 
-* **Whitelist System / 专属白名单系统:** Easily exempt trusted players (like crafters) from filters via the right-click menu, preventing accidental blocks.<br>
-  *支持右键一键添加白名单，豁免暂离等过滤规则，彻底告别公益工匠误伤。*
+*   **Automated Harassment Defense / 骚扰自动拦截**<br>
+    Automatically declines group invitations, trade requests, guild invites, and duel challenges from blacklisted players with silent background processing.<br>
+    自动静默拒绝黑名单玩家发起的组队、交易、公会邀请及决斗请求，全程后台静默处理，拒绝任何干扰。
 
-* **Intelligent Auto-decline / 智能拦截:** Automatically declines group invitations and trade requests from blacklisted players.<br>
-  *自动拒绝黑名单玩家的组队邀请与交易请求。*
+*   **Intelligent Raid & Party Alerts / 团队潜入预警**<br>
+    Automatically scans group/raid members upon joining. If a blacklisted player is detected, you will receive a prominent, one-time local warning.<br>
+    入队自动扫描机制，若队伍或团队中混入黑名单玩家，系统将即时发出醒目的本地红色预警。
 
-* **Cross-realm Support / 跨服精准支持:** Accurately identifies and blocks players even when they are from different realms, with automatic server name verification.<br>
-  *精准识别跨服玩家，支持自动服务器名称补全与校验。*
+*   **Cross-realm & Version Sync / 跨服适配与版本感知**<br>
+    Accurately identifies players across servers and keeps your anti-spam defenses updated with a built-in silent version-check mechanism.<br>
+    精准支持跨服玩家识别，内置静默版本感知功能，确保你的过滤规则时刻保持在最新防御前沿。
 
-* **Easy Data Management / 便捷数据管理:** Import and export your blacklist effortlessly using structured data code.<br>
-  *支持通过代码轻松导入或导出你的黑名单数据，方便备份与分享。*
+*   **Easy Data Management / 便捷数据管理**<br>
+    Import, export, and merge your blacklist effortlessly using structured data code, making backup and sharing simple.<br>
+    支持通过代码轻松导入、导出及合并你的黑名单数据库，备份与分享仅在指尖瞬间。    
 
+---
+## 🌍 Language Support / 语言支持
+
+English (enUS) / 简体中文 (zhCN) / 繁体中文 (zhTW)
 ---
 
 ## 🌍 Region Compatibility (区域兼容性说明)
