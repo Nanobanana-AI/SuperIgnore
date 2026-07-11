@@ -1,4 +1,4 @@
--- SuperIgnore v1.5.0
+-- SuperIgnore v1.6.0
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -58,7 +58,13 @@ local L = {
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
-	ABOUT_TEXT = "Author: okqiyi \nVersion: v1.5.0\n\n【v1.5.0 Updates】\n- New: One-time alert when a blacklisted player joins your group.\n- Optimized: Underlying logic and performance optimization.\n\nFeedback and bug reports are welcome on CurseForge!",
+	ABOUT_TITLE = "SuperIgnore",
+    ABOUT_AUTHOR = "Author: okqiyi",
+    ABOUT_VERSION_TEXT = "Version: v%s",
+    ABOUT_UPDATE_TITLE = "【Updates】",
+    ABOUT_UPDATE_NEW = "- Auto-sync official ignore list.",
+    ABOUT_UPDATE_OPT = "- Underlying logic and performance optimization.",
+    ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
     
@@ -83,6 +89,13 @@ local L = {
     MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone addon not found or list empty.",
     MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone list already synced. No new players found.",
 	MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] ALERT: %s (Note: %s) is on your blacklist. Please be cautious!|r",
+	UI_BTN_SYNC_OFFICIAL = "Sync Official Ignore",
+    REASON_OFFICIAL = "Official Sync",
+    UI_CHK_AUTOSYNC_MS = "Auto-sync MS",
+    UI_CHK_AUTOSYNC_OFFICIAL = "Auto-sync Official",
+    MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r Official sync! Added %d new players.",
+    MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r Official list synced. No new players.",
+	MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] New version available: v%s|r",
 }
 
 local locale = GetLocale()
@@ -136,7 +149,13 @@ if locale == "zhCN" then
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
-	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.5.0\n\n【v1.5.0 核心更新】\n- 新增：当队伍或团队中混入黑名单玩家时，发出一次性高亮预警。\n- 优化：底层逻辑和性能优化。\n\n如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
+	L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
+    L.ABOUT_AUTHOR = "作者: okqiyi"
+    L.ABOUT_VERSION_TEXT = "版本: v%s"
+    L.ABOUT_UPDATE_TITLE = "【核心更新】"
+    L.ABOUT_UPDATE_NEW = "- 支持一键/自动同步官方屏蔽列表，突破官方上限。"
+    L.ABOUT_UPDATE_OPT = "- 底层逻辑和性能优化。"
+    L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
     L.LIST_REASON_NONE = "无"
@@ -160,6 +179,13 @@ if locale == "zhCN" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警报：%s 备注：%s 在你的黑名单列表中。请注意防范！|r"
+	L.UI_BTN_SYNC_OFFICIAL = "同步官方屏蔽列表"
+    L.REASON_OFFICIAL = "官方同步"
+    L.UI_CHK_AUTOSYNC_MS = "自动同步"
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "自动同步"
+    L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方屏蔽同步完成！新增 %d 名玩家。"
+    L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方屏蔽已全部同步过，无新增。"
+	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 发现新版本 v%s|r"
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -208,7 +234,13 @@ elseif locale == "zhTW" then
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
-	L.ABOUT_TEXT = "作者: okqiyi \n版本: v1.5.0\n\n【v1.5.0 核心更新】\n- 新增：當隊伍或團隊中混入黑名單玩家時，發出一次性高亮預警。\n- 優化：底層邏輯與性能優化。\n\n如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
+	L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
+    L.ABOUT_AUTHOR = "作者: okqiyi"
+    L.ABOUT_VERSION_TEXT = "版本: v%s"
+    L.ABOUT_UPDATE_TITLE = "【核心更新】"
+    L.ABOUT_UPDATE_NEW = "- 支援一鍵/自動同步官方黑名單，突破官方上限。"
+    L.ABOUT_UPDATE_OPT = "- 底層邏輯與性能優化。"
+    L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
     L.LIST_REASON_NONE = "無"
@@ -232,6 +264,13 @@ elseif locale == "zhTW" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未偵測到網易集合石插件，或目前沒有集合石黑名單資料。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步過，沒有發現新的黑名單。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警報：%s 備註：%s 在你的黑名單列表中。請注意防範！|r"
+	L.UI_BTN_SYNC_OFFICIAL = "同步官方黑名單"
+    L.REASON_OFFICIAL = "官方同步"
+    L.UI_CHK_AUTOSYNC_MS = "自動同步"
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "自動同步"
+    L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方黑名單同步完成！新增 %d 名玩家。"
+    L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方黑名單已全部同步過，無新增。"
+	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 發現新版本 v%s|r"
 end
 
 -- 1. 初始化数据库
@@ -249,17 +288,41 @@ local npcCache = {}
 
 -- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
-    local name = Ambiguate(author, "none")
+    local name = Ambiguate(author, "none") -- 保持原生 Ambiguate 供 DND 功能使用
     
-    -- 【新增】：最高优先级 -> 白名单检测
-    if SuperIgnoreWhiteListDB and SuperIgnoreWhiteListDB[name] then
-        return false -- 白名单玩家，直接无条件放行
+    -- ==========================================
+    -- 提取底层数据 (黑白名单共用，极大提升性能)
+    -- ==========================================
+    local rawName, rawRealm = strsplit("-", author)
+    local cleanAuthor = string.gsub(author, "%s+", "")
+    local originalHasRealm = (rawRealm and rawRealm ~= "")
+    local fullName = rawName .. "-" .. (originalHasRealm and rawRealm or GetNormalizedRealmName())
+    
+    local inInstance, _ = IsInInstance()
+    local isGroupEnv = (inInstance or IsInGroup())
+    
+    -- ==========================================
+    -- 【最高优先级 -> 白名单检测】(同款环境锁兜底)
+    -- ==========================================
+    if SuperIgnoreWhiteListDB then
+        -- 1. 精确与补全匹配
+        if SuperIgnoreWhiteListDB[cleanAuthor] or SuperIgnoreWhiteListDB[fullName] then
+            return false 
+        end
+        -- 2. 模糊匹配 (大秘境与跨服组队专用)
+        if not originalHasRealm and isGroupEnv then
+            for dbKey, _ in pairs(SuperIgnoreWhiteListDB) do
+                local dbName = strsplit("-", dbKey)
+                if dbName == rawName then
+                    return false 
+                end
+            end
+        end
     end
 
-    -- 【修复后的强硬过滤逻辑】：不再直接调用 UnitAFK(author)
+    -- 【修复后的强硬过滤逻辑】：拦截 DND/AFK
     if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false then
         if name ~= UnitName("player") then
-            -- 排除公共大频道（CHAT_MSG_CHANNEL），其他频道（私聊/说/大喊/小队/团队）全部生效
             if event ~= "CHAT_MSG_CHANNEL" then
                 if UnitIsAFK(author) or UnitIsDND(author) then
                     return true
@@ -271,47 +334,44 @@ local function ChatFilter(self, event, msg, author, ...)
     -- A. 关键词/正则匹配拦截
     if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
-            -- 1. 安全执行：使用 pcall (保护调用) 防止错误的正则语法导致过滤模块崩溃
             local success, match = pcall(string.find, msg, keyword)
-            
-            -- 如果正则匹配成功，直接拦截
-            if success and match then
-                return true
-            end
-            
-            -- 2. 智能降级：如果正则执行报错 (success为false，通常是因为玩家输入了独立的 "[" 等未转义符号)
-            -- 系统自动降级为“纯文本精确匹配” (第四个参数 true)，确保乱写的屏蔽词依然能作为纯文本拦截生效
+            if success and match then return true end
             if not success then
-                if string.find(msg, keyword, 1, true) then
+                if string.find(msg, keyword, 1, true) then return true end
+            end
+        end
+    end
+    
+    -- ==========================================
+    -- B. 超级黑名单拦截 (同款环境锁兜底)
+    -- ==========================================
+    if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then 
+        return true 
+    end
+    
+    if not originalHasRealm and isGroupEnv then
+        for dbKey, _ in pairs(SuperIgnoreDB) do
+            if string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
+                local dbName = strsplit("-", dbKey)
+                if dbName == rawName then
                     return true
                 end
             end
         end
     end
     
-    -- B. 超级黑名单拦截
-    local name, realm = strsplit("-", author)
-    if not realm or realm == "" then
-        realm = GetNormalizedRealmName()
-    end
-    local fullName = name .. "-" .. realm
-    if SuperIgnoreDB[fullName] or SuperIgnoreDB[author] then
-        return true 
-    end
-    
     -- C. 【新增】智能过滤器：重复信息防刷屏 (15秒内同一个人发一模一样的话)
     if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false then
         local now = GetTime()
         if repeatCache[author] and repeatCache[author].msg == msg and (now - repeatCache[author].time < 15) then
-            return true -- 拦截重复刷屏
+            return true 
         end
         repeatCache[author] = {msg = msg, time = now}
     end
     
-    -- D. 【新增】智能过滤器：任务组队通告过滤 (匹配典型的任务进度播报)
+    -- D. 【新增】智能过滤器：任务组队通告过滤 
     if SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false then
         if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT" then
-            -- 匹配 "1/10" 或者包含 "任务进度" 等常见通告特征
             if string.find(msg, "%d+/%d+") or string.find(msg, "任务") or string.find(msg, "进度") or string.find(msg, "Quest") then
                 return true
             end
@@ -794,9 +854,49 @@ dataFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
 dataFrame:SetPoint("BOTTOMRIGHT", -30, 20)
 dataFrame:Hide()
 
+
+
+
+
+-- ==========================================
+-- 第一行：同步集合石屏蔽列表 + 同步官方屏蔽列表 (并排)
+-- ==========================================
+local btnSyncMS = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
+btnSyncMS:SetSize(160, 25)
+btnSyncMS:SetPoint("TOPLEFT", 5, 0) -- 绝对左上角起点
+btnSyncMS:SetText(L.UI_BTN_SYNC)
+
+
+local chkAutoSyncMS = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
+chkAutoSyncMS:SetPoint("LEFT", btnSyncMS, "RIGHT", 5, 0)
+chkAutoSyncMS.Text:SetText(L.UI_CHK_AUTOSYNC_MS)
+chkAutoSyncMS.Text:SetFontObject("GameFontHighlightSmall")
+chkAutoSyncMS:SetScript("OnClick", function(self)
+    SuperIgnoreDB = SuperIgnoreDB or {}
+    SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] = self:GetChecked()
+end)
+
+local btnSyncOfficial = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
+btnSyncOfficial:SetSize(160, 25)
+btnSyncOfficial:SetPoint("LEFT", btnSyncMS, "RIGHT", 110, 0) -- 留出打钩的间距，向右平移
+btnSyncOfficial:SetText(L.UI_BTN_SYNC_OFFICIAL)
+
+
+local chkAutoSyncOfficial = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
+chkAutoSyncOfficial:SetPoint("LEFT", btnSyncOfficial, "RIGHT", 5, 0)
+chkAutoSyncOfficial.Text:SetText(L.UI_CHK_AUTOSYNC_OFFICIAL)
+chkAutoSyncOfficial.Text:SetFontObject("GameFontHighlightSmall")
+chkAutoSyncOfficial:SetScript("OnClick", function(self)
+    SuperIgnoreDB = SuperIgnoreDB or {}
+    SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] = self:GetChecked()
+end)
+
+-- ==========================================
+-- 第二行：生成导出代码 + 导入覆盖合并
+-- ==========================================
 local btnGenerate = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnGenerate:SetSize(120, 25)
-btnGenerate:SetPoint("TOPLEFT", 5, 0)
+btnGenerate:SetPoint("TOPLEFT", btnSyncMS, "BOTTOMLEFT", 0, -10) -- 挂在第一行下方，另起一行
 btnGenerate:SetText(L.UI_BTN_EXPORT)
 
 local btnImportData = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
@@ -804,19 +904,8 @@ btnImportData:SetSize(130, 25)
 btnImportData:SetPoint("LEFT", btnGenerate, "RIGHT", 20, 0)
 btnImportData:SetText(L.UI_BTN_IMPORT)
 
-local btnSyncMS = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
-btnSyncMS:SetSize(160, 25)
-btnSyncMS:SetPoint("LEFT", btnImportData, "RIGHT", 20, 0) 
-btnSyncMS:SetText(L.UI_BTN_SYNC)
 
-local chkAutoSync = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSync:SetPoint("LEFT", btnSyncMS, "RIGHT", 15, 0)
-chkAutoSync.Text:SetText(L.UI_CHK_AUTOSYNC)
-chkAutoSync.Text:SetFontObject("GameFontHighlightSmall")
-chkAutoSync:SetScript("OnClick", function(self)
-    SuperIgnoreDB = SuperIgnoreDB or {}
-    SuperIgnoreDB["__CONFIG_AUTOSYNC__"] = self:GetChecked()
-end)
+
 
 local dataStatsText = dataFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 dataStatsText:SetPoint("TOPLEFT", btnGenerate, "BOTTOMLEFT", 5, -8)
@@ -861,8 +950,20 @@ aboutTitle:SetText(L.ABOUT_TITLE)
 
 local aboutAuthor = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 aboutAuthor:SetPoint("TOPLEFT", aboutTitle, "BOTTOMLEFT", 0, -15)
-aboutAuthor:SetText(L.ABOUT_TEXT)
-aboutAuthor:SetJustifyH("LEFT") 
+
+-- 自动获取 TOC 版本号并拼接完整文本
+local ver = addonVersion or L.UNKNOWN_VERSION
+local finalAboutText = string.format("%s\n%s\n\n%s\n%s\n%s\n\n%s",
+    L.ABOUT_AUTHOR,
+    string.format(L.ABOUT_VERSION_TEXT, ver),
+    string.format(L.ABOUT_UPDATE_TITLE, ver),
+    L.ABOUT_UPDATE_NEW,
+    L.ABOUT_UPDATE_OPT,
+    L.ABOUT_FOOTER
+)
+
+aboutAuthor:SetText(finalAboutText)
+aboutAuthor:SetJustifyH("LEFT")
 
 local ngaTitle = aboutFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 ngaTitle:SetPoint("TOPLEFT", aboutAuthor, "BOTTOMLEFT", 0, -20)
@@ -946,15 +1047,27 @@ local function RefreshList()
         btnData:LockHighlight()
         dataFrame:Show()
         
-        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC__"] == false then
-            chkAutoSync:SetChecked(false)
+		if dataEditBox then
+            dataEditBox:SetText("")
+        end
+		
+        -- 1. 集合石自动同步（默认打钩）
+        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] == false then
+            chkAutoSyncMS:SetChecked(false)
         else
-            chkAutoSync:SetChecked(true)
+            chkAutoSyncMS:SetChecked(true)
+        end
+        
+        -- 2. 官方自动同步（默认打钩）
+        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] == false then
+            chkAutoSyncOfficial:SetChecked(false)
+        else
+            chkAutoSyncOfficial:SetChecked(true)
         end
         
         local pCount, kCount = 0, 0
         for k, _ in pairs(SuperIgnoreDB or {}) do 
-            -- 【极简优化】：不再一个个枚举，直接拦截所有 __CONFIG_ 前缀
+            
             if string.sub(k, 1, 9) ~= "__CONFIG_" then pCount = pCount + 1 end 
         end
         for _ in pairs(SuperIgnoreKeywordsDB or {}) do kCount = kCount + 1 end
@@ -1221,6 +1334,35 @@ btnImportData:SetScript("OnClick", function()
     pcall(RefreshList)
 end) 
 
+-- 【新增核心逻辑】同步官方黑名单 (过滤无服务器的数据，重复则跳过)
+local function DoSyncOfficial(isAuto)
+    local count = 0
+    local total = C_FriendList.GetNumIgnores() or 0
+    
+    if total > 0 then
+        SuperIgnoreDB = SuperIgnoreDB or {}
+        for i = 1, total do
+            -- 【修复】：暴雪正确的 API 是 GetIgnoreName，获取玩家名字
+            local name = C_FriendList.GetIgnoreName(i)
+            
+            -- 核心条件：有名字 + 必须带“-”服务器后缀 + 数据库里没有(防覆盖)
+            if name and name ~= "" and string.find(name, "-") and not SuperIgnoreDB[name] then
+                SuperIgnoreDB[name] = { reason = L.REASON_OFFICIAL, time = date("%Y-%m-%d %H:%M") }
+                count = count + 1
+            end
+        end
+    end
+
+    if count > 0 then
+        print(string.format(L.MSG_OFFICIAL_SUCCESS, count))
+        if RefreshList then RefreshList() end
+    else
+        if not isAuto then
+            print(L.MSG_OFFICIAL_EMPTY)
+        end
+    end
+end
+
 local function DoSyncMeetingStone(isAuto)
     if not MEETINGSTONE_UI_DB or not MEETINGSTONE_UI_DB.global or not MEETINGSTONE_UI_DB.global.UIMemory or not MEETINGSTONE_UI_DB.global.UIMemory.IGNORE_LIST then
         if not isAuto then
@@ -1254,16 +1396,21 @@ local function DoSyncMeetingStone(isAuto)
     end
 end
 
-btnSyncMS:SetScript("OnClick", function() 
-    DoSyncMeetingStone(false)
-end)
+btnSyncMS:SetScript("OnClick", function() DoSyncMeetingStone(false) end)
+btnSyncOfficial:SetScript("OnClick", function() DoSyncOfficial(false) end)
+
+
 
 searchBox:SetScript("OnTextChanged", RefreshList)
 
 panel:SetScript("OnShow", function()
-    if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC__"] ~= false then
-        if DoSyncMeetingStone then 
-            DoSyncMeetingStone(true) 
+    if SuperIgnoreDB then
+        -- 默认打钩，除非玩家手动取消
+        if SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] ~= false then
+            if DoSyncMeetingStone then DoSyncMeetingStone(true) end
+        end
+        if SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] ~= false then
+            if DoSyncOfficial then DoSyncOfficial(true) end
         end
     end
     RefreshList()
@@ -1274,3 +1421,53 @@ if Settings and Settings.RegisterCanvasLayoutCategory then
     Settings.RegisterAddOnCategory(category)
     SuperIgnoreCategory = category
 end
+
+
+-- ==========================================
+-- 9. 插件版本静默检测 (Addon Version Check)
+-- ==========================================
+C_ChatInfo.RegisterAddonMessagePrefix("SuperIgnore")
+
+local function ParseVersion(verStr)
+    if not verStr then return 0, 0, 0 end
+    local major, minor, patch = string.match(verStr, "(%d+)%.(%d+)%.(%d+)")
+    return tonumber(major) or 0, tonumber(minor) or 0, tonumber(patch) or 0
+end
+
+local myVerString = C_AddOns.GetAddOnMetadata("SuperIgnore", "Version") or "1.0.0"
+myVerString = string.gsub(myVerString, "v", "") 
+local myV1, myV2, myV3 = ParseVersion(myVerString)
+
+local hasWarnedUpdate = false 
+
+local commFrame = CreateFrame("Frame")
+commFrame:RegisterEvent("CHAT_MSG_ADDON")
+commFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+commFrame:RegisterEvent("GROUP_ROSTER_UPDATE")
+
+commFrame:SetScript("OnEvent", function(self, event, prefix, msg, channel, sender)
+    if event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE" then
+        if IsInGroup() then
+            local dist = IsInRaid() and "RAID" or "PARTY"
+            C_ChatInfo.SendAddonMessage("SuperIgnore", myVerString, dist)
+        end
+        if IsInGuild() then
+            C_ChatInfo.SendAddonMessage("SuperIgnore", myVerString, "GUILD")
+        end
+        return
+    end
+
+    if event == "CHAT_MSG_ADDON" and prefix == "SuperIgnore" then
+        local myFullName = UnitName("player") .. "-" .. GetNormalizedRealmName()
+        if sender == myFullName then return end
+
+        if not hasWarnedUpdate then
+            local oV1, oV2, oV3 = ParseVersion(msg)
+            if oV1 > myV1 or (oV1 == myV1 and oV2 > myV2) or (oV1 == myV1 and oV2 == myV2 and oV3 > myV3) then
+                hasWarnedUpdate = true
+                -- 调用字典中极简的一句话提示
+                print(string.format(L.MSG_UPDATE_AVAILABLE, msg))
+            end
+        end
+    end
+end)
