@@ -83,6 +83,14 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+
+## 🌟 v1.7.0 - (2026.07.20)
+
+*   **🚀 Comprehensive Blocklist Synchronization**: Added full support for syncing the GroupFinder blocklist. The addon now strictly extracts valid "Player-Realm" entries and automatically filters out invalid title data to completely prevent "Unknown Target" errors.
+*   **🎨 UI Panel Overhaul**: Redesigned the Data/Sync tab for a cleaner, minimalist layout. Introduced a unified auto-sync settings section with independent checkboxes for Official, MeetingStone, and GroupFinder platforms, eliminating button clutter.
+*   **🚀 全面同步扩展**：新增对队伍查找器（GroupFinder）黑名单的同步支持。底层逻辑严格校验并仅提取有效的“玩家-服务器”格式，自动丢弃标题类垃圾数据，彻底解决同步后出现“未知目标”的问题！
+*   **🎨 界面排版重构**：优化了“数据/同步”面板的视觉排版。采用极简设计，将官方、网易集合石、队伍查找器的同步操作整合为纯文字提示加独立复选框的统一配置区，告别界面拥挤。
+
 ## 🌟 v1.6.0 - (2026.07.11)
 
 🚀 Official Ignore List Synchronization: Added one-click/auto-sync for Blizzard’s official ignore list. It accurately extracts "Player-Realm" entries while filtering out outdated, invalid data, helping you bypass the official ignore cap.
