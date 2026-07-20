@@ -6,8 +6,9 @@
 ## Notes-zhCN: 战网全角色共享！一次拉黑，全账号生效的智能黑名单与防刷屏工具。
 ## Notes-zhTW: 戰網全角色共享！一次黑單，全帳號生效的智能黑名單與防洗頻工具。
 ## Author: okqiyi
-## Version: 1.6.0
+## Version: 1.7.0
 ## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB, SuperIgnoreWhiteListDB
+## OptionalDeps: MeetingStone, GroupFinder
 ## IconTexture: 136813
 
 SuperIgnore.lua
