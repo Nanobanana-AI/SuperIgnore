@@ -1,4 +1,4 @@
--- SuperIgnore v1.6.0
+-- SuperIgnore v1.7.0
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -62,7 +62,7 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- Auto-sync official ignore list.",
+    ABOUT_UPDATE_NEW = "- New: Auto-sync for Official, MeetingStone, and GroupFinder blocklists.",
     ABOUT_UPDATE_OPT = "- Underlying logic and performance optimization.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
@@ -96,6 +96,16 @@ local L = {
     MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r Official sync! Added %d new players.",
     MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r Official list synced. No new players.",
 	MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] New version available: v%s|r",
+	
+    UI_SYNC_LABEL = "Auto-Sync:",
+    UI_CHK_AUTOSYNC_OFFICIAL = "Official",
+    UI_CHK_AUTOSYNC_MS = "MeetingStone",
+    UI_CHK_AUTOSYNC_GF = "GroupFinder",
+    
+    REASON_GF = "GroupFinder Sync",
+    MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r GroupFinder addon not found or list empty.",
+    MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r GroupFinder list already synced. No new entries.",
+    MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r GroupFinder sync! Added %d players.",
 }
 
 local locale = GetLocale()
@@ -153,7 +163,7 @@ if locale == "zhCN" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 支持一键/自动同步官方屏蔽列表，突破官方上限。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支持自动同步官方、集合石及队伍查找器黑名单。"
     L.ABOUT_UPDATE_OPT = "- 底层逻辑和性能优化。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
@@ -179,13 +189,23 @@ if locale == "zhCN" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警报：%s 备注：%s 在你的黑名单列表中。请注意防范！|r"
-	L.UI_BTN_SYNC_OFFICIAL = "同步官方屏蔽列表"
+	
     L.REASON_OFFICIAL = "官方同步"
     L.UI_CHK_AUTOSYNC_MS = "自动同步"
     L.UI_CHK_AUTOSYNC_OFFICIAL = "自动同步"
     L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方屏蔽同步完成！新增 %d 名玩家。"
     L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方屏蔽已全部同步过，无新增。"
 	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 发现新版本 v%s|r"
+	
+    L.UI_SYNC_LABEL = "自动同步黑名单数据："
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
+    L.UI_CHK_AUTOSYNC_MS = "网易集合石"
+    L.UI_CHK_AUTOSYNC_GF = "队伍查找器"
+    
+    L.REASON_GF = "队伍查找器同步"
+    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未检测到 GroupFinder 插件或数据。"
+    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 队伍查找器已全部同步过，无新增。"
+    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 队伍查找器同步完成！新增: 玩家 %d 名。"
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -238,7 +258,7 @@ elseif locale == "zhTW" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 支援一鍵/自動同步官方黑名單，突破官方上限。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支援自動同步官方、集合石及隊伍尋找器黑名單。"
     L.ABOUT_UPDATE_OPT = "- 底層邏輯與性能優化。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
@@ -264,13 +284,23 @@ elseif locale == "zhTW" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未偵測到網易集合石插件，或目前沒有集合石黑名單資料。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步過，沒有發現新的黑名單。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警報：%s 備註：%s 在你的黑名單列表中。請注意防範！|r"
-	L.UI_BTN_SYNC_OFFICIAL = "同步官方黑名單"
+	
     L.REASON_OFFICIAL = "官方同步"
     L.UI_CHK_AUTOSYNC_MS = "自動同步"
     L.UI_CHK_AUTOSYNC_OFFICIAL = "自動同步"
     L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方黑名單同步完成！新增 %d 名玩家。"
     L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方黑名單已全部同步過，無新增。"
 	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 發現新版本 v%s|r"
+	
+    L.UI_SYNC_LABEL = "自動同步黑名單資料："
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
+    L.UI_CHK_AUTOSYNC_MS = "網易集合石"
+    L.UI_CHK_AUTOSYNC_GF = "隊伍尋找器"
+    
+    L.REASON_GF = "隊伍尋找器同步"
+    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未偵測到 GroupFinder 插件或資料。"
+    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 隊伍尋找器已全部同步過，無新增。"
+    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 隊伍尋找器同步完成！新增: 玩家 %d 名。"
 end
 
 -- 1. 初始化数据库
@@ -859,45 +889,58 @@ dataFrame:Hide()
 
 
 -- ==========================================
--- 第一行：同步集合石屏蔽列表 + 同步官方屏蔽列表 (并排)
+-- 第一行：纯文字提示 + 三大黑名单自动同步复选框
 -- ==========================================
-local btnSyncMS = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
-btnSyncMS:SetSize(160, 25)
-btnSyncMS:SetPoint("TOPLEFT", 5, 0) -- 绝对左上角起点
-btnSyncMS:SetText(L.UI_BTN_SYNC)
+-- 1. 纯文字标签
+local syncLabel = dataFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+syncLabel:SetPoint("TOPLEFT", 10, -5)
+syncLabel:SetText(L.UI_SYNC_LABEL) -- 调用字典
 
-
-local chkAutoSyncMS = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncMS:SetPoint("LEFT", btnSyncMS, "RIGHT", 5, 0)
-chkAutoSyncMS.Text:SetText(L.UI_CHK_AUTOSYNC_MS)
-chkAutoSyncMS.Text:SetFontObject("GameFontHighlightSmall")
-chkAutoSyncMS:SetScript("OnClick", function(self)
-    SuperIgnoreDB = SuperIgnoreDB or {}
-    SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] = self:GetChecked()
-end)
-
-local btnSyncOfficial = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
-btnSyncOfficial:SetSize(160, 25)
-btnSyncOfficial:SetPoint("LEFT", btnSyncMS, "RIGHT", 110, 0) -- 留出打钩的间距，向右平移
-btnSyncOfficial:SetText(L.UI_BTN_SYNC_OFFICIAL)
-
-
+-- 2. 官方 (复选框)
 local chkAutoSyncOfficial = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncOfficial:SetPoint("LEFT", btnSyncOfficial, "RIGHT", 5, 0)
-chkAutoSyncOfficial.Text:SetText(L.UI_CHK_AUTOSYNC_OFFICIAL)
+chkAutoSyncOfficial:SetPoint("LEFT", syncLabel, "RIGHT", 10, 0)
+chkAutoSyncOfficial.Text:SetText(L.UI_CHK_AUTOSYNC_OFFICIAL) -- 调用字典
 chkAutoSyncOfficial.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncOfficial:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] = self:GetChecked()
 end)
 
+-- 3. 网易集合石 (复选框)
+local chkAutoSyncMS = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
+chkAutoSyncMS:SetPoint("LEFT", chkAutoSyncOfficial, "RIGHT", 50, 0)
+chkAutoSyncMS.Text:SetText(L.UI_CHK_AUTOSYNC_MS) -- 调用字典
+chkAutoSyncMS.Text:SetFontObject("GameFontHighlightSmall")
+chkAutoSyncMS:SetScript("OnClick", function(self)
+    SuperIgnoreDB = SuperIgnoreDB or {}
+    SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] = self:GetChecked()
+end)
+
+-- 4. 队伍查找器 (复选框)
+local chkAutoSyncGF = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
+chkAutoSyncGF:SetPoint("LEFT", chkAutoSyncMS, "RIGHT", 80, 0)
+chkAutoSyncGF.Text:SetText(L.UI_CHK_AUTOSYNC_GF) -- 调用字典
+chkAutoSyncGF.Text:SetFontObject("GameFontHighlightSmall")
+chkAutoSyncGF:SetScript("OnClick", function(self)
+    SuperIgnoreDB = SuperIgnoreDB or {}
+    SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] = self:GetChecked()
+end)
+
+
+
+
 -- ==========================================
 -- 第二行：生成导出代码 + 导入覆盖合并
 -- ==========================================
 local btnGenerate = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnGenerate:SetSize(120, 25)
-btnGenerate:SetPoint("TOPLEFT", btnSyncMS, "BOTTOMLEFT", 0, -10) -- 挂在第一行下方，另起一行
+-- 挂靠在纯文字标签的下方
+btnGenerate:SetPoint("TOPLEFT", syncLabel, "BOTTOMLEFT", -5, -15) 
 btnGenerate:SetText(L.UI_BTN_EXPORT)
+
+
+
+
 
 local btnImportData = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnImportData:SetSize(130, 25)
@@ -1065,6 +1108,13 @@ local function RefreshList()
             chkAutoSyncOfficial:SetChecked(true)
         end
         
+		-- 3. 队伍查找器自动同步（默认打钩）
+        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] == false then
+            chkAutoSyncGF:SetChecked(false)
+        else
+            chkAutoSyncGF:SetChecked(true)
+        end
+		
         local pCount, kCount = 0, 0
         for k, _ in pairs(SuperIgnoreDB or {}) do 
             
@@ -1396,21 +1446,64 @@ local function DoSyncMeetingStone(isAuto)
     end
 end
 
-btnSyncMS:SetScript("OnClick", function() DoSyncMeetingStone(false) end)
-btnSyncOfficial:SetScript("OnClick", function() DoSyncOfficial(false) end)
+
+-- 【核心修复】同步 GroupFinder 队伍查找器黑名单 (严格仅同步有效玩家)
+local function DoSyncGroupFinder(isAuto)
+    if not GroupFinderDB or type(GroupFinderDB.blocklist) ~= "table" then
+        if not isAuto then print(L.MSG_ERR_NO_GF) end
+        return
+    end
+
+    local pCount = 0
+    SuperIgnoreDB = SuperIgnoreDB or {}
+
+    for _, data in ipairs(GroupFinderDB.blocklist) do
+        -- 核心修正：必须同时满足以下三个条件
+        -- 1. 类型必须是 leader (玩家)
+        -- 2. 字段有值且不为空
+        -- 3. 必须包含服务器连字符 "-" (防止把标题或无效数据当成玩家导入)
+        if data.kind == "leader" and data.leader and data.leader ~= "" then
+            local name = data.leader
+            if string.find(name, "-") and not SuperIgnoreDB[name] then
+                SuperIgnoreDB[name] = { 
+                    reason = data.note or L.REASON_GF, 
+                    time = data.time or date("%Y-%m-%d %H:%M") 
+                }
+                pCount = pCount + 1
+            end
+        end
+    end
+
+    if pCount > 0 then
+        print(string.format(L.MSG_GF_SUCCESS, pCount))
+        if RefreshList then RefreshList() end
+    else
+        if not isAuto then
+            print(L.MSG_GF_EMPTY)
+        end
+    end
+end
+
+
+
+
 
 
 
 searchBox:SetScript("OnTextChanged", RefreshList)
 
+-- [在文件最底部的面板显示事件里添加：]
 panel:SetScript("OnShow", function()
     if SuperIgnoreDB then
-        -- 默认打钩，除非玩家手动取消
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] ~= false then
             if DoSyncMeetingStone then DoSyncMeetingStone(true) end
         end
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] ~= false then
             if DoSyncOfficial then DoSyncOfficial(true) end
+        end
+        -- 【新增】打开面板时自动触发 GF 同步
+        if SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] ~= false then
+            if DoSyncGroupFinder then DoSyncGroupFinder(true) end
         end
     end
     RefreshList()
@@ -1471,3 +1564,4 @@ commFrame:SetScript("OnEvent", function(self, event, prefix, msg, channel, sende
         end
     end
 end)
+
