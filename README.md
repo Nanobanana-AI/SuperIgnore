@@ -83,6 +83,13 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.7.1 - (2026.08.02)
+
+*   **🚀 **Cross-Realm Instance Fix**: Fixed a critical silent crash caused by the system API occasionally returning empty realm names in cross-realm environments (Raids, Battlegrounds, Dungeons). The anti-spam filter will now work flawlessly in all instanced content, ensuring spam is strictly blocked.
+
+*   **🚀 **跨服副本防崩溃修复**：紧急修复了在跨服环境（团队副本、大秘境、战场）中，因系统底层接口偶发性获取不到服务器名而引发的静默报错问题。现在进本后防刷屏功能将完美无缝衔接，把连发刷屏宏死死按在第一条！
+
+
 
 ## 🌟 v1.7.0 - (2026.07.20)
 
