@@ -1,4 +1,4 @@
--- SuperIgnore v1.7.0
+-- SuperIgnore v1.7.1
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -63,7 +63,7 @@ local L = {
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
     ABOUT_UPDATE_NEW = "- New: Auto-sync for Official, MeetingStone, and GroupFinder blocklists.",
-    ABOUT_UPDATE_OPT = "- Underlying logic and performance optimization.",
+    ABOUT_UPDATE_OPT = "- Fix: Resolved anti-spam failure and silent crashes in cross-realm instances.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
@@ -164,7 +164,7 @@ if locale == "zhCN" then
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
     L.ABOUT_UPDATE_NEW = "- 新增：支持自动同步官方、集合石及队伍查找器黑名单。"
-    L.ABOUT_UPDATE_OPT = "- 底层逻辑和性能优化。"
+    L.ABOUT_UPDATE_OPT = "- 修复：跨服环境（副本/战场）下防刷屏偶发失效及报错问题。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
@@ -259,7 +259,7 @@ elseif locale == "zhTW" then
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
     L.ABOUT_UPDATE_NEW = "- 新增：支援自動同步官方、集合石及隊伍尋找器黑名單。"
-    L.ABOUT_UPDATE_OPT = "- 底層邏輯與性能優化。"
+    L.ABOUT_UPDATE_OPT = "- 修復：跨服環境（副本/戰場）下防洗頻偶發失效及報錯問題。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
@@ -318,15 +318,18 @@ local npcCache = {}
 
 -- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
-    local name = Ambiguate(author, "none") -- 保持原生 Ambiguate 供 DND 功能使用
+    local name = Ambiguate(author, "none") 
     
     -- ==========================================
-    -- 提取底层数据 (黑白名单共用，极大提升性能)
+    -- 提取底层数据 (安全修复：防止跨服/副本中静默崩溃)
     -- ==========================================
     local rawName, rawRealm = strsplit("-", author)
     local cleanAuthor = string.gsub(author, "%s+", "")
     local originalHasRealm = (rawRealm and rawRealm ~= "")
-    local fullName = rawName .. "-" .. (originalHasRealm and rawRealm or GetNormalizedRealmName())
+    
+    -- 核心修复：加了 'or ""' 兜底。即使副本里系统抽风返回 nil，插件也不会崩溃罢工
+    local myRealm = GetNormalizedRealmName() or ""
+    local fullName = rawName .. "-" .. (originalHasRealm and rawRealm or myRealm)
     
     local inInstance, _ = IsInInstance()
     local isGroupEnv = (inInstance or IsInGroup())
@@ -390,13 +393,16 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
     
-    -- C. 【新增】智能过滤器：重复信息防刷屏 (15秒内同一个人发一模一样的话)
+    -- C. 【新增】智能过滤器：重复信息防刷屏 (过滤空格绕过版)
     if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false then
         local now = GetTime()
-        if repeatCache[author] and repeatCache[author].msg == msg and (now - repeatCache[author].time < 15) then
+        -- 核心杀招：删掉字符串里所有的空格、换行符等空白字符，提取骨架
+        local strippedMsg = string.gsub(msg, "%s+", "")
+        
+        if repeatCache[author] and repeatCache[author].msg == strippedMsg and (now - repeatCache[author].time < 15) then
             return true 
         end
-        repeatCache[author] = {msg = msg, time = now}
+        repeatCache[author] = {msg = strippedMsg, time = now}
     end
     
     -- D. 【新增】智能过滤器：任务组队通告过滤 
