@@ -54,7 +54,7 @@
 ---
 ## 🌍 Language Support / 语言支持
 
-English (enUS) / 简体中文 (zhCN) / 繁体中文 (zhTW)
+English (enUS) / 简体中文 (zhCN) / 繁体中文 (zhTW) / 한국어 (koKR)
 ---
 
 ## 🌍 Region Compatibility (区域兼容性说明)
