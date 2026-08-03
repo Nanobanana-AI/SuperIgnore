@@ -1,4 +1,4 @@
--- SuperIgnore v1.7.1
+-- SuperIgnore v1.7.2
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -62,7 +62,7 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- New: Auto-sync for Official, MeetingStone, and GroupFinder blocklists.",
+    ABOUT_UPDATE_NEW = "- New: Korean (koKR); Auto-sync Official & LFG addon blocklists.",
     ABOUT_UPDATE_OPT = "- Fix: Resolved anti-spam failure and silent crashes in cross-realm instances.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
@@ -100,12 +100,19 @@ local L = {
     UI_SYNC_LABEL = "Auto-Sync:",
     UI_CHK_AUTOSYNC_OFFICIAL = "Official",
     UI_CHK_AUTOSYNC_MS = "MeetingStone",
-    UI_CHK_AUTOSYNC_GF = "GroupFinder",
+    UI_CHK_AUTOSYNC_GF = "GroupFinder",      
+    UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard", 
     
     REASON_GF = "GroupFinder Sync",
+    REASON_PGB = "PremadeGroupBoard Sync", -- 【新增】
     MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r GroupFinder addon not found or list empty.",
+    MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r PremadeGroupBoard addon not found or list empty.", -- 【新增】
     MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r GroupFinder list already synced. No new entries.",
+    MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PremadeGroupBoard list already synced. No new entries.", -- 【新增】
     MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r GroupFinder sync! Added %d players.",
+    MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PremadeGroupBoard sync! Added %d players.", -- 【新增】
+	
+	
 }
 
 local locale = GetLocale()
@@ -163,7 +170,7 @@ if locale == "zhCN" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支持自动同步官方、集合石及队伍查找器黑名单。"
+    L.ABOUT_UPDATE_NEW = "- 新增：韩语(koKR)；支持自动同步官方及集合石等组队插件黑名单。"
     L.ABOUT_UPDATE_OPT = "- 修复：跨服环境（副本/战场）下防刷屏偶发失效及报错问题。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
@@ -201,11 +208,16 @@ if locale == "zhCN" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "网易集合石"
     L.UI_CHK_AUTOSYNC_GF = "队伍查找器"
+    L.UI_CHK_AUTOSYNC_PGB = "PGB" 
     
     L.REASON_GF = "队伍查找器同步"
+    L.REASON_PGB = "PGB 同步" -- 【新增】
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未检测到 GroupFinder 插件或数据。"
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未检测到 PremadeGroupBoard 插件或数据。" -- 【新增】
     L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 队伍查找器已全部同步过，无新增。"
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名单已全部同步过，无新增。" -- 【新增】
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 队伍查找器同步完成！新增: 玩家 %d 名。"
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名单同步完成！新增: 玩家 %d 名。" -- 【新增】
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -258,7 +270,7 @@ elseif locale == "zhTW" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支援自動同步官方、集合石及隊伍尋找器黑名單。"
+    L.ABOUT_UPDATE_NEW = "- 新增：韓語(koKR)；支援自動同步官方及集合石等組隊插件黑名單。"
     L.ABOUT_UPDATE_OPT = "- 修復：跨服環境（副本/戰場）下防洗頻偶發失效及報錯問題。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
@@ -296,12 +308,118 @@ elseif locale == "zhTW" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "網易集合石"
     L.UI_CHK_AUTOSYNC_GF = "隊伍尋找器"
+    L.UI_CHK_AUTOSYNC_PGB = "預創建隊伍面板 (PGB)" 
     
     L.REASON_GF = "隊伍尋找器同步"
+    L.REASON_PGB = "PGB 同步" -- 【新增】
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未偵測到 GroupFinder 插件或資料。"
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未偵測到 PremadeGroupBoard 插件或資料。" -- 【新增】
     L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 隊伍尋找器已全部同步過，無新增。"
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名單已全部同步過，無新增。" -- 【新增】
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 隊伍尋找器同步完成！新增: 玩家 %d 名。"
-end
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名單同步完成！新增: 玩家 %d 名。" -- 【新增】
+
+
+elseif locale == "koKR" then
+    L.UI_ADD_TITLE = "SuperIgnore에 추가"
+    L.UI_TARGET_NONE = "대상: 없음"
+    L.UI_TARGET_PREFIX = "대상: |cff00ff00"
+    L.UI_BTN_CONFIRM = "확인"
+    L.UI_BTN_CANCEL = "취소"
+    L.BTN_R1 = "버스"
+    L.BTN_R2 = "광고"
+    L.BTN_R3 = "비매너"
+    L.BTN_R4 = "봇"
+    L.MENU_ADD = "SuperIgnore에 추가"
+    L.MENU_WHITELIST = "화이트리스트에 추가"  
+    L.REASON_MANUAL = "수동 추가"
+    L.REASON_IMPORT = "가져오기"
+    L.REASON_MS = "MeetingStone 동기화"
+    L.UNKNOWN_VERSION = "알 수 없는 버전"
+    L.PANEL_DESC1 = "SuperIgnore는 가볍고 성능이 뛰어난 채팅 필터 및 차단 목록 애드온입니다."
+    L.PANEL_DESC2 = "계정 전체 차단을 지원합니다. 한 번만 차단하면 모든 캐릭터의 채팅이 깨끗해집니다!"
+    
+    L.TAB_WHITELIST = "화이트리스트"
+    L.UI_WHITELIST_INPUT = "화이트리스트 플레이어-서버:"
+    L.MSG_WHITELISTED = "|cff00ff00[SuperIgnore]|r 화이트리스트에 추가됨: %s"
+    
+    L.TAB_PLAYER = "플레이어 차단"
+    L.TAB_KEYWORD = "키워드 차단"
+    L.TAB_FILTERS = "확장 필터"
+    L.TAB_DATA = "데이터/동기화"
+    L.TAB_ABOUT = "정보"
+    
+    L.UI_PLAYER_INPUT = "플레이어-서버:"
+    L.UI_REASON_INPUT = "메모:"
+    L.UI_BTN_ADD = "추가"
+    L.UI_KEYWORD_INPUT = "새 키워드 (정규식):"
+    L.UI_SEARCH = "검색:"
+    L.UI_BTN_EXPORT = "데이터 내보내기"
+    L.UI_BTN_IMPORT = "가져오기 및 병합"
+    L.UI_BTN_SYNC = "MeetingStone 동기화"
+    
+    L.UI_CHK_AUTOSYNC = "패널 열기 시 자동 동기화"
+    L.UI_CHK_DND = "자리비움/다른용무중 플레이어 메시지 차단"
+    L.UI_CHK_REPEAT = "동일 메시지 반복 차단 (도배 방지)"
+    L.UI_CHK_ACHV = "중복 업적 메시지 합치기"
+    L.UI_CHK_NPC = "NPC 반복 대사 차단"
+    L.UI_CHK_QUEST = "퀘스트/인던 진행 알림 차단"
+    
+    L.STATS_TEXT = "통계: 플레이어 %d명 차단, 키워드 %d개 차단"
+    L.ABOUT_TITLE = "SuperIgnore"
+    L.ABOUT_AUTHOR = "제작자: okqiyi"
+    L.ABOUT_VERSION_TEXT = "버전: v%s"
+    L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
+    L.ABOUT_UPDATE_NEW = "- 추가: 한국어(koKR) 완벽 지원; 공식 및 MeetingStone 등 파티 찾기 애드온 차단 목록 자동 동기화."
+    L.ABOUT_UPDATE_OPT = "- 수정: 인스턴스/크로스 서버 환경에서 도배 방지 기능 오류 및 충돌 해결."
+    L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
+    L.ABOUT_NGA = "NGA (Ctrl+C로 복사):"
+    L.ABOUT_CF = "CurseForge (Ctrl+C로 복사):"
+    L.LIST_REASON_NONE = "없음"
+    L.LIST_ADD_TIME = "추가일: "
+    L.LIST_BTN_REMOVE = "삭제"
+    
+    L.MSG_GROUP_DECLINED = "|cffff0000[SuperIgnore]|r 차단된 플레이어 %s의 파티 초대를 자동으로 거절했습니다."
+    L.MSG_TRADE_DECLINED = "|cffff0000[SuperIgnore]|r 차단된 플레이어 %s의 거래 요청을 자동으로 거절했습니다."
+    L.MSG_BLACKLISTED = "|cffff0000[SuperIgnore]|r %s 차단됨. 사유: %s"
+    L.MSG_ADDED_KEYWORD = "|cffff0000[SuperIgnore]|r 키워드를 추가했습니다: %s"
+    L.MSG_EXPORTED = "|cffff0000[SuperIgnore]|r 내보내기 코드가 생성되었습니다. Ctrl+C로 복사하세요."
+    L.MSG_IMPORT_SUCCESS = "|cff00ff00[SuperIgnore]|r 가져오기가 완료되었습니다. 추가됨: 플레이어 %d명, 키워드 %d개."
+    L.MSG_IMPORT_FILTERED = " |cffffff00서버 정보가 없는 유효하지 않은 항목 %d개를 자동으로 제외했습니다.|r"
+    L.MSG_MS_SUCCESS = "|cff00ff00[SuperIgnore]|r 자동 동기화 완료! 새 플레이어 %d명이 전역 차단 목록에 추가되었습니다."
+    
+    L.MSG_ERR_NO_REALM = "|cffff0000[SuperIgnore]|r 서버 정보를 가져오지 못해 차단에 실패했습니다!"
+    L.MSG_ERR_COMBAT = "|cffff0000[SuperIgnore]|r 전투 중에는 설정을 열 수 없습니다."
+    L.MSG_ERR_NO_PANEL = "|cffff0000[SuperIgnore]|r 오류: 설정 패널이 초기화되지 않았습니다."
+    L.MSG_ERR_FORMAT = "|cffff0000[SuperIgnore]|r 오류: 서버명을 반드시 포함해야 합니다. (예: 플레이어-서버)"
+    L.MSG_ERR_IMPORT = "|cffff0000[SuperIgnore]|r 잘못된 형식입니다! --SuperIgnoreDataV1 문자열이 포함되어야 합니다."
+    L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone 애드온을 찾을 수 없거나 목록이 비어 있습니다."
+    L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone 목록은 이미 동기화되어 있습니다. 새로운 플레이어가 없습니다."
+    L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 경고: %s (메모: %s) 님이 차단 목록에 있습니다. 주의하세요!|r"
+    
+    L.REASON_OFFICIAL = "공식 동기화"
+    L.UI_CHK_AUTOSYNC_MS = "자동 동기화"
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "자동 동기화"
+    L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 공식 차단 동기화 완료! 플레이어 %d명 추가."
+    L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 공식 차단 목록이 동기화되었습니다. 새로운 플레이어가 없습니다."
+    L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 새 버전이 있습니다: v%s|r"
+    
+    L.UI_SYNC_LABEL = "블랙리스트 자동 동기화:"
+    L.UI_CHK_AUTOSYNC_OFFICIAL = "공식"
+    L.UI_CHK_AUTOSYNC_MS = "MeetingStone"
+    L.UI_CHK_AUTOSYNC_GF = "파티 찾기"
+    L.UI_CHK_AUTOSYNC_PGB = "사전 구성 파티 (PGB)" -- 【新增】
+    
+    L.REASON_GF = "파티 찾기 동기화"
+    L.REASON_PGB = "PGB 동기화" -- 【新增】
+    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 파티 찾기 애드온을 찾을 수 없거나 데이터가 없습니다."
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 사전 구성 파티(PGB) 애드온을 찾을 수 없거나 데이터가 없습니다." -- 【新增】
+    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 파티 찾기 목록이 이미 동기화되었습니다. 새 항목이 없습니다."
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 목록이 이미 동기화되었습니다. 새 항목이 없습니다." -- 【新增】
+    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 파티 찾기 동기화 완료! 플레이어 %d명 추가."
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 동기화 완료! 플레이어 %d명 추가." -- 【新增】
+	
+	end
 
 -- 1. 初始化数据库
 SuperIgnoreDB = SuperIgnoreDB or {}
@@ -932,6 +1050,16 @@ chkAutoSyncGF:SetScript("OnClick", function(self)
     SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] = self:GetChecked()
 end)
 
+-- 5. PremadeGroupBoard (复选框) 【新增】
+local chkAutoSyncPGB = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
+-- 将它挂靠在队伍查找器复选框的右边
+chkAutoSyncPGB:SetPoint("LEFT", chkAutoSyncGF, "RIGHT", 80, 0) 
+chkAutoSyncPGB.Text:SetText(L.UI_CHK_AUTOSYNC_PGB) 
+chkAutoSyncPGB.Text:SetFontObject("GameFontHighlightSmall")
+chkAutoSyncPGB:SetScript("OnClick", function(self)
+    SuperIgnoreDB = SuperIgnoreDB or {}
+    SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] = self:GetChecked()
+end)
 
 
 
@@ -1119,6 +1247,13 @@ local function RefreshList()
             chkAutoSyncGF:SetChecked(false)
         else
             chkAutoSyncGF:SetChecked(true)
+        end
+		
+		-- 4. PGB自动同步（默认打钩）【新增】
+        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] == false then
+            chkAutoSyncPGB:SetChecked(false)
+        else
+            chkAutoSyncPGB:SetChecked(true)
         end
 		
         local pCount, kCount = 0, 0
@@ -1491,7 +1626,40 @@ local function DoSyncGroupFinder(isAuto)
 end
 
 
+-- 【新增核心逻辑】同步 PremadeGroupBoard (PGB) 黑名单
+local function DoSyncPremadeGroupBoard(isAuto)
+    -- 判断数据库以及 blocklist 结构是否存在
+    if not PremadeGroupBoardDB or type(PremadeGroupBoardDB.blocklist) ~= "table" then
+        if not isAuto then print(L.MSG_ERR_NO_PGB) end
+        return
+    end
 
+    local pCount = 0
+    SuperIgnoreDB = SuperIgnoreDB or {}
+
+    for _, data in ipairs(PremadeGroupBoardDB.blocklist) do
+        -- 与 GF 逻辑完全一致：必须是 leader 类型、包含名字、且带有"-"服务器标识
+        if data.kind == "leader" and data.leader and data.leader ~= "" then
+            local name = data.leader
+            if string.find(name, "-") and not SuperIgnoreDB[name] then
+                SuperIgnoreDB[name] = { 
+                    reason = data.note or L.REASON_PGB, -- 如果有 note 用 note，否则用默认理由
+                    time = data.time or date("%Y-%m-%d %H:%M") 
+                }
+                pCount = pCount + 1
+            end
+        end
+    end
+
+    if pCount > 0 then
+        print(string.format(L.MSG_PGB_SUCCESS, pCount))
+        if RefreshList then RefreshList() end
+    else
+        if not isAuto then
+            print(L.MSG_PGB_EMPTY)
+        end
+    end
+end
 
 
 
@@ -1507,9 +1675,12 @@ panel:SetScript("OnShow", function()
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] ~= false then
             if DoSyncOfficial then DoSyncOfficial(true) end
         end
-        -- 【新增】打开面板时自动触发 GF 同步
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] ~= false then
             if DoSyncGroupFinder then DoSyncGroupFinder(true) end
+        end
+        -- 【新增】打开面板时自动触发 PGB 同步
+        if SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] ~= false then
+            if DoSyncPremadeGroupBoard then DoSyncPremadeGroupBoard(true) end
         end
     end
     RefreshList()
