@@ -2,13 +2,15 @@
 ## Title: SuperIgnore
 ## Title-zhCN: SuperIgnore |cff00ff00超级黑名单|r
 ## Title-zhTW: SuperIgnore |cff00ff00超級黑名單|r
+## Title-koKR: SuperIgnore |cff00ff00슈퍼 차단|r
 ## Notes: A lightweight, account-wide ignore list that syncs across all characters.
 ## Notes-zhCN: 战网全角色共享！一次拉黑，全账号生效的智能黑名单与防刷屏工具。
 ## Notes-zhTW: 戰網全角色共享！一次黑單，全帳號生效的智能黑名單與防洗頻工具。
+## Notes-koKR: 계정 내 모든 캐릭터 공유! 한 번의 차단으로 전 캐릭터에 적용되는 스마트 차단 및 도배 방지 애드온.
 ## Author: okqiyi
-## Version: 1.7.1
+## Version: 1.7.2
 ## SavedVariables: SuperIgnoreDB, SuperIgnoreKeywordsDB, SuperIgnoreWhiteListDB
-## OptionalDeps: MeetingStone, GroupFinder
+## OptionalDeps: MeetingStone, GroupFinder, PremadeGroupBoard
 ## IconTexture: 136813
 
 SuperIgnore.lua
