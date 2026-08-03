@@ -27,9 +27,9 @@
     Block players across your entire Battle.net account. Once added to the list, they are permanently blocked on all characters.<br>
     一次添加，全战网所有角色共同生效，彻底告别重复拉黑的繁琐。
     
-*   **Official & Third-Party Sync / 双重黑名单同步**<br>
-    Seamlessly syncs ignore lists from Blizzard’s official system and the NetEase Meeting Stone, aggregating all your block data into one powerhouse database.<br>
-    支持一键同步官方屏蔽列表与网易集合石黑名单，实现多来源数据无缝整合，突破官方人数上限。
+*   **Official & Multi-Platform Auto-Sync / 官方与多平台黑名单自动同步**<br>
+     Automatically and seamlessly syncs ignore lists from Blizzard's official system, **Meeting Stone**, **GroupFinder**, and **PremadeGroupBoard (PGB)**. Aggregates all your block data from multiple addons into one ultimate powerhouse database, easily bypassing the default cap.  
+    支持打开面板全自动静默同步，完美兼容并整合**暴雪官方**、**网易集合石**、**队伍查找器 (GroupFinder)** 以及 **PremadeGroupBoard (PGB)** 的屏蔽列表。将多来源的独立黑名单一网打尽、无缝整合，轻松突破官方黑名单人数上限！
 
 *   **Smart Chat Filtering / 智能聊天过滤**<br>
     Advanced regex-based filtering cleans your chat window by blocking DND/AFK spam, repetitive NPC dialogue, and annoying advertisements.<br>
@@ -82,6 +82,20 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 ---
 
 ## 📝 Changelog (更新日志)
+
+## 🌟 v1.7.2 - (2026.08.03)
+
+🌍 **New Language Support / 多语言扩充**
+
+*   **EN:** Added full Korean (`koKR`) localization support.
+*   **CN:** 新增全面支持韩语 (`koKR`)，UI 界面与提示将根据客户端语言自动无缝适配。
+
+🔄 **Multi-Platform Auto-Sync / 多平台黑名单一键整合**
+
+*   **EN:** Seamlessly and automatically syncs ignore lists from Blizzard's official system, **Meeting Stone**, **GroupFinder**, and **PremadeGroupBoard (PGB)**. Aggregates all your block data into one ultimate powerhouse database, easily bypassing the default limit!
+*   **CN:** 支持打开面板全自动静默同步。完美兼容并整合 **暴雪官方**、**网易集合石**、**队伍查找器 (GroupFinder)** 以及 **PremadeGroupBoard (PGB)** 的屏蔽列表。将多端、多来源的独立黑名单一网打尽、无缝整合.
+
+
 
 ## 🌟 v1.7.1 - (2026.08.02)
 
