@@ -83,6 +83,11 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.7.3 - (2026.08.04)
+
+* **English**: Added a silent anti-spam filter for repetitive system messages and further optimized cross-realm stability.
+* **中文**: 新增系统黄字防刷屏静默拦截功能，并进一步优化了跨服环境下的稳定性。
+
 ## 🌟 v1.7.2 - (2026.08.03)
 
 🌍 **New Language Support / 多语言扩充**
