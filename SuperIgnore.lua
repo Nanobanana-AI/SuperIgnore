@@ -1,4 +1,4 @@
--- SuperIgnore v1.7.2
+-- SuperIgnore 
 -- A lightweight, account-wide ignore list management & chat filter tool.
 -- Copyright (c) 2026 okqiyi. All rights reserved.
 
@@ -55,6 +55,7 @@ local L = {
     UI_CHK_ACHV = "Merge duplicate achievements",
     UI_CHK_NPC = "Block repetitive NPC dialogues",
     UI_CHK_QUEST = "Block quest/instance progress spam",
+	UI_CHK_SYSTEM = "Block repetitive System messages", 
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
@@ -62,7 +63,7 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- New: Korean (koKR); Auto-sync Official & LFG addon blocklists.",
+    ABOUT_UPDATE_NEW = "- New: Auto-sync Official & LFG addon blocklists.",
     ABOUT_UPDATE_OPT = "- Fix: Resolved anti-spam failure and silent crashes in cross-realm instances.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
@@ -104,18 +105,20 @@ local L = {
     UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard", 
     
     REASON_GF = "GroupFinder Sync",
-    REASON_PGB = "PremadeGroupBoard Sync", -- 【新增】
+    REASON_PGB = "PremadeGroupBoard Sync", 
     MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r GroupFinder addon not found or list empty.",
-    MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r PremadeGroupBoard addon not found or list empty.", -- 【新增】
+    MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r PremadeGroupBoard addon not found or list empty.", 
     MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r GroupFinder list already synced. No new entries.",
-    MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PremadeGroupBoard list already synced. No new entries.", -- 【新增】
+    MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PremadeGroupBoard list already synced. No new entries.", 
     MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r GroupFinder sync! Added %d players.",
-    MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PremadeGroupBoard sync! Added %d players.", -- 【新增】
+    MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PremadeGroupBoard sync! Added %d players.", 
 	
 	
 }
 
-local locale = GetLocale()
+--  测试 用  互换 --
+
+ local locale = GetLocale()
 -- local locale = "enUS"
 
 
@@ -163,6 +166,7 @@ if locale == "zhCN" then
     L.UI_CHK_ACHV = "合并公会/队伍同款成就 (防霸屏)"
     L.UI_CHK_NPC = "拦截 NPC 高频重复台词"
     L.UI_CHK_QUEST = "拦截队伍/副本任务进度通告"
+	L.UI_CHK_SYSTEM = "拦截系统黄字连续重复刷屏" 
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
@@ -170,7 +174,7 @@ if locale == "zhCN" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：韩语(koKR)；支持自动同步官方及集合石等组队插件黑名单。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支持自动同步官方及集合石等组队插件黑名单。"
     L.ABOUT_UPDATE_OPT = "- 修复：跨服环境（副本/战场）下防刷屏偶发失效及报错问题。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
@@ -207,17 +211,17 @@ if locale == "zhCN" then
     L.UI_SYNC_LABEL = "自动同步黑名单数据："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "网易集合石"
-    L.UI_CHK_AUTOSYNC_GF = "队伍查找器"
-    L.UI_CHK_AUTOSYNC_PGB = "PGB" 
+    L.UI_CHK_AUTOSYNC_GF = "GroupFinder"
+    L.UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard" 
     
     L.REASON_GF = "队伍查找器同步"
-    L.REASON_PGB = "PGB 同步" -- 【新增】
+    L.REASON_PGB = "PGB 同步" 
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未检测到 GroupFinder 插件或数据。"
-    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未检测到 PremadeGroupBoard 插件或数据。" -- 【新增】
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未检测到 PremadeGroupBoard 插件或数据。" 
     L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 队伍查找器已全部同步过，无新增。"
-    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名单已全部同步过，无新增。" -- 【新增】
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名单已全部同步过，无新增。" 
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 队伍查找器同步完成！新增: 玩家 %d 名。"
-    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名单同步完成！新增: 玩家 %d 名。" -- 【新增】
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名单同步完成！新增: 玩家 %d 名。" 
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -263,6 +267,7 @@ elseif locale == "zhTW" then
     L.UI_CHK_ACHV = "合併公會/隊伍同款成就 (防霸屏)"
     L.UI_CHK_NPC = "攔截 NPC 高頻重複台詞"
     L.UI_CHK_QUEST = "攔截隊伍/副本任務進度通告"
+	L.UI_CHK_SYSTEM = "攔截系統黃字連續重複洗頻" 
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
@@ -270,7 +275,7 @@ elseif locale == "zhTW" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：韓語(koKR)；支援自動同步官方及集合石等組隊插件黑名單。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支援自動同步官方及集合石等組隊插件黑名單。"
     L.ABOUT_UPDATE_OPT = "- 修復：跨服環境（副本/戰場）下防洗頻偶發失效及報錯問題。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
@@ -307,17 +312,17 @@ elseif locale == "zhTW" then
     L.UI_SYNC_LABEL = "自動同步黑名單資料："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "網易集合石"
-    L.UI_CHK_AUTOSYNC_GF = "隊伍尋找器"
-    L.UI_CHK_AUTOSYNC_PGB = "預創建隊伍面板 (PGB)" 
+    L.UI_CHK_AUTOSYNC_GF = "GroupFinder"
+    L.UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard" 
     
-    L.REASON_GF = "隊伍尋找器同步"
-    L.REASON_PGB = "PGB 同步" -- 【新增】
+    L.REASON_GF = "GroupFinder同步"
+    L.REASON_PGB = "PGB 同步" 
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未偵測到 GroupFinder 插件或資料。"
-    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未偵測到 PremadeGroupBoard 插件或資料。" -- 【新增】
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未偵測到 PremadeGroupBoard 插件或資料。" 
     L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 隊伍尋找器已全部同步過，無新增。"
-    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名單已全部同步過，無新增。" -- 【新增】
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名單已全部同步過，無新增。" 
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 隊伍尋找器同步完成！新增: 玩家 %d 名。"
-    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名單同步完成！新增: 玩家 %d 名。" -- 【新增】
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名單同步完成！新增: 玩家 %d 名。" 
 
 
 elseif locale == "koKR" then
@@ -364,13 +369,14 @@ elseif locale == "koKR" then
     L.UI_CHK_ACHV = "중복 업적 메시지 합치기"
     L.UI_CHK_NPC = "NPC 반복 대사 차단"
     L.UI_CHK_QUEST = "퀘스트/인던 진행 알림 차단"
+	L.UI_CHK_SYSTEM = "시스템 메시지 반복 출력 차단" 
     
     L.STATS_TEXT = "통계: 플레이어 %d명 차단, 키워드 %d개 차단"
     L.ABOUT_TITLE = "SuperIgnore"
     L.ABOUT_AUTHOR = "제작자: okqiyi"
     L.ABOUT_VERSION_TEXT = "버전: v%s"
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
-    L.ABOUT_UPDATE_NEW = "- 추가: 한국어(koKR) 완벽 지원; 공식 및 MeetingStone 등 파티 찾기 애드온 차단 목록 자동 동기화."
+    L.ABOUT_UPDATE_NEW = "- 추가: 공식 및 MeetingStone 등 파티 찾기 애드온 차단 목록 자동 동기화."
     L.ABOUT_UPDATE_OPT = "- 수정: 인스턴스/크로스 서버 환경에서 도배 방지 기능 오류 및 충돌 해결."
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
     L.ABOUT_NGA = "NGA (Ctrl+C로 복사):"
@@ -408,28 +414,29 @@ elseif locale == "koKR" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "공식"
     L.UI_CHK_AUTOSYNC_MS = "MeetingStone"
     L.UI_CHK_AUTOSYNC_GF = "파티 찾기"
-    L.UI_CHK_AUTOSYNC_PGB = "사전 구성 파티 (PGB)" -- 【新增】
+    L.UI_CHK_AUTOSYNC_PGB = "사전 구성 파티 (PGB)" 
     
     L.REASON_GF = "파티 찾기 동기화"
-    L.REASON_PGB = "PGB 동기화" -- 【新增】
+    L.REASON_PGB = "PGB 동기화" 
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 파티 찾기 애드온을 찾을 수 없거나 데이터가 없습니다."
-    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 사전 구성 파티(PGB) 애드온을 찾을 수 없거나 데이터가 없습니다." -- 【新增】
+    L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 사전 구성 파티(PGB) 애드온을 찾을 수 없거나 데이터가 없습니다." 
     L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 파티 찾기 목록이 이미 동기화되었습니다. 새 항목이 없습니다."
-    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 목록이 이미 동기화되었습니다. 새 항목이 없습니다." -- 【新增】
+    L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 목록이 이미 동기화되었습니다. 새 항목이 없습니다." 
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 파티 찾기 동기화 완료! 플레이어 %d명 추가."
-    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 동기화 완료! 플레이어 %d명 추가." -- 【新增】
+    L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 동기화 완료! 플레이어 %d명 추가." 
 	
 	end
 
 -- 1. 初始化数据库
 SuperIgnoreDB = SuperIgnoreDB or {}
 SuperIgnoreKeywordsDB = SuperIgnoreKeywordsDB or {}
-SuperIgnoreWhiteListDB = SuperIgnoreWhiteListDB or {} -- 【新增】：独立的白名单库
+SuperIgnoreWhiteListDB = SuperIgnoreWhiteListDB or {} --：独立的白名单库
 
--- 【新增】内存级防抖缓存表 (重启游戏即清空，零负担)
+--内存级防抖缓存表 (重启游戏即清空，零负担)
 local repeatCache = {}
 local achvCache = {}
 local npcCache = {}
+local sysCache = {}
 
 
 
@@ -461,15 +468,19 @@ local function ChatFilter(self, event, msg, author, ...)
             return false 
         end
         -- 2. 模糊匹配 (大秘境与跨服组队专用)
-        if not originalHasRealm and isGroupEnv then
-            for dbKey, _ in pairs(SuperIgnoreWhiteListDB) do
-                local dbName = strsplit("-", dbKey)
-                if dbName == rawName then
-                    return false 
-                end
+-- 白名单的模糊匹配
+if not originalHasRealm and isGroupEnv then
+    for dbKey, _ in pairs(SuperIgnoreWhiteListDB) do
+        -- 加上类型判断，防止脏数据崩溃
+        if type(dbKey) == "string" then
+            local dbName = strsplit("-", dbKey)
+            if dbName == rawName then
+                return false
             end
         end
     end
+end
+end
 
     -- 【修复后的强硬过滤逻辑】：拦截 DND/AFK
     if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false then
@@ -500,16 +511,19 @@ local function ChatFilter(self, event, msg, author, ...)
         return true 
     end
     
-    if not originalHasRealm and isGroupEnv then
-        for dbKey, _ in pairs(SuperIgnoreDB) do
-            if string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
-                local dbName = strsplit("-", dbKey)
-                if dbName == rawName then
-                    return true
-                end
+    -- 黑名单的模糊匹配
+if not originalHasRealm and isGroupEnv then
+    for dbKey, _ in pairs(SuperIgnoreDB) do
+        -- 加上 type(dbKey) == "string" 的安全锁
+        if type(dbKey) == "string" and string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
+            local dbName = strsplit("-", dbKey)
+            if dbName == rawName then
+                return true
             end
         end
     end
+end
+
     
     -- C. 【新增】智能过滤器：重复信息防刷屏 (过滤空格绕过版)
     if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false then
@@ -545,7 +559,7 @@ for _, ev in ipairs(chatEvents) do
     ChatFrame_AddMessageEventFilter(ev, ChatFilter)
 end
 
--- 【新增】智能过滤器：DND/AFK 自动回复拦截
+--智能过滤器：DND/AFK 自动回复拦截
 local function FilterDND(self, event, msg, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_DND__"] ~= false then
         return true
@@ -576,7 +590,7 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD_ACHIEVEMENT", FilterAchv)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", FilterAchv)
 
 
--- 【新增】智能过滤器：NPC 重复说话过滤 (60秒内同一台词只显示一次)
+--智能过滤器：NPC 重复说话过滤 (60秒内同一台词只显示一次)
 local function FilterNPC(self, event, msg, author, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false then
         local now = GetTime()
@@ -591,6 +605,22 @@ end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_SAY", FilterNPC)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
 
+--智能过滤器：系统黄字防刷屏 (5秒内完全相同的系统提示只显示一次)
+local function FilterSystemSpam(self, event, msg, ...)
+    if SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false then
+        local now = GetTime()
+        -- 如果相同的消息在 5 秒内再次出现，则拦截
+        if sysCache[msg] and (now - sysCache[msg] < 5) then
+            -- 刷新计时器，如果一直刷，就一直拦截，直到消停 5 秒
+            sysCache[msg] = now 
+            return true
+        end
+        sysCache[msg] = now
+    end
+    return false
+end
+ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", FilterSystemSpam)
+
 
 -- ==========================================
 -- 3. 组队、交易、公会邀请与决斗拦截模块（全面封杀黑名单用户）
@@ -598,8 +628,8 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PARTY_INVITE_REQUEST")
 frame:RegisterEvent("TRADE_REQUEST")
-frame:RegisterEvent("GUILD_INVITE_REQUEST") -- 【新增】注册公会邀请事件
-frame:RegisterEvent("DUEL_REQUESTED")        -- 【新增】注册决斗请求事件
+frame:RegisterEvent("GUILD_INVITE_REQUEST") --注册公会邀请事件
+frame:RegisterEvent("DUEL_REQUESTED")        --注册决斗请求事件
 
 frame:SetScript("OnEvent", function(self, event, sender, ...)
     local cleanSender = Ambiguate(sender, "none")
@@ -616,12 +646,12 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
             print(string.format(L.MSG_TRADE_DECLINED, sender))
             
         elseif event == "GUILD_INVITE_REQUEST" then
-            DeclineGuild() -- 【新增】静默拒绝公会邀请
+            DeclineGuild() --静默拒绝公会邀请
             StaticPopup_Hide("GUILD_INVITE") -- 隐藏系统的弹窗
             
             
         elseif event == "DUEL_REQUESTED" then
-            CancelDuel() -- 【新增】静默拒绝决斗请求
+            CancelDuel() --静默拒绝决斗请求
             StaticPopup_Hide("DUEL") -- 隐藏系统的弹窗
         end
     end
@@ -977,7 +1007,7 @@ scrollFrame:SetScrollChild(scrollChild)
 local rows = {}
 
 -- ==========================================
--- 【新增】扩展过滤页签 (Filters) UI 
+--扩展过滤页签 (Filters) UI 
 -- ==========================================
 local filtersFrame = CreateFrame("Frame", nil, panel)
 filtersFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
@@ -1001,6 +1031,7 @@ local chkRepeat = CreateConfigCheck(filtersFrame, -50, "__CONFIG_FILTER_REPEAT__
 local chkAchv = CreateConfigCheck(filtersFrame, -90, "__CONFIG_FILTER_ACHV__", L.UI_CHK_ACHV)
 local chkNPC = CreateConfigCheck(filtersFrame, -130, "__CONFIG_FILTER_NPC__", L.UI_CHK_NPC)
 local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
+local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
 
 -- 数据与同步模块
 local dataFrame = CreateFrame("Frame", nil, panel)
@@ -1018,42 +1049,41 @@ dataFrame:Hide()
 -- 1. 纯文字标签
 local syncLabel = dataFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 syncLabel:SetPoint("TOPLEFT", 10, -5)
-syncLabel:SetText(L.UI_SYNC_LABEL) -- 调用字典
+syncLabel:SetText(L.UI_SYNC_LABEL) 
 
--- 2. 官方 (复选框)
+-- 2. 官方 (第一行，左侧)
 local chkAutoSyncOfficial = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
 chkAutoSyncOfficial:SetPoint("LEFT", syncLabel, "RIGHT", 10, 0)
-chkAutoSyncOfficial.Text:SetText(L.UI_CHK_AUTOSYNC_OFFICIAL) -- 调用字典
+chkAutoSyncOfficial.Text:SetText(L.UI_CHK_AUTOSYNC_OFFICIAL) 
 chkAutoSyncOfficial.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncOfficial:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] = self:GetChecked()
 end)
 
--- 3. 网易集合石 (复选框)
+-- 3. 网易集合石 (第一行，右侧 - 大幅拉开间距，给各国语言留出充足空间)
 local chkAutoSyncMS = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncMS:SetPoint("LEFT", chkAutoSyncOfficial, "RIGHT", 50, 0)
-chkAutoSyncMS.Text:SetText(L.UI_CHK_AUTOSYNC_MS) -- 调用字典
+
+chkAutoSyncMS:SetPoint("LEFT", chkAutoSyncOfficial, "RIGHT", 160, 0) 
+chkAutoSyncMS.Text:SetText(L.UI_CHK_AUTOSYNC_MS) 
 chkAutoSyncMS.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncMS:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] = self:GetChecked()
 end)
-
--- 4. 队伍查找器 (复选框)
+-- 4. 队伍查找器 (第二行，对齐到“官方”的下方)
 local chkAutoSyncGF = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncGF:SetPoint("LEFT", chkAutoSyncMS, "RIGHT", 80, 0)
-chkAutoSyncGF.Text:SetText(L.UI_CHK_AUTOSYNC_GF) -- 调用字典
+chkAutoSyncGF:SetPoint("TOPLEFT", chkAutoSyncOfficial, "BOTTOMLEFT", 0, -5) 
+chkAutoSyncGF.Text:SetText(L.UI_CHK_AUTOSYNC_GF) 
 chkAutoSyncGF.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncGF:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] = self:GetChecked()
 end)
 
--- 5. PremadeGroupBoard (复选框) 【新增】
+-- 5. PremadeGroupBoard (第二行，对齐到“集合石”的下方)
 local chkAutoSyncPGB = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
--- 将它挂靠在队伍查找器复选框的右边
-chkAutoSyncPGB:SetPoint("LEFT", chkAutoSyncGF, "RIGHT", 80, 0) 
+chkAutoSyncPGB:SetPoint("TOPLEFT", chkAutoSyncMS, "BOTTOMLEFT", 0, -5) 
 chkAutoSyncPGB.Text:SetText(L.UI_CHK_AUTOSYNC_PGB) 
 chkAutoSyncPGB.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncPGB:SetScript("OnClick", function(self)
@@ -1061,15 +1091,13 @@ chkAutoSyncPGB:SetScript("OnClick", function(self)
     SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] = self:GetChecked()
 end)
 
-
-
 -- ==========================================
 -- 第二行：生成导出代码 + 导入覆盖合并
 -- ==========================================
 local btnGenerate = CreateFrame("Button", nil, dataFrame, "UIPanelButtonTemplate")
 btnGenerate:SetSize(120, 25)
--- 挂靠在纯文字标签的下方
-btnGenerate:SetPoint("TOPLEFT", syncLabel, "BOTTOMLEFT", -5, -15) 
+-- 按钮整体往下挪，给上面多出来的一行复选框让出空间 (Y轴偏移量从 -15 改为 -45)
+btnGenerate:SetPoint("TOPLEFT", syncLabel, "BOTTOMLEFT", -5, -45) 
 btnGenerate:SetText(L.UI_BTN_EXPORT)
 
 
@@ -1216,6 +1244,7 @@ local function RefreshList()
         chkAchv:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_ACHV__"] ~= false)
         chkNPC:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false)
         chkQuest:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false)
+		chkSystem:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false)
         
         searchBox:Hide(); scrollFrame:Hide()
         return
@@ -1678,7 +1707,7 @@ panel:SetScript("OnShow", function()
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] ~= false then
             if DoSyncGroupFinder then DoSyncGroupFinder(true) end
         end
-        -- 【新增】打开面板时自动触发 PGB 同步
+        --打开面板时自动触发 PGB 同步
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] ~= false then
             if DoSyncPremadeGroupBoard then DoSyncPremadeGroupBoard(true) end
         end
