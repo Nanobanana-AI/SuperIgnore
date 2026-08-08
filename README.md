@@ -83,6 +83,12 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+
+## 🌟 v1.7.4 - (2026.08.08)
+
+* **English**: Added a silent auto-decline feature for LFG applicants when leading a group, and refactored the underlying interception logic to improve overall stability.
+* **中文**: 新增队长模式下全静默秒拒集合石/队伍查找器进组申请功能，并优化了底层拦截逻辑，全面提升多环境下的运行稳定性。
+
 ## 🌟 v1.7.3 - (2026.08.04)
 
 * **English**: Added a silent anti-spam filter for repetitive system messages and further optimized cross-realm stability.
