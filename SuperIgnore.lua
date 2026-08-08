@@ -63,8 +63,8 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- New: Auto-sync Official & LFG addon blocklists.",
-    ABOUT_UPDATE_OPT = "- Fix: Resolved anti-spam failure and silent crashes in cross-realm instances.",
+    ABOUT_UPDATE_NEW = "- New: Silently auto-declines LFG applicants when leading a group.",
+    ABOUT_UPDATE_OPT = "- Opt: Refactored underlying logic to improve overall stability.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
@@ -90,6 +90,8 @@ local L = {
     MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone addon not found or list empty.",
     MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone list already synced. No new players found.",
 	MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] ALERT: %s (Note: %s) is on your blacklist. Please be cautious!|r",
+	MSG_LFG_DECLINED = "|cffff0000[SuperIgnore]|r Auto-declined LFG applicant %s.",
+	
 	UI_BTN_SYNC_OFFICIAL = "Sync Official Ignore",
     REASON_OFFICIAL = "Official Sync",
     UI_CHK_AUTOSYNC_MS = "Auto-sync MS",
@@ -112,6 +114,7 @@ local L = {
     MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PremadeGroupBoard list already synced. No new entries.", 
     MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r GroupFinder sync! Added %d players.",
     MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PremadeGroupBoard sync! Added %d players.", 
+	
 	
 	
 }
@@ -174,8 +177,8 @@ if locale == "zhCN" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支持自动同步官方及集合石等组队插件黑名单。"
-    L.ABOUT_UPDATE_OPT = "- 修复：跨服环境（副本/战场）下防刷屏偶发失效及报错问题。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支持队长模式下，全静默秒拒黑名单玩家的集合石进组申请。"
+    L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑，全面提升多环境下的运行稳定性。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
@@ -200,6 +203,7 @@ if locale == "zhCN" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未检测到网易集合石插件，或当前没有集合石屏蔽数据。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步过，没有发现新的黑名单。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警报：%s 备注：%s 在你的黑名单列表中。请注意防范！|r"
+	L.MSG_LFG_DECLINED = "|cffff0000[SuperIgnore]|r 已自动拒绝黑名单玩家 %s 的集合石/队伍查找器进组申请。"
 	
     L.REASON_OFFICIAL = "官方同步"
     L.UI_CHK_AUTOSYNC_MS = "自动同步"
@@ -222,6 +226,7 @@ if locale == "zhCN" then
     L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名单已全部同步过，无新增。" 
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 队伍查找器同步完成！新增: 玩家 %d 名。"
     L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名单同步完成！新增: 玩家 %d 名。" 
+	
 
 elseif locale == "zhTW" then
     L.UI_ADD_TITLE = "加入超級黑名單"
@@ -275,8 +280,8 @@ elseif locale == "zhTW" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支援自動同步官方及集合石等組隊插件黑名單。"
-    L.ABOUT_UPDATE_OPT = "- 修復：跨服環境（副本/戰場）下防洗頻偶發失效及報錯問題。"
+    L.ABOUT_UPDATE_NEW = "- 新增：支援隊長模式下，全靜默秒拒黑名單玩家的集合石進組申請。"
+    L.ABOUT_UPDATE_OPT = "- 優化：修復底層攔截邏輯，全面提升多環境下的運行穩定性。"
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
@@ -301,6 +306,7 @@ elseif locale == "zhTW" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r 未偵測到網易集合石插件，或目前沒有集合石黑名單資料。"
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r 集合石列表已全部同步過，沒有發現新的黑名單。"
 	L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 警報：%s 備註：%s 在你的黑名單列表中。請注意防範！|r"
+	L.MSG_LFG_DECLINED = "|cffff0000[SuperIgnore]|r 已自動拒絕黑名單玩家 %s 的集合石/隊伍尋找器進組申請。"
 	
     L.REASON_OFFICIAL = "官方同步"
     L.UI_CHK_AUTOSYNC_MS = "自動同步"
@@ -323,6 +329,7 @@ elseif locale == "zhTW" then
     L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名單已全部同步過，無新增。" 
     L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 隊伍尋找器同步完成！新增: 玩家 %d 名。"
     L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名單同步完成！新增: 玩家 %d 名。" 
+	
 
 
 elseif locale == "koKR" then
@@ -376,8 +383,8 @@ elseif locale == "koKR" then
     L.ABOUT_AUTHOR = "제작자: okqiyi"
     L.ABOUT_VERSION_TEXT = "버전: v%s"
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
-    L.ABOUT_UPDATE_NEW = "- 추가: 공식 및 MeetingStone 등 파티 찾기 애드온 차단 목록 자동 동기화."
-    L.ABOUT_UPDATE_OPT = "- 수정: 인스턴스/크로스 서버 환경에서 도배 방지 기능 오류 및 충돌 해결."
+    L.ABOUT_UPDATE_NEW = "- 추가: 파티장일 때 차단된 플레이어의 파티 찾기 신청을 조용히 자동 거절합니다."
+    L.ABOUT_UPDATE_OPT = "- 수정: 기본 차단 로직을 최적화하고 전반적인 안정성을 향상시켰습니다."
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
     L.ABOUT_NGA = "NGA (Ctrl+C로 복사):"
     L.ABOUT_CF = "CurseForge (Ctrl+C로 복사):"
@@ -402,6 +409,7 @@ elseif locale == "koKR" then
     L.MSG_ERR_NO_MS = "|cffff0000[SuperIgnore]|r MeetingStone 애드온을 찾을 수 없거나 목록이 비어 있습니다."
     L.MSG_MS_EMPTY = "|cffffff00[SuperIgnore]|r MeetingStone 목록은 이미 동기화되어 있습니다. 새로운 플레이어가 없습니다."
     L.MSG_GROUP_ALERT = "|cffff0000[SuperIgnore] 경고: %s (메모: %s) 님이 차단 목록에 있습니다. 주의하세요!|r"
+	L.MSG_LFG_DECLINED = "|cffff0000[SuperIgnore]|r 차단된 플레이어 %s의 파티 찾기 신청을 자동으로 거절했습니다."
     
     L.REASON_OFFICIAL = "공식 동기화"
     L.UI_CHK_AUTOSYNC_MS = "자동 동기화"
@@ -605,13 +613,37 @@ end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_SAY", FilterNPC)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
 
---智能过滤器：系统黄字防刷屏 (5秒内完全相同的系统提示只显示一次)
+--智能过滤器：系统黄字防刷屏 (威力加强版：直接秒杀黑名单相关黄字)
 local function FilterSystemSpam(self, event, msg, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false then
         local now = GetTime()
-        -- 如果相同的消息在 5 秒内再次出现，则拦截
+        
+        -- ==========================================
+        -- 【新增绝杀逻辑】：提取黄字底层的玩家超链接
+        -- ==========================================
+        local linkName = string.match(msg, "|Hplayer:([^|:]+)")
+        if linkName then
+            local cleanName = Ambiguate(linkName, "none")
+            local fullName = linkName
+            
+            -- 如果链接里没带服务器，自动抓取当前服务器补全
+            if not string.find(fullName, "-") then
+                local myRealm = GetNormalizedRealmName() or ""
+                if myRealm ~= "" then 
+                    fullName = cleanName .. "-" .. myRealm 
+                end
+            end
+            
+            -- 只要提取到的名字在黑名单里，这条黄字直接蒸发，绝不显示！
+            if SuperIgnoreDB[linkName] or SuperIgnoreDB[cleanName] or SuperIgnoreDB[fullName] then
+                return true 
+            end
+        end
+
+        -- ==========================================
+        -- 保留原来的常规防刷屏逻辑 (5秒内重复黄字拦截)
+        -- ==========================================
         if sysCache[msg] and (now - sysCache[msg] < 5) then
-            -- 刷新计时器，如果一直刷，就一直拦截，直到消停 5 秒
             sysCache[msg] = now 
             return true
         end
@@ -623,40 +655,149 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", FilterSystemSpam)
 
 
 -- ==========================================
--- 3. 组队、交易、公会邀请与决斗拦截模块（全面封杀黑名单用户）
+-- 3. 组队、交易、公会邀请、决斗与【集合石申请】拦截模块
 -- ==========================================
+-- 【保留绝杀】：只劫持暴雪底层的邀请 API，废掉第三方插件的自动放行，绝不碰声音 API
+local orig_InviteApplicant = C_LFGList.InviteApplicant
+C_LFGList.InviteApplicant = function(applicantID)
+    local info = C_LFGList.GetApplicantInfo(applicantID)
+    if info then
+        local numMembers = info.numMembers or 1
+        local myRealm = GetNormalizedRealmName() or ""
+        
+        for i = 1, numMembers do
+            local name = C_LFGList.GetApplicantMemberInfo(applicantID, i)
+            if name then
+                local cleanName = Ambiguate(name, "none")
+                local fullName = name
+                if not string.find(fullName, "-") and myRealm ~= "" then
+                    fullName = cleanName .. "-" .. myRealm
+                end
+                
+                -- 如果在黑名单里，拦截集合石的邀请指令，直接改为拒绝！
+                if SuperIgnoreDB[cleanName] or SuperIgnoreDB[fullName] then
+                    C_LFGList.DeclineApplicant(applicantID)
+                    return 
+                end
+            end
+        end
+    end
+    return orig_InviteApplicant(applicantID)
+end
+
+
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PARTY_INVITE_REQUEST")
 frame:RegisterEvent("TRADE_REQUEST")
-frame:RegisterEvent("GUILD_INVITE_REQUEST") --注册公会邀请事件
-frame:RegisterEvent("DUEL_REQUESTED")        --注册决斗请求事件
+frame:RegisterEvent("GUILD_INVITE_REQUEST")
+frame:RegisterEvent("DUEL_REQUESTED")
+-- 监听队伍查找器/集合石的申请列表变动
+frame:RegisterEvent("LFG_LIST_APPLICANT_LIST_UPDATED")
+frame:RegisterEvent("LFG_LIST_APPLICANT_UPDATED")
+
+-- 统一防刷屏缓存表：拦截动作 90 秒内同一个人只提示一次
+local actionDeclinedCache = {}
 
 frame:SetScript("OnEvent", function(self, event, sender, ...)
-    local cleanSender = Ambiguate(sender, "none")
     
-    -- 只要对方在你的通用黑名单里，直接执行全方位全自动拦截
-    if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] then
+    local now = GetTime()
+
+    -- ==========================================
+    -- 队长模式下，静默拒绝黑名单玩家的集合石申请
+    -- ==========================================
+    if event == "LFG_LIST_APPLICANT_LIST_UPDATED" or event == "LFG_LIST_APPLICANT_UPDATED" then
+        if UnitIsGroupLeader("player") then
+            local applicants = C_LFGList.GetApplicants()
+            if applicants then
+                local myRealm = GetNormalizedRealmName() or ""
+                
+                for _, applicantID in ipairs(applicants) do
+                    local info = C_LFGList.GetApplicantInfo(applicantID)
+                    
+                    if info and info.applicantStatus == "applied" then
+                        local numMembers = info.numMembers or 1
+                        
+                        for i = 1, numMembers do
+                            local name = C_LFGList.GetApplicantMemberInfo(applicantID, i)
+                            if name then
+                                local cleanName = Ambiguate(name, "none")
+                                local fullName = name
+                                if not string.find(fullName, "-") and myRealm ~= "" then
+                                    fullName = fullName .. "-" .. myRealm
+                                end
+                                
+                                if SuperIgnoreDB[cleanName] or SuperIgnoreDB[fullName] then
+                                    -- 底层静默拒绝
+                                    C_LFGList.DeclineApplicant(applicantID)
+                                    muteLFGTime = now -- 再次上锁，触发 1 秒静默期
+                                    
+                                    -- 防刷屏提示逻辑 (90秒)
+                                    if not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90) then
+                                        print(string.format(L.MSG_LFG_DECLINED, fullName))
+                                        actionDeclinedCache[fullName] = now
+                                    end
+                                    
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+        return
+    end
+	
+    -- ==========================================
+    -- 常规的点对点拦截 (别人主动点你)
+    -- ==========================================
+    if not sender then return end
+    
+    -- 补全同服/同公会邀请时不带服务器后缀的问题
+    local cleanSender = Ambiguate(sender, "none")
+    local fullName = sender
+    if not string.find(fullName, "-") then
+        local myRealm = GetNormalizedRealmName() or ""
+        if myRealm ~= "" then
+            fullName = cleanSender .. "-" .. myRealm
+        end
+    end
+    
+    if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] or SuperIgnoreDB[fullName] then
+        
+        -- 判断是否需要打印提示（90秒防刷屏）
+        local shouldPrint = not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90)
+        
         if event == "PARTY_INVITE_REQUEST" then
             DeclineGroup()
             StaticPopup_Hide("PARTY_INVITE")
-            print(string.format(L.MSG_GROUP_DECLINED, sender))
+            if shouldPrint then
+                print(string.format(L.MSG_GROUP_DECLINED, fullName))
+            end
             
         elseif event == "TRADE_REQUEST" then
             CancelTrade()
-            print(string.format(L.MSG_TRADE_DECLINED, sender))
+            if shouldPrint then
+                print(string.format(L.MSG_TRADE_DECLINED, fullName))
+            end
             
         elseif event == "GUILD_INVITE_REQUEST" then
-            DeclineGuild() --静默拒绝公会邀请
-            StaticPopup_Hide("GUILD_INVITE") -- 隐藏系统的弹窗
-            
+            DeclineGuild()
+            StaticPopup_Hide("GUILD_INVITE")
+            -- 如果字典里配置了公会邀请的文本，可以像上面一样加 print
             
         elseif event == "DUEL_REQUESTED" then
-            CancelDuel() --静默拒绝决斗请求
-            StaticPopup_Hide("DUEL") -- 隐藏系统的弹窗
+            CancelDuel()
+            StaticPopup_Hide("DUEL")
+            -- 如果字典里配置了决斗的文本，可以像上面一样加 print
+        end
+
+        -- 只要触发了需要打印的提示，就刷新这个人的冷却时间
+        if shouldPrint then
+            actionDeclinedCache[fullName] = now
         end
     end
 end)
-
 
 -- ==========================================
 -- 8. 队伍/团队黑名单成员静默扫描与防刷屏预警
