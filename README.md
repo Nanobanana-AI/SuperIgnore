@@ -83,6 +83,10 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.7.5 - (2026.08.13)
+* English: Updated compatibility for WoW Patch 12.1 and optimized the underlying chat filtering and interception logic for better accuracy.
+
+* 中文: 全面兼容魔兽 12.1 版本，并修复了部分底层聊天过滤与拦截逻辑，进一步提升判断准确性。
 
 ## 🌟 v1.7.4 - (2026.08.08)
 
