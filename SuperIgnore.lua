@@ -63,7 +63,7 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- New: Silently auto-declines LFG applicants when leading a group.",
+    ABOUT_UPDATE_NEW = "- New: Fully compatible with WoW Patch 12.1.",
     ABOUT_UPDATE_OPT = "- Opt: Refactored underlying logic to improve overall stability.",
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
@@ -177,8 +177,12 @@ if locale == "zhCN" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支持队长模式下，全静默秒拒黑名单玩家的集合石进组申请。"
+	
+	
+    L.ABOUT_UPDATE_NEW = "- 新增：全面兼容魔兽 12.1 版本。"
     L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑，全面提升多环境下的运行稳定性。"
+	
+	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
     L.ABOUT_NGA = "NGA  (请按 Ctrl+C 复制):"
     L.ABOUT_CF = "CurseForge  (请按 Ctrl+C 复制):"
@@ -280,8 +284,12 @@ elseif locale == "zhTW" then
     L.ABOUT_AUTHOR = "作者: okqiyi"
     L.ABOUT_VERSION_TEXT = "版本: v%s"
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
-    L.ABOUT_UPDATE_NEW = "- 新增：支援隊長模式下，全靜默秒拒黑名單玩家的集合石進組申請。"
+	
+	
+    L.ABOUT_UPDATE_NEW = "- 新增：全面相容魔獸 12.1 版本。"
     L.ABOUT_UPDATE_OPT = "- 優化：修復底層攔截邏輯，全面提升多環境下的運行穩定性。"
+	
+	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
     L.ABOUT_NGA = "NGA (請按 Ctrl+C 複製):"
     L.ABOUT_CF = "CurseForge (請按 Ctrl+C 複製):"
@@ -383,8 +391,12 @@ elseif locale == "koKR" then
     L.ABOUT_AUTHOR = "제작자: okqiyi"
     L.ABOUT_VERSION_TEXT = "버전: v%s"
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
-    L.ABOUT_UPDATE_NEW = "- 추가: 파티장일 때 차단된 플레이어의 파티 찾기 신청을 조용히 자동 거절합니다."
+	
+	
+    L.ABOUT_UPDATE_NEW = "- 추가: WoW 12.1 패치 완벽 지원."
     L.ABOUT_UPDATE_OPT = "- 수정: 기본 차단 로직을 최적화하고 전반적인 안정성을 향상시켰습니다."
+	
+	
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
     L.ABOUT_NGA = "NGA (Ctrl+C로 복사):"
     L.ABOUT_CF = "CurseForge (Ctrl+C로 복사):"
@@ -453,6 +465,13 @@ local sysCache = {}
 local function ChatFilter(self, event, msg, author, ...)
     local name = Ambiguate(author, "none") 
     
+	-- ==========================================
+    -- 【核心修复】：给自己颁发“免死金牌”，绝对不拦截自己发出的任何消息！
+    -- ==========================================
+    if name == UnitName("player") then
+        return false
+    end
+	
     -- ==========================================
     -- 提取底层数据 (安全修复：防止跨服/副本中静默崩溃)
     -- ==========================================
