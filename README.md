@@ -212,10 +212,10 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 
 
-<img width="815" height="820" alt="1" src="https://github.com/user-attachments/assets/2b67183b-06b4-4f25-9dbf-b34e788b1d20" />
-<img width="812" height="819" alt="2" src="https://github.com/user-attachments/assets/274ad1d0-7ab0-4f01-a24a-fbce5912f616" />
-<img width="812" height="822" alt="3" src="https://github.com/user-attachments/assets/b568429d-1d6f-47f5-81e2-700d0e21040d" />
-<img width="816" height="814" alt="4" src="https://github.com/user-attachments/assets/0e77c935-3cd6-499b-8551-1656f53e4c35" />
+<img width="781" height="697" alt="EN1" src="https://github.com/user-attachments/assets/c255252c-930e-4625-9432-a25e3557ef4f" />
+<img width="782" height="696" alt="EN2" src="https://github.com/user-attachments/assets/11678ded-3708-4e9a-b149-9ae313db5d93" />
+<img width="784" height="700" alt="EN3" src="https://github.com/user-attachments/assets/aa2e304d-f750-468a-b578-847a0c992f24" />
+<img width="770" height="681" alt="EN4" src="https://github.com/user-attachments/assets/ed6ac280-f0ef-4615-88a3-1df2b2cd2678" />
 
 
 
