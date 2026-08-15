@@ -211,6 +211,8 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 🔗 [CurseForge 官方页面直达](https://www.curseforge.com/wow/addons/superignore)
 
 
+<br>
+<br>
 
 <img width="781" height="697" alt="EN1" src="https://github.com/user-attachments/assets/c255252c-930e-4625-9432-a25e3557ef4f" />
 <img width="782" height="696" alt="EN2" src="https://github.com/user-attachments/assets/11678ded-3708-4e9a-b149-9ae313db5d93" />
