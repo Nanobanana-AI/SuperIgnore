@@ -83,6 +83,13 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+
+
+## 🌟 v1.7.6 - (2026.08.24)
+
+* English: Added smart exemptions for party and raid chats to prevent tactical communication from being accidentally muted by spam or keyword filters.
+* 中文: 新增组队与团队频道智能豁免机制，有效防止打本时的正常战术交流被防刷屏或屏蔽词误伤。
+
 ## 🌟 v1.7.5 - (2026.08.13)
 * English: Updated compatibility for WoW Patch 12.1 and optimized the underlying chat filtering and interception logic for better accuracy.
 
