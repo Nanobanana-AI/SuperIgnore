@@ -63,8 +63,12 @@ local L = {
     ABOUT_AUTHOR = "Author: okqiyi",
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
-    ABOUT_UPDATE_NEW = "- New: Fully compatible with WoW Patch 12.1.",
+	
+	
+    ABOUT_UPDATE_NEW = "- New: Party/Raid chat exemption to prevent muting tactical callouts.",
     ABOUT_UPDATE_OPT = "- Opt: Refactored underlying logic to improve overall stability.",
+	
+	
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
     ABOUT_NGA = "NGA (Ctrl+C to copy):",
     ABOUT_CF = "CurseForge (Ctrl+C to copy):",
@@ -98,7 +102,7 @@ local L = {
     UI_CHK_AUTOSYNC_OFFICIAL = "Auto-sync Official",
     MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r Official sync! Added %d new players.",
     MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r Official list synced. No new players.",
-	MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] New version available: v%s|r",
+	MSG_UPDATE_AVAILABLE = "|cffffff00[SuperIgnore] New version available: v%s|r",
 	
     UI_SYNC_LABEL = "Auto-Sync:",
     UI_CHK_AUTOSYNC_OFFICIAL = "Official",
@@ -179,7 +183,7 @@ if locale == "zhCN" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：全面兼容魔兽 12.1 版本。"
+    L.ABOUT_UPDATE_NEW = "- 新增：组队频道智能豁免，防止正常战术交流被误屏蔽。"
     L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑，全面提升多环境下的运行稳定性。"
 	
 	
@@ -214,7 +218,7 @@ if locale == "zhCN" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "自动同步"
     L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方屏蔽同步完成！新增 %d 名玩家。"
     L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方屏蔽已全部同步过，无新增。"
-	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 发现新版本 v%s|r"
+	L.MSG_UPDATE_AVAILABLE = "|cffffff00[SuperIgnore] 发现新版本 v%s|r"
 	
     L.UI_SYNC_LABEL = "自动同步黑名单数据："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
@@ -321,7 +325,7 @@ elseif locale == "zhTW" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "自動同步"
     L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 官方黑名單同步完成！新增 %d 名玩家。"
     L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 官方黑名單已全部同步過，無新增。"
-	L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 發現新版本 v%s|r"
+	L.MSG_UPDATE_AVAILABLE = "|cffffff00[SuperIgnore] 發現新版本 v%s|r"
 	
     L.UI_SYNC_LABEL = "自動同步黑名單資料："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
@@ -393,7 +397,7 @@ elseif locale == "koKR" then
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 추가: WoW 12.1 패치 완벽 지원."
+    L.ABOUT_UPDATE_NEW = "- 추가: 파티/공격대 예외 적용으로 전술 대화 오인 차단 방지."
     L.ABOUT_UPDATE_OPT = "- 수정: 기본 차단 로직을 최적화하고 전반적인 안정성을 향상시켰습니다."
 	
 	
@@ -428,7 +432,7 @@ elseif locale == "koKR" then
     L.UI_CHK_AUTOSYNC_OFFICIAL = "자동 동기화"
     L.MSG_OFFICIAL_SUCCESS = "|cff00ff00[SuperIgnore]|r 공식 차단 동기화 완료! 플레이어 %d명 추가."
     L.MSG_OFFICIAL_EMPTY = "|cffffff00[SuperIgnore]|r 공식 차단 목록이 동기화되었습니다. 새로운 플레이어가 없습니다."
-    L.MSG_UPDATE_AVAILABLE = "|cffff0000[SuperIgnore] 새 버전이 있습니다: v%s|r"
+    L.MSG_UPDATE_AVAILABLE = "|cffffff00[SuperIgnore] 새 버전이 있습니다: v%s|r"
     
     L.UI_SYNC_LABEL = "블랙리스트 자동 동기화:"
     L.UI_CHK_AUTOSYNC_OFFICIAL = "공식"
@@ -465,13 +469,16 @@ local sysCache = {}
 local function ChatFilter(self, event, msg, author, ...)
     local name = Ambiguate(author, "none") 
     
-	-- ==========================================
+    -- ==========================================
     -- 【核心修复】：给自己颁发“免死金牌”，绝对不拦截自己发出的任何消息！
     -- ==========================================
     if name == UnitName("player") then
         return false
     end
-	
+    
+    -- 【新增】：判断当前是否为小队、团队或副本频道
+    local isGroupChat = (event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT")
+    
     -- ==========================================
     -- 提取底层数据 (安全修复：防止跨服/副本中静默崩溃)
     -- ==========================================
@@ -479,7 +486,6 @@ local function ChatFilter(self, event, msg, author, ...)
     local cleanAuthor = string.gsub(author, "%s+", "")
     local originalHasRealm = (rawRealm and rawRealm ~= "")
     
-    -- 核心修复：加了 'or ""' 兜底。即使副本里系统抽风返回 nil，插件也不会崩溃罢工
     local myRealm = GetNormalizedRealmName() or ""
     local fullName = rawName .. "-" .. (originalHasRealm and rawRealm or myRealm)
     
@@ -490,38 +496,28 @@ local function ChatFilter(self, event, msg, author, ...)
     -- 【最高优先级 -> 白名单检测】(同款环境锁兜底)
     -- ==========================================
     if SuperIgnoreWhiteListDB then
-        -- 1. 精确与补全匹配
-        if SuperIgnoreWhiteListDB[cleanAuthor] or SuperIgnoreWhiteListDB[fullName] then
-            return false 
-        end
-        -- 2. 模糊匹配 (大秘境与跨服组队专用)
--- 白名单的模糊匹配
-if not originalHasRealm and isGroupEnv then
-    for dbKey, _ in pairs(SuperIgnoreWhiteListDB) do
-        -- 加上类型判断，防止脏数据崩溃
-        if type(dbKey) == "string" then
-            local dbName = strsplit("-", dbKey)
-            if dbName == rawName then
-                return false
-            end
-        end
-    end
-end
-end
-
-    -- 【修复后的强硬过滤逻辑】：拦截 DND/AFK
-    if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false then
-        if name ~= UnitName("player") then
-            if event ~= "CHAT_MSG_CHANNEL" then
-                if UnitIsAFK(author) or UnitIsDND(author) then
-                    return true
+        if SuperIgnoreWhiteListDB[cleanAuthor] or SuperIgnoreWhiteListDB[fullName] then return false end
+        if not originalHasRealm and isGroupEnv then
+            for dbKey, _ in pairs(SuperIgnoreWhiteListDB) do
+                if type(dbKey) == "string" then
+                    local dbName = strsplit("-", dbKey)
+                    if dbName == rawName then return false end
                 end
             end
         end
     end
+
+    -- 【优化】：拦截 DND/AFK (如果你在队伍/团队里说话，则直接豁免)
+    if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false and not isGroupChat then
+        if event ~= "CHAT_MSG_CHANNEL" then
+            if UnitIsAFK(author) or UnitIsDND(author) then
+                return true
+            end
+        end
+    end
     
-    -- A. 关键词/正则匹配拦截
-    if SuperIgnoreKeywordsDB then
+    -- A. 关键词/正则匹配拦截 (如果你在队伍/团队里说话，则豁免，防止战术交流误触)
+    if SuperIgnoreKeywordsDB and not isGroupChat then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
             local success, match = pcall(string.find, msg, keyword)
             if success and match then return true end
@@ -532,39 +528,30 @@ end
     end
     
     -- ==========================================
-    -- B. 超级黑名单拦截 (同款环境锁兜底)
+    -- B. 超级黑名单拦截 (黑名单绝对不豁免，哪怕在队伍里依然拉黑)
     -- ==========================================
-    if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then 
-        return true 
-    end
+    if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then return true end
     
-    -- 黑名单的模糊匹配
-if not originalHasRealm and isGroupEnv then
-    for dbKey, _ in pairs(SuperIgnoreDB) do
-        -- 加上 type(dbKey) == "string" 的安全锁
-        if type(dbKey) == "string" and string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
-            local dbName = strsplit("-", dbKey)
-            if dbName == rawName then
-                return true
+    if not originalHasRealm and isGroupEnv then
+        for dbKey, _ in pairs(SuperIgnoreDB) do
+            if type(dbKey) == "string" and string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
+                local dbName = strsplit("-", dbKey)
+                if dbName == rawName then return true end
             end
         end
     end
-end
-
     
-    -- C. 【新增】智能过滤器：重复信息防刷屏 (过滤空格绕过版)
-    if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false then
+    -- C. 智能过滤器：重复信息防刷屏 (如果在队伍/团队里说话，则豁免，允许队友发叠词)
+    if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false and not isGroupChat then
         local now = GetTime()
-        -- 核心杀招：删掉字符串里所有的空格、换行符等空白字符，提取骨架
         local strippedMsg = string.gsub(msg, "%s+", "")
-        
         if repeatCache[author] and repeatCache[author].msg == strippedMsg and (now - repeatCache[author].time < 15) then
             return true 
         end
         repeatCache[author] = {msg = strippedMsg, time = now}
     end
     
-    -- D. 【新增】智能过滤器：任务组队通告过滤 
+    -- D. 智能过滤器：任务组队通告过滤 (这个本来就是针对队伍的，保持原样)
     if SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false then
         if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT" then
             if string.find(msg, "%d+/%d+") or string.find(msg, "任务") or string.find(msg, "进度") or string.find(msg, "Quest") then
@@ -1897,8 +1884,6 @@ local myVerString = C_AddOns.GetAddOnMetadata("SuperIgnore", "Version") or "1.0.
 myVerString = string.gsub(myVerString, "v", "") 
 local myV1, myV2, myV3 = ParseVersion(myVerString)
 
-local hasWarnedUpdate = false 
-
 local commFrame = CreateFrame("Frame")
 commFrame:RegisterEvent("CHAT_MSG_ADDON")
 commFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -1920,13 +1905,16 @@ commFrame:SetScript("OnEvent", function(self, event, prefix, msg, channel, sende
         local myFullName = UnitName("player") .. "-" .. GetNormalizedRealmName()
         if sender == myFullName then return end
 
-        if not hasWarnedUpdate then
-            local oV1, oV2, oV3 = ParseVersion(msg)
-            if oV1 > myV1 or (oV1 == myV1 and oV2 > myV2) or (oV1 == myV1 and oV2 == myV2 and oV3 > myV3) then
-                hasWarnedUpdate = true
-                -- 调用字典中极简的一句话提示
+        local oV1, oV2, oV3 = ParseVersion(msg)
+        if oV1 > myV1 or (oV1 == myV1 and oV2 > myV2) or (oV1 == myV1 and oV2 == myV2 and oV3 > myV3) then
+            
+            -- 【核心修改】：使用账号通用数据库记录已提示过的版本号
+            SuperIgnoreDB = SuperIgnoreDB or {}
+            if SuperIgnoreDB["__CONFIG_WARNED_VERSION__"] ~= msg then
+                SuperIgnoreDB["__CONFIG_WARNED_VERSION__"] = msg
                 print(string.format(L.MSG_UPDATE_AVAILABLE, msg))
             end
+            
         end
     end
 end)
