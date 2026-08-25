@@ -65,8 +65,8 @@ local L = {
     ABOUT_UPDATE_TITLE = "【Updates】",
 	
 	
-    ABOUT_UPDATE_NEW = "- New: Party/Raid chat exemption to prevent muting tactical callouts.",
-    ABOUT_UPDATE_OPT = "- Opt: Refactored underlying logic to improve overall stability.",
+    ABOUT_UPDATE_NEW = "- New: Smart exemption for teammate messages.",
+    ABOUT_UPDATE_OPT = "- Opt: Fixed underlying interception logic.",
 	
 	
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
@@ -183,8 +183,8 @@ if locale == "zhCN" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：组队频道智能豁免，防止正常战术交流被误屏蔽。"
-    L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑，全面提升多环境下的运行稳定性。"
+    L.ABOUT_UPDATE_NEW = "- 新增：队友发言智能豁免"
+    L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
@@ -290,8 +290,8 @@ elseif locale == "zhTW" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：全面相容魔獸 12.1 版本。"
-    L.ABOUT_UPDATE_OPT = "- 優化：修復底層攔截邏輯，全面提升多環境下的運行穩定性。"
+    L.ABOUT_UPDATE_NEW = "- 新增：隊友發言智能豁免"
+    L.ABOUT_UPDATE_OPT = "- 優化：修復底層攔截邏輯"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
@@ -397,8 +397,8 @@ elseif locale == "koKR" then
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 추가: 파티/공격대 예외 적용으로 전술 대화 오인 차단 방지."
-    L.ABOUT_UPDATE_OPT = "- 수정: 기본 차단 로직을 최적화하고 전반적인 안정성을 향상시켰습니다."
+    L.ABOUT_UPDATE_NEW = "- 추가: 팀원 채팅 스마트 예외 적용"
+    L.ABOUT_UPDATE_OPT = "- 최적화: 기본 차단 로직 수정"
 	
 	
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
@@ -464,7 +464,6 @@ local sysCache = {}
 
 
 
-
 -- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
     local name = Ambiguate(author, "none") 
@@ -476,12 +475,15 @@ local function ChatFilter(self, event, msg, author, ...)
         return false
     end
     
-    -- 【新增】：判断当前是否为小队、团队或副本频道
-    local isGroupChat = (event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT")
+    -- ==========================================
+    -- 【核心升级】：队友级智能豁免机制
+    -- 不仅判断频道，更判断“人”。只要是队友，无论在哪个频道说话（包含白字/大喊）都豁免！
+    -- ==========================================
+    local isGroupChannel = (event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT")
+    local isTeammate = UnitInParty(name) or UnitInRaid(name) or UnitInParty(author) or UnitInRaid(author)
+    local isExempted = isGroupChannel or isTeammate
     
-    -- ==========================================
     -- 提取底层数据 (安全修复：防止跨服/副本中静默崩溃)
-    -- ==========================================
     local rawName, rawRealm = strsplit("-", author)
     local cleanAuthor = string.gsub(author, "%s+", "")
     local originalHasRealm = (rawRealm and rawRealm ~= "")
@@ -507,8 +509,8 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
 
-    -- 【优化】：拦截 DND/AFK (如果你在队伍/团队里说话，则直接豁免)
-    if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false and not isGroupChat then
+    -- 【优化】：拦截 DND/AFK (对队友和组队频道全方位豁免)
+    if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false and not isExempted then
         if event ~= "CHAT_MSG_CHANNEL" then
             if UnitIsAFK(author) or UnitIsDND(author) then
                 return true
@@ -516,8 +518,8 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
     
-    -- A. 关键词/正则匹配拦截 (如果你在队伍/团队里说话，则豁免，防止战术交流误触)
-    if SuperIgnoreKeywordsDB and not isGroupChat then
+    -- A. 关键词/正则匹配拦截 (对队友和组队频道全方位豁免，防止战术交流误触)
+    if SuperIgnoreKeywordsDB and not isExempted then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
             local success, match = pcall(string.find, msg, keyword)
             if success and match then return true end
@@ -528,7 +530,7 @@ local function ChatFilter(self, event, msg, author, ...)
     end
     
     -- ==========================================
-    -- B. 超级黑名单拦截 (黑名单绝对不豁免，哪怕在队伍里依然拉黑)
+    -- B. 超级黑名单拦截 (黑名单绝对不豁免，哪怕是队友也照样拉黑)
     -- ==========================================
     if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then return true end
     
@@ -541,17 +543,28 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
     
-    -- C. 智能过滤器：重复信息防刷屏 (如果在队伍/团队里说话，则豁免，允许队友发叠词)
-    if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false and not isGroupChat then
+    -- C. 智能过滤器：重复信息防刷屏 (对队友豁免，允许队友发叠词；内置 0.2秒 并发容错)
+    if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false and not isExempted then
         local now = GetTime()
         local strippedMsg = string.gsub(msg, "%s+", "")
-        if repeatCache[author] and repeatCache[author].msg == strippedMsg and (now - repeatCache[author].time < 15) then
-            return true 
+        
+        if repeatCache[author] and repeatCache[author].msg == strippedMsg then
+            local timeDiff = now - repeatCache[author].time
+            if timeDiff < 15 then
+                -- 时间差 > 0.2 秒说明是真正的刷屏，拦截；< 0.2 秒是多标签页分发，放行
+                if timeDiff > 0.2 then 
+                    return true 
+                end
+            end
         end
-        repeatCache[author] = {msg = strippedMsg, time = now}
+        
+        -- 只有真正的新消息（超过 0.2 秒），才更新缓存时间
+        if not repeatCache[author] or repeatCache[author].msg ~= strippedMsg or (now - (repeatCache[author].time or 0) > 0.2) then
+            repeatCache[author] = {msg = strippedMsg, time = now}
+        end
     end
     
-    -- D. 智能过滤器：任务组队通告过滤 (这个本来就是针对队伍的，保持原样)
+    -- D. 智能过滤器：任务组队通告过滤 (保持原样，专治队伍里的任务刷屏)
     if SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false then
         if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT" then
             if string.find(msg, "%d+/%d+") or string.find(msg, "任务") or string.find(msg, "进度") or string.find(msg, "Quest") then
@@ -586,16 +599,20 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_DND", FilterDND)
 -- 【修复】智能过滤器：成就防霸屏 (10秒内同一个成就只显示一次)
 local function FilterAchv(self, event, msg, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_ACHV__"] ~= false then
-        -- 核心修改：不再匹配整个超链接，而是精准提取成就ID (连续的数字)
         local achvID = string.match(msg, "|Hachievement:(%d+):")
         
         if achvID then
             local now = GetTime()
-            -- 用成就ID作为缓存的Key，完美无视不同玩家的GUID差异
-            if achvCache[achvID] and (now - achvCache[achvID] < 10) then
-                return true 
+            if achvCache[achvID] then
+                local timeDiff = now - achvCache[achvID]
+                if timeDiff < 10 then
+                    if timeDiff > 0.2 then return true end
+                end
             end
-            achvCache[achvID] = now
+            
+            if not achvCache[achvID] or (now - achvCache[achvID] > 0.2) then
+                achvCache[achvID] = now
+            end
         end
     end
     return false
@@ -609,15 +626,24 @@ local function FilterNPC(self, event, msg, author, ...)
     if SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false then
         local now = GetTime()
         local key = (author or "NPC") .. msg
-        if npcCache[key] and (now - npcCache[key] < 60) then
-            return true
+        
+        if npcCache[key] then
+            local timeDiff = now - npcCache[key]
+            if timeDiff < 60 then
+                if timeDiff > 0.2 then return true end
+            end
         end
-        npcCache[key] = now
+        
+        if not npcCache[key] or (now - npcCache[key] > 0.2) then
+            npcCache[key] = now
+        end
     end
     return false
 end
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_SAY", FilterNPC)
 ChatFrame_AddMessageEventFilter("CHAT_MSG_MONSTER_YELL", FilterNPC)
+
+
 
 --智能过滤器：系统黄字防刷屏 (威力加强版：直接秒杀黑名单相关黄字)
 local function FilterSystemSpam(self, event, msg, ...)
@@ -625,35 +651,36 @@ local function FilterSystemSpam(self, event, msg, ...)
         local now = GetTime()
         
         -- ==========================================
-        -- 【新增绝杀逻辑】：提取黄字底层的玩家超链接
+        -- 【绝杀逻辑】：提取黄字底层的玩家超链接
         -- ==========================================
         local linkName = string.match(msg, "|Hplayer:([^|:]+)")
         if linkName then
             local cleanName = Ambiguate(linkName, "none")
             local fullName = linkName
             
-            -- 如果链接里没带服务器，自动抓取当前服务器补全
             if not string.find(fullName, "-") then
                 local myRealm = GetNormalizedRealmName() or ""
-                if myRealm ~= "" then 
-                    fullName = cleanName .. "-" .. myRealm 
-                end
+                if myRealm ~= "" then fullName = cleanName .. "-" .. myRealm end
             end
             
-            -- 只要提取到的名字在黑名单里，这条黄字直接蒸发，绝不显示！
             if SuperIgnoreDB[linkName] or SuperIgnoreDB[cleanName] or SuperIgnoreDB[fullName] then
                 return true 
             end
         end
 
         -- ==========================================
-        -- 保留原来的常规防刷屏逻辑 (5秒内重复黄字拦截)
+        -- 【核心修复】：多标签页黄字防刷屏逻辑
         -- ==========================================
-        if sysCache[msg] and (now - sysCache[msg] < 5) then
-            sysCache[msg] = now 
-            return true
+        if sysCache[msg] then
+            local timeDiff = now - sysCache[msg]
+            if timeDiff < 5 then
+                if timeDiff > 0.2 then return true end
+            end
         end
-        sysCache[msg] = now
+        
+        if not sysCache[msg] or (now - sysCache[msg] > 0.2) then
+            sysCache[msg] = now
+        end
     end
     return false
 end
