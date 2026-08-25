@@ -84,6 +84,11 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 ## 📝 Changelog (更新日志)
 
 
+## 🌟 v1.7.7 - (2026.08.25)
+
+* English: Fixed a critical issue where multi-tab chat frames or third-party addons (e.g., Prat) would swallow normal messages. Upgraded the exemption system to cover all teammate communications (including Say/Yell channels) for flawless tactical callouts.
+* 中文: 修复了在多聊天窗口或第三方插件（如 Prat）环境下，防刷屏机制导致吞消息的严重 Bug；全面升级“队友身份豁免”逻辑，现在队友的任何发言（含白字/大喊）均受保护，彻底保障打本战术沟通。
+
 
 ## 🌟 v1.7.6 - (2026.08.24)
 
