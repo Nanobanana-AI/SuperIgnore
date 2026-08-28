@@ -3,7 +3,7 @@
 <img width="100" height="100" alt="logo" src="https://github.com/user-attachments/assets/a514a768-0a9e-4fee-844b-c6a52d464153" />
 
 
-  <h1>❌ SuperIgnore</h1>
+  <h1> SuperIgnore</h1>
   <p><b>The Ultimate Account-wide Ignore System for WoW</b></p>
   <p>魔兽世界战网全角色通用黑名单插件</p>
   
