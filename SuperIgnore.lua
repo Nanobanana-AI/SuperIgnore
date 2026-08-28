@@ -56,6 +56,11 @@ local L = {
     UI_CHK_NPC = "Block repetitive NPC dialogues",
     UI_CHK_QUEST = "Block quest/instance progress spam",
 	UI_CHK_SYSTEM = "Block repetitive System messages", 
+	
+	UI_CHK_LONEWOLF = "Lone Wolf Mode: Auto-decline strangers",
+    UI_CHK_LONEWOLF_DESC = "⚠️ Warning: Only friends, guildmates, and applied LFG leaders can invite you. Others are silently declined!",
+	UI_LONEWOLF_CONFIRM_TEXT = "⚠️ WARNING: Enabling Lone Wolf Mode will automatically and silently decline all group invites from strangers!\n\n(Only friends, guildmates, or LFG leaders you applied to are allowed.)\n\nAre you sure you want to enable this?",
+    UI_BTN_ENABLE = "Enable",
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
@@ -64,9 +69,9 @@ local L = {
     ABOUT_VERSION_TEXT = "Version: v%s",
     ABOUT_UPDATE_TITLE = "【Updates】",
 	
-	
-    ABOUT_UPDATE_NEW = "- New: Smart exemption for teammate messages.",
-    ABOUT_UPDATE_OPT = "- Opt: Fixed underlying interception logic.",
+	-- 新增 优化
+    ABOUT_UPDATE_NEW = "- New: Lone Wolf mode (block strangers) & teammate chat exemption.",
+    ABOUT_UPDATE_OPT = "- Opt: Fixed raid achievement spam & core interception logic.",
 	
 	
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
@@ -174,6 +179,11 @@ if locale == "zhCN" then
     L.UI_CHK_NPC = "拦截 NPC 高频重复台词"
     L.UI_CHK_QUEST = "拦截队伍/副本任务进度通告"
 	L.UI_CHK_SYSTEM = "拦截系统黄字连续重复刷屏" 
+	
+	L.UI_CHK_LONEWOLF = "独狼模式：自动拒绝所有陌生人组队邀请"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 警告：开启后仅允许好友/公会/你主动申请的团长组你，其他邀请将被静默秒拒！"
+	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 警告：开启独狼模式后，\n所有来自陌生人的组队邀请将被自动且静默地拒绝！\n\n(仅允许好友、公会成员、或您主动申请的团长)\n\n确定要开启吗？"
+    L.UI_BTN_ENABLE = "确定开启"
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
@@ -183,8 +193,8 @@ if locale == "zhCN" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：队友发言智能豁免"
-    L.ABOUT_UPDATE_OPT = "- 优化：修复底层拦截逻辑"
+    L.ABOUT_UPDATE_NEW = "- 新增：独狼组队防御模式与队友发言智能豁免。"
+    L.ABOUT_UPDATE_OPT = "- 优化：修复团本成就刷屏漏洞及底层拦截逻辑。"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
@@ -281,6 +291,12 @@ elseif locale == "zhTW" then
     L.UI_CHK_NPC = "攔截 NPC 高頻重複台詞"
     L.UI_CHK_QUEST = "攔截隊伍/副本任務進度通告"
 	L.UI_CHK_SYSTEM = "攔截系統黃字連續重複洗頻" 
+	
+	L.UI_CHK_LONEWOLF = "孤狼模式：自動拒絕所有陌生人組隊邀請"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 警告：開啟後僅允許好友/公會/你主動申請的團長組你，其他邀請將被靜默秒拒！"
+	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 警告：開啟孤狼模式後，\n所有來自陌生人的組隊邀請將被自動且靜默地拒絕！\n\n(僅允許好友、公會成員、或您主動申請的團長)\n\n確定要開啟嗎？"
+    L.UI_BTN_ENABLE = "確定開啟"
+	
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
     L.ABOUT_TITLE = "SuperIgnore (超級黑名單)"
@@ -290,8 +306,8 @@ elseif locale == "zhTW" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：隊友發言智能豁免"
-    L.ABOUT_UPDATE_OPT = "- 優化：修復底層攔截邏輯"
+    L.ABOUT_UPDATE_NEW = "- 新增：孤狼組隊防禦模式與隊友發言智能豁免。"
+    L.ABOUT_UPDATE_OPT = "- 優化：修復團本成就洗頻漏洞及底層攔截邏輯。"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
@@ -389,6 +405,12 @@ elseif locale == "koKR" then
     L.UI_CHK_NPC = "NPC 반복 대사 차단"
     L.UI_CHK_QUEST = "퀘스트/인던 진행 알림 차단"
 	L.UI_CHK_SYSTEM = "시스템 메시지 반복 출력 차단" 
+	
+	L.UI_CHK_LONEWOLF = "솔로 모드: 낯선 사람의 파티 초대 자동 거절"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 경고: 활성화 시 친구, 길드원, 본인이 직접 신청한 파티장의 초대만 허용되며, 다른 모든 초대는 자동으로 거절됩니다!"
+	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 경고: 솔로 모드를 켜면 낯선 사람의 모든 파티 초대가 자동으로 조용히 거절됩니다!\n\n(친구, 길드원 또는 본인이 신청한 파티장만 예외)\n\n정말 켜시겠습니까?"
+    L.UI_BTN_ENABLE = "켜기"
+	
     
     L.STATS_TEXT = "통계: 플레이어 %d명 차단, 키워드 %d개 차단"
     L.ABOUT_TITLE = "SuperIgnore"
@@ -396,9 +418,10 @@ elseif locale == "koKR" then
     L.ABOUT_VERSION_TEXT = "버전: v%s"
     L.ABOUT_UPDATE_TITLE = "【업데이트 내역】"
 	
+	-- 新增 优化
 	
-    L.ABOUT_UPDATE_NEW = "- 추가: 팀원 채팅 스마트 예외 적용"
-    L.ABOUT_UPDATE_OPT = "- 최적화: 기본 차단 로직 수정"
+    L.ABOUT_UPDATE_NEW = "- 추가: 솔로 모드(낯선 사람 초대 차단) 및 팀원 채팅 예외 적용."
+    L.ABOUT_UPDATE_OPT = "- 최적화: 공격대 업적 도배 방지 수정 및 기본 차단 로직 개선."
 	
 	
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
@@ -439,7 +462,8 @@ elseif locale == "koKR" then
     L.UI_CHK_AUTOSYNC_MS = "MeetingStone"
     L.UI_CHK_AUTOSYNC_GF = "파티 찾기"
     L.UI_CHK_AUTOSYNC_PGB = "사전 구성 파티 (PGB)" 
-    
+	
+	    
     L.REASON_GF = "파티 찾기 동기화"
     L.REASON_PGB = "PGB 동기화" 
     L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 파티 찾기 애드온을 찾을 수 없거나 데이터가 없습니다."
@@ -604,15 +628,20 @@ local function FilterAchv(self, event, msg, ...)
         if achvID then
             local now = GetTime()
             if achvCache[achvID] then
-                local timeDiff = now - achvCache[achvID]
+                local timeDiff = now - achvCache[achvID].time
                 if timeDiff < 10 then
-                    if timeDiff > 0.2 then return true end
+                    -- 【核心修复】：必须是0.2秒内，且【字面内容(含玩家名字)完全一致】，才判定为多标签页分发
+                    if timeDiff <= 0.2 and achvCache[achvID].msg == msg then
+                        return false 
+                    else
+                        -- 否则（比如别的玩家在同一瞬间跳了成就，名字不一样），无情拦截！
+                        return true 
+                    end
                 end
             end
             
-            if not achvCache[achvID] or (now - achvCache[achvID] > 0.2) then
-                achvCache[achvID] = now
-            end
+            -- 更新缓存，不仅记时间，还要把具体的整句话（msg）当做指纹记下来
+            achvCache[achvID] = { time = now, msg = msg }
         end
     end
     return false
@@ -719,6 +748,65 @@ C_LFGList.InviteApplicant = function(applicantID)
 end
 
 
+
+-- ==========================================
+-- 【独狼模式】智能豁免缓存与熟人验证函数
+-- ==========================================
+local tempLFGLeaders = {}
+
+-- 监听玩家主动申请集合石的动作，给该团长发放 5 分钟临时通行证
+hooksecurefunc(C_LFGList, "ApplyToGroup", function(searchResultID)
+    if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] then
+        local info = C_LFGList.GetSearchResultInfo(searchResultID)
+        if info and info.leaderName then
+            local cleanName = Ambiguate(info.leaderName, "none")
+            tempLFGLeaders[cleanName] = GetTime() + 300 -- 300秒 = 5分钟
+        end
+    end
+end)
+
+-- 极简核心判定：他是不是熟人？(加入安全容错与现代 API 支持)
+local function IsFamiliarPlayer(name)
+    local cleanName = Ambiguate(name, "none")
+    
+    -- 1. 检查 5 分钟集合石临时通行证
+    if tempLFGLeaders[cleanName] and GetTime() < tempLFGLeaders[cleanName] then return true end
+    
+    -- 2. 检查是否为同公会 (增加 pcall 安全调用，防止跨服或无公会时报错)
+    if IsGuildMember then
+        local ok, isGuild = pcall(IsGuildMember, name)
+        if ok and isGuild then return true end
+        local ok2, isGuild2 = pcall(IsGuildMember, cleanName)
+        if ok2 and isGuild2 then return true end
+    end
+    
+    -- 3. 检查角色好友
+    if C_FriendList and C_FriendList.GetFriendInfo then
+        local ok, info = pcall(C_FriendList.GetFriendInfo, name)
+        if ok and info then return true end
+        local ok2, info2 = pcall(C_FriendList.GetFriendInfo, cleanName)
+        if ok2 and info2 then return true end
+    end
+    
+    -- 4. 检查是否为战网好友 (全面升级为现代 C_BattleNet API)
+    if C_BattleNet and C_BattleNet.GetNumFriends then
+        local numBNet = C_BattleNet.GetNumFriends() or 0
+        for i = 1, numBNet do
+            local accInfo = C_BattleNet.GetFriendAccountInfo(i)
+            if accInfo and accInfo.gameAccountInfo then
+                local charName = accInfo.gameAccountInfo.characterName
+                local client = accInfo.gameAccountInfo.clientProgram
+                if (client == "WoW" or client == BNET_CLIENT_WOW) and charName == cleanName then
+                    return true
+                end
+            end
+        end
+    end
+    
+    return false
+end
+
+
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PARTY_INVITE_REQUEST")
 frame:RegisterEvent("TRADE_REQUEST")
@@ -785,52 +873,65 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
     -- 常规的点对点拦截 (别人主动点你)
     -- ==========================================
     if not sender then return end
+	
+	-- 【新增】：独狼模式拦截逻辑 (优先于黑名单判断)
+    if SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] and event == "PARTY_INVITE_REQUEST" then
+        if not IsFamiliarPlayer(sender) then
+            DeclineGroup()
+            -- 【核心修复】：全面击杀老版与新版魔兽的所有组队 UI 弹窗
+            StaticPopup_Hide("PARTY_INVITE")
+            StaticPopup_Hide("PARTY_INVITE_XREALM")
+            if GroupInviteFrame then GroupInviteFrame:Hide() end
+            if GroupInvitationFrame then GroupInvitationFrame:Hide() end
+            
+            local shouldPrint = not actionDeclinedCache[sender] or (now - actionDeclinedCache[sender] > 90)
+            if shouldPrint then
+                print("|cffffff00[SuperIgnore] 独狼模式：已自动拦截来自陌生人 " .. sender .. " 的组队邀请。|r")
+                actionDeclinedCache[sender] = now
+            end
+            return 
+        end
+    end
     
     -- 补全同服/同公会邀请时不带服务器后缀的问题
     local cleanSender = Ambiguate(sender, "none")
     local fullName = sender
     if not string.find(fullName, "-") then
         local myRealm = GetNormalizedRealmName() or ""
-        if myRealm ~= "" then
-            fullName = cleanSender .. "-" .. myRealm
-        end
+        if myRealm ~= "" then fullName = cleanSender .. "-" .. myRealm end
     end
     
     if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] or SuperIgnoreDB[fullName] then
-        
-        -- 判断是否需要打印提示（90秒防刷屏）
         local shouldPrint = not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90)
         
         if event == "PARTY_INVITE_REQUEST" then
             DeclineGroup()
+            -- 【核心修复】：同步隐藏黑名单拦截的 UI 弹窗
             StaticPopup_Hide("PARTY_INVITE")
+            StaticPopup_Hide("PARTY_INVITE_XREALM")
+            if GroupInviteFrame then GroupInviteFrame:Hide() end
+            if GroupInvitationFrame then GroupInvitationFrame:Hide() end
+            
             if shouldPrint then
                 print(string.format(L.MSG_GROUP_DECLINED, fullName))
             end
             
         elseif event == "TRADE_REQUEST" then
             CancelTrade()
-            if shouldPrint then
-                print(string.format(L.MSG_TRADE_DECLINED, fullName))
-            end
+            if shouldPrint then print(string.format(L.MSG_TRADE_DECLINED, fullName)) end
             
         elseif event == "GUILD_INVITE_REQUEST" then
             DeclineGuild()
             StaticPopup_Hide("GUILD_INVITE")
-            -- 如果字典里配置了公会邀请的文本，可以像上面一样加 print
             
         elseif event == "DUEL_REQUESTED" then
             CancelDuel()
             StaticPopup_Hide("DUEL")
-            -- 如果字典里配置了决斗的文本，可以像上面一样加 print
         end
 
-        -- 只要触发了需要打印的提示，就刷新这个人的冷却时间
-        if shouldPrint then
-            actionDeclinedCache[fullName] = now
-        end
+        if shouldPrint then actionDeclinedCache[fullName] = now end
     end
-end)
+	end)
 
 -- ==========================================
 -- 8. 队伍/团队黑名单成员静默扫描与防刷屏预警
@@ -1207,6 +1308,53 @@ local chkNPC = CreateConfigCheck(filtersFrame, -130, "__CONFIG_FILTER_NPC__", L.
 local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
 local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
 
+local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
+local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
+
+-- 【新增】：独狼模式 (大幅增加间距，并附带原生防误触确认弹窗)
+local chkLoneWolf = CreateFrame("CheckButton", nil, filtersFrame, "InterfaceOptionsCheckButtonTemplate")
+chkLoneWolf:SetPoint("TOPLEFT", 10, -270)
+chkLoneWolf.Text:SetText(L.UI_CHK_LONEWOLF)
+chkLoneWolf.Text:SetFontObject("GameFontHighlight")
+
+-- 为独狼模式定制专属的 OnClick 拦截
+chkLoneWolf:SetScript("OnClick", function(self)
+    local isChecked = self:GetChecked()
+    
+    if isChecked then
+        -- 尝试开启时，弹出暴雪原生确认框 (使用多语言字典)
+        StaticPopupDialogs["SUPERIGNORE_LONEWOLF_CONFIRM"] = {
+            text = L.UI_LONEWOLF_CONFIRM_TEXT,
+            button1 = L.UI_BTN_ENABLE,
+            button2 = L.UI_BTN_CANCEL,
+            OnAccept = function()
+                SuperIgnoreDB = SuperIgnoreDB or {}
+                SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] = true
+                self:SetChecked(true)
+            end,
+            OnCancel = function()
+                -- 玩家反悔或误触，强行将勾选框恢复为未选中状态
+                self:SetChecked(false)
+            end,
+            timeout = 0,
+            whileDead = true,
+            hideOnEscape = true,
+            preferredIndex = 3, -- 使用暴雪内置的高优先级弹窗层级
+        }
+        StaticPopup_Show("SUPERIGNORE_LONEWOLF_CONFIRM")
+    else
+        -- 尝试关闭时，属于安全操作，直接生效无需确认
+        SuperIgnoreDB = SuperIgnoreDB or {}
+        SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] = false
+    end
+end)
+
+local loneWolfDesc = filtersFrame:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
+loneWolfDesc:SetPoint("TOPLEFT", chkLoneWolf, "BOTTOMLEFT", 4, -2)
+loneWolfDesc:SetText(L.UI_CHK_LONEWOLF_DESC)
+loneWolfDesc:SetJustifyH("LEFT")
+
+
 -- 数据与同步模块
 local dataFrame = CreateFrame("Frame", nil, panel)
 dataFrame:SetPoint("TOPLEFT", btnPlayers, "BOTTOMLEFT", 0, -20)
@@ -1419,6 +1567,7 @@ local function RefreshList()
         chkNPC:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false)
         chkQuest:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false)
 		chkSystem:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false)
+		chkLoneWolf:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] == true)
         
         searchBox:Hide(); scrollFrame:Hide()
         return
