@@ -1,4 +1,8 @@
 <div align="center">
+
+  <img src="https://github.com/user-attachments/assets/d12c11eb-d357-4446-abd4-486b269a2518" alt="SuperIgnore Logo" width="100" height="100" />
+  <h1>SuperIgnore</h1>
+
   <h1>❌ SuperIgnore</h1>
   <p><b>The Ultimate Account-wide Ignore System for WoW</b></p>
   <p>魔兽世界战网全角色通用黑名单插件</p>
