@@ -17,9 +17,11 @@
 
 ## 📖 Introduction (简介)
 
-**SuperIgnore** is a lightweight, high-performance addon designed to provide a comprehensive ignore system that works across the entire Battle.net account. It helps you block players across all characters and filter annoying chat messages with ease.
+**SuperIgnore** is a lightweight, high-performance **blacklist** and **chat filter** addon designed to provide a comprehensive **ignore system** across your entire Battle.net account. It empowers you to **bypass the default cap**, effortlessly block toxic players, and filter out annoying spam. 
 
-**超级黑名单**是一个极简、轻量、高性能的聊天过滤与黑名单管理插件，旨在提供一套覆盖整个战网账号的全面屏蔽系统。
+> **Block toxic players once, clean chat on all characters, and enjoy a spam-free Azeroth!**
+
+**SuperIgnore (超级黑名单)** 是一款极简、轻量、高性能的**聊天过滤**与**黑名单管理**插件，旨在为您提供一套覆盖整个战网账号的全面**屏蔽系统**。它能帮您突破游戏原生的黑名单人数上限，轻松拦截恶意玩家与刷屏广告。
 
 > **一次拉黑，全战网所有角色共同生效！还你清净的艾泽拉斯！**
 
