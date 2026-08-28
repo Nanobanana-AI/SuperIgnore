@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="https://github.com/user-attachments/assets/d12c11eb-d357-4446-abd4-486b269a2518.png" alt="SuperIgnore Logo" width="100" height="100" />
+ <img width="100" height="100" alt="logo" src="https://github.com/user-attachments/assets/d12c11eb-d357-4446-abd4-486b269a2518" />
   <h1>SuperIgnore</h1>
 
   <h1>❌ SuperIgnore</h1>
