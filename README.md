@@ -89,6 +89,17 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.7.9 - (2026.08.31)
+
+* English: Introduced a dual-track "Lone Wolf Mode" featuring both "Session" and "Global" (account-wide) switches, complete with confirmation dialogs and an on-login status alert to prevent accidental blocks. Upgraded the familiar player verification system using core GUIDs and roster scanning to permanently fix the bug where cross-realm guild members were falsely declined.
+* 中文: 新增“全局独狼模式”（战网全角色永久生效）与“单次模式”双轨开关，并配备二次确认弹窗及上线状态黄字播报，有效防止误触；全面升级熟人验证底层逻辑，采用 GUID 验证与真实公会名单交叉比对，彻底修复跨服公会成员邀请被误拦截的漏洞。
+
+## 🌟 v1.7.8 - (2026.08.28)
+
+*   English: Introduced "Lone Wolf Mode" to automatically decline group invites from strangers (with smart exemptions for friends, guild members, and applied LFG leaders). Optimized the anti-spam filter to completely resolve the issue of simultaneous raid achievement spam.
+*   中文: 新增“独狼模式”，开启后可自动拦截所有陌生人的组队邀请（智能豁免好友、公会成员及主动申请的集合石团长）；优化防霸屏机制，彻底修复大型团本中多人同时获得成就导致的瞬间刷屏漏洞。
+
+
 
 ## 🌟 v1.7.7 - (2026.08.25)
 
