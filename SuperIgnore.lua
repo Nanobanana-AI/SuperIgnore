@@ -57,10 +57,14 @@ local L = {
     UI_CHK_QUEST = "Block quest/instance progress spam",
 	UI_CHK_SYSTEM = "Block repetitive System messages", 
 	
-	UI_CHK_LONEWOLF = "Lone Wolf Mode: Auto-decline strangers",
-    UI_CHK_LONEWOLF_DESC = "⚠️ Warning: Only friends, guildmates, and applied LFG leaders can invite you. Others are silently declined!",
-	UI_LONEWOLF_CONFIRM_TEXT = "⚠️ WARNING: Enabling Lone Wolf Mode will automatically and silently decline all group invites from strangers!\n\n(Only friends, guildmates, or LFG leaders you applied to are allowed.)\n\nAre you sure you want to enable this?",
+	UI_CHK_LONEWOLF = "Lone Wolf Mode: Auto-decline strangers (Current session)",
+    UI_CHK_LONEWOLF_GLOBAL = "Global Lone Wolf Mode: Account-wide & permanent (Caution)",
+    UI_CHK_LONEWOLF_DESC = "⚠️ Lone Wolf Defense Mechanism:\nAutomatically and silently declines all group invites from strangers!\n(Smart exemptions: Friends, Guildmates, and applied LFG leaders)",
+    UI_LONEWOLF_CONFIRM_TEXT_SESSION = "Are you sure you want to enable [Session Lone Wolf Mode]?\n\nFor the rest of this session, all group invites from strangers will be silently declined!",
+    UI_LONEWOLF_CONFIRM_TEXT = "Are you sure you want to enable [Global Lone Wolf Mode]?\n\nAccount-wide, all your characters will automatically default to declining stranger invites upon logging in!",
+	MSG_LONEWOLF_GLOBAL_ACTIVE = "|cffffff00[SuperIgnore] Notice: [Global Lone Wolf Mode] is active. Stranger invites are auto-declined.|r",
     UI_BTN_ENABLE = "Enable",
+	
     
     STATS_TEXT = "Stats: %d Players blocked, %d Keywords blocked",
     ABOUT_TITLE = "SuperIgnore",
@@ -180,10 +184,13 @@ if locale == "zhCN" then
     L.UI_CHK_QUEST = "拦截队伍/副本任务进度通告"
 	L.UI_CHK_SYSTEM = "拦截系统黄字连续重复刷屏" 
 	
-	L.UI_CHK_LONEWOLF = "独狼模式：自动拒绝所有陌生人组队邀请"
-    L.UI_CHK_LONEWOLF_DESC = "⚠️ 警告：开启后仅允许好友/公会/你主动申请的团长组你，其他邀请将被静默秒拒！"
-	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 警告：开启独狼模式后，\n所有来自陌生人的组队邀请将被自动且静默地拒绝！\n\n(仅允许好友、公会成员、或您主动申请的团长)\n\n确定要开启吗？"
+	L.UI_CHK_LONEWOLF = "独狼模式：自动拒绝陌生人组队 (本次登录有效)"
+    L.UI_CHK_LONEWOLF_GLOBAL = "全局独狼模式：全战网所有角色永久生效 (慎选)"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 独狼防御机制说明：\n开启后将静默且无情地秒拒所有陌生人邀请！\n(系统将智能豁免：您的好友、公会成员、及您主动申请的团长)"
+    L.UI_LONEWOLF_CONFIRM_TEXT_SESSION = "您确定要开启【单次独狼模式】吗？\n\n开启后，本次登录期间所有来自陌生人的组队邀请将被静默拒绝！"
+    L.UI_LONEWOLF_CONFIRM_TEXT = "您确定要开启【全局独狼模式】吗？\n\n开启后，您战网下的所有角色每次上线，都会默认处于拒绝陌生人组队的状态！"
     L.UI_BTN_ENABLE = "确定开启"
+	L.MSG_LONEWOLF_GLOBAL_ACTIVE = "|cffffff00[SuperIgnore] 提示：您当前已开启【全局独狼模式】，陌生人组队邀请将被自动拒绝。|r"
     
     L.STATS_TEXT = "当前统计：已拦截玩家 %d 名，屏蔽关键词 %d 个"
     L.ABOUT_TITLE = "SuperIgnore (超级黑名单)"
@@ -292,10 +299,13 @@ elseif locale == "zhTW" then
     L.UI_CHK_QUEST = "攔截隊伍/副本任務進度通告"
 	L.UI_CHK_SYSTEM = "攔截系統黃字連續重複洗頻" 
 	
-	L.UI_CHK_LONEWOLF = "孤狼模式：自動拒絕所有陌生人組隊邀請"
-    L.UI_CHK_LONEWOLF_DESC = "⚠️ 警告：開啟後僅允許好友/公會/你主動申請的團長組你，其他邀請將被靜默秒拒！"
-	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 警告：開啟孤狼模式後，\n所有來自陌生人的組隊邀請將被自動且靜默地拒絕！\n\n(僅允許好友、公會成員、或您主動申請的團長)\n\n確定要開啟嗎？"
+	L.UI_CHK_LONEWOLF = "孤狼模式：自動拒絕陌生人組隊 (本次登入有效)"
+    L.UI_CHK_LONEWOLF_GLOBAL = "全局孤狼模式：全戰網所有角色永久生效 (慎選)"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 孤狼防禦機制說明：\n開啟後將靜默且無情地秒拒所有陌生人邀請！\n(系統將智能豁免：您的好友、公會成員、及您主動申請的團長)"
+    L.UI_LONEWOLF_CONFIRM_TEXT_SESSION = "您確定要開啟【單次孤狼模式】嗎？\n\n開啟後，本次登入期間所有來自陌生人的組隊邀請將被靜默拒絕！"
+    L.UI_LONEWOLF_CONFIRM_TEXT = "您確定要開啟【全局孤狼模式】嗎？\n\n開啟後，您戰網下的所有角色每次上線，都會預設處於拒絕陌生人組隊的狀態！"
     L.UI_BTN_ENABLE = "確定開啟"
+	L.MSG_LONEWOLF_GLOBAL_ACTIVE = "|cffffff00[SuperIgnore] 提示：您目前已開啟【全局孤狼模式】，陌生人組隊邀請將被自動拒絕。|r"
 	
     
     L.STATS_TEXT = "當前統計：已攔截玩家 %d 名，封鎖關鍵字 %d 個"
@@ -406,10 +416,13 @@ elseif locale == "koKR" then
     L.UI_CHK_QUEST = "퀘스트/인던 진행 알림 차단"
 	L.UI_CHK_SYSTEM = "시스템 메시지 반복 출력 차단" 
 	
-	L.UI_CHK_LONEWOLF = "솔로 모드: 낯선 사람의 파티 초대 자동 거절"
-    L.UI_CHK_LONEWOLF_DESC = "⚠️ 경고: 활성화 시 친구, 길드원, 본인이 직접 신청한 파티장의 초대만 허용되며, 다른 모든 초대는 자동으로 거절됩니다!"
-	L.UI_LONEWOLF_CONFIRM_TEXT = "⚠️ 경고: 솔로 모드를 켜면 낯선 사람의 모든 파티 초대가 자동으로 조용히 거절됩니다!\n\n(친구, 길드원 또는 본인이 신청한 파티장만 예외)\n\n정말 켜시겠습니까?"
+	L.UI_CHK_LONEWOLF = "솔로 모드: 낯선 사람 파티 초대 자동 거절 (현재 접속에만 적용)"
+    L.UI_CHK_LONEWOLF_GLOBAL = "글로벌 솔로 모드: 계정 내 모든 캐릭터 영구 적용 (주의)"
+    L.UI_CHK_LONEWOLF_DESC = "⚠️ 솔로 모드 방어 메커니즘:\n활성화 시 낯선 사람의 파티 초대를 조용히 즉시 거절합니다!\n(스마트 예외: 친구, 길드원, 본인이 신청한 파티장)"
+    L.UI_LONEWOLF_CONFIRM_TEXT_SESSION = "[단일 솔로 모드]를 켜시겠습니까?\n\n활성화 시 현재 접속 기간 동안 낯선 사람의 모든 파티 초대가 조용히 거절됩니다!"
+    L.UI_LONEWOLF_CONFIRM_TEXT = "[글로벌 솔로 모드]를 켜시겠습니까?\n\n활성화 시 계정 내 모든 캐릭터가 접속할 때마다 기본적으로 낯선 사람의 초대를 거절하는 상태가 됩니다!"
     L.UI_BTN_ENABLE = "켜기"
+	L.MSG_LONEWOLF_GLOBAL_ACTIVE = "|cffffff00[SuperIgnore] 알림: [글로벌 솔로 모드]가 켜져 있습니다. 낯선 사람의 초대가 자동 거절됩니다.|r"
 	
     
     L.STATS_TEXT = "통계: 플레이어 %d명 차단, 키워드 %d개 차단"
@@ -485,6 +498,7 @@ local repeatCache = {}
 local achvCache = {}
 local npcCache = {}
 local sysCache = {}
+local SessionLoneWolf = false -- 单次登录有效的独狼开关（内存变量）
 
 
 
@@ -765,19 +779,34 @@ hooksecurefunc(C_LFGList, "ApplyToGroup", function(searchResultID)
     end
 end)
 
--- 极简核心判定：他是不是熟人？(加入安全容错与现代 API 支持)
-local function IsFamiliarPlayer(name)
+-- 极简核心判定：他是不是熟人？(终极无死角验证版本)
+local function IsFamiliarPlayer(name, guid)
     local cleanName = Ambiguate(name, "none")
+    local baseName = string.match(name, "^([^-]+)") or name
     
     -- 1. 检查 5 分钟集合石临时通行证
     if tempLFGLeaders[cleanName] and GetTime() < tempLFGLeaders[cleanName] then return true end
     
-    -- 2. 检查是否为同公会 (增加 pcall 安全调用，防止跨服或无公会时报错)
-    if IsGuildMember then
-        local ok, isGuild = pcall(IsGuildMember, name)
-        if ok and isGuild then return true end
-        local ok2, isGuild2 = pcall(IsGuildMember, cleanName)
-        if ok2 and isGuild2 then return true end
+    -- 2. 检查是否为同公会 (终极修复：GUID验证 + 遍历真实公会名单兜底)
+    if IsInGuild() then
+        -- A. 优先使用现代 API 通过 GUID 瞬间验证
+        if guid and C_GuildInfo and C_GuildInfo.IsGuildMember then
+            local ok, isGuild = pcall(C_GuildInfo.IsGuildMember, guid)
+            if ok and isGuild then return true end
+        end
+        
+        -- B. 兜底：遍历公会真实名单 (解决 IsGuildMember API 无法识别文本名字的底层大坑)
+        local numGuildMembers = GetNumGuildMembers()
+        for i = 1, numGuildMembers do
+            local rosterName = GetGuildRosterInfo(i)
+            if rosterName then
+                local rCleanName = Ambiguate(rosterName, "none")
+                local rBaseName = string.match(rosterName, "^([^-]+)") or rosterName
+                if rosterName == name or rCleanName == cleanName or rBaseName == baseName then
+                    return true
+                end
+            end
+        end
     end
     
     -- 3. 检查角色好友
@@ -786,9 +815,11 @@ local function IsFamiliarPlayer(name)
         if ok and info then return true end
         local ok2, info2 = pcall(C_FriendList.GetFriendInfo, cleanName)
         if ok2 and info2 then return true end
+        local ok3, info3 = pcall(C_FriendList.GetFriendInfo, baseName)
+        if ok3 and info3 then return true end
     end
     
-    -- 4. 检查是否为战网好友 (全面升级为现代 C_BattleNet API)
+    -- 4. 检查是否为战网好友
     if C_BattleNet and C_BattleNet.GetNumFriends then
         local numBNet = C_BattleNet.GetNumFriends() or 0
         for i = 1, numBNet do
@@ -796,8 +827,10 @@ local function IsFamiliarPlayer(name)
             if accInfo and accInfo.gameAccountInfo then
                 local charName = accInfo.gameAccountInfo.characterName
                 local client = accInfo.gameAccountInfo.clientProgram
-                if (client == "WoW" or client == BNET_CLIENT_WOW) and charName == cleanName then
-                    return true
+                if (client == "WoW" or client == BNET_CLIENT_WOW) then
+                    if charName == baseName or charName == cleanName or charName == name then
+                        return true
+                    end
                 end
             end
         end
@@ -874,11 +907,15 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
     -- ==========================================
     if not sender then return end
 	
-	-- 【新增】：独狼模式拦截逻辑 (优先于黑名单判断)
-    if SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] and event == "PARTY_INVITE_REQUEST" then
-        if not IsFamiliarPlayer(sender) then
+-- 【新增】：独狼模式拦截逻辑 (优先于黑名单判断)
+    -- 【新增】：独狼模式拦截逻辑 (改为判断 SessionLoneWolf 内存变量)
+    if SessionLoneWolf and event == "PARTY_INVITE_REQUEST" then
+        -- 提取底层事件传来的第7个参数 (sender是第1个，...里的第6个即为GUID)
+        local guid = select(6, ...) 
+        
+        -- 将名字和提取到的 GUID 共同交由验证函数判定
+        if not IsFamiliarPlayer(sender, guid) then
             DeclineGroup()
-            -- 【核心修复】：全面击杀老版与新版魔兽的所有组队 UI 弹窗
             StaticPopup_Hide("PARTY_INVITE")
             StaticPopup_Hide("PARTY_INVITE_XREALM")
             if GroupInviteFrame then GroupInviteFrame:Hide() end
@@ -1311,48 +1348,100 @@ local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM_
 local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
 local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
 
--- 【新增】：独狼模式 (大幅增加间距，并附带原生防误触确认弹窗)
+-- ==========================================
+-- 【新增】：独狼模式危险区 (独立横线与说明)
+-- ==========================================
+-- 1. 画一条暗灰色的分割横线
+local loneWolfDivider = filtersFrame:CreateTexture(nil, "ARTWORK")
+loneWolfDivider:SetColorTexture(0.4, 0.4, 0.4, 0.5) 
+loneWolfDivider:SetPoint("TOPLEFT", 10, -235)
+loneWolfDivider:SetPoint("BOTTOMRIGHT", filtersFrame, "TOPRIGHT", -30, -236)
+
+-- 2. 横线下方的详细警告说明 (使用 GameFontNormal 变为醒目黄色)
+local loneWolfDesc = filtersFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+loneWolfDesc:SetPoint("TOPLEFT", loneWolfDivider, "BOTTOMLEFT", 4, -8) -- 紧贴横线下方
+loneWolfDesc:SetText(L.UI_CHK_LONEWOLF_DESC)
+loneWolfDesc:SetJustifyH("LEFT")
+
+-- 3. 开关 A：单次生效 (无弹窗，随点随用。锚点对齐到说明文字的左下角)
 local chkLoneWolf = CreateFrame("CheckButton", nil, filtersFrame, "InterfaceOptionsCheckButtonTemplate")
-chkLoneWolf:SetPoint("TOPLEFT", 10, -270)
+chkLoneWolf:SetPoint("TOPLEFT", loneWolfDesc, "BOTTOMLEFT", -4, -10) 
 chkLoneWolf.Text:SetText(L.UI_CHK_LONEWOLF)
 chkLoneWolf.Text:SetFontObject("GameFontHighlight")
 
--- 为独狼模式定制专属的 OnClick 拦截
+-- 4. 开关 B：全局永久生效 (带确认弹窗。锚点对齐到单次开关的左下角)
+local chkLoneWolfGlobal = CreateFrame("CheckButton", nil, filtersFrame, "InterfaceOptionsCheckButtonTemplate")
+chkLoneWolfGlobal:SetPoint("TOPLEFT", chkLoneWolf, "BOTTOMLEFT", 0, -5)
+chkLoneWolfGlobal.Text:SetText(L.UI_CHK_LONEWOLF_GLOBAL)
+chkLoneWolfGlobal.Text:SetFontObject("GameFontHighlight")
+
+-- 【联动逻辑 A】：点击单次开关
 chkLoneWolf:SetScript("OnClick", function(self)
     local isChecked = self:GetChecked()
     
     if isChecked then
-        -- 尝试开启时，弹出暴雪原生确认框 (使用多语言字典)
+        -- 尝试开启单次模式时，弹出确认框
+        StaticPopupDialogs["SUPERIGNORE_LONEWOLF_CONFIRM_SESSION"] = {
+            text = L.UI_LONEWOLF_CONFIRM_TEXT_SESSION, 
+            button1 = L.UI_BTN_ENABLE,
+            button2 = L.UI_BTN_CANCEL,
+            OnAccept = function()
+                SessionLoneWolf = true
+                self:SetChecked(true)
+            end,
+            OnCancel = function()
+                -- 玩家取消，强制去掉勾选
+                self:SetChecked(false)
+            end,
+            timeout = 0,
+            whileDead = true,
+            hideOnEscape = true,
+            preferredIndex = 3,
+        }
+        StaticPopup_Show("SUPERIGNORE_LONEWOLF_CONFIRM_SESSION")
+    else
+        -- 关闭单次模式时直接生效，同时必须联动把全局模式也关掉
+        SessionLoneWolf = false
+        chkLoneWolfGlobal:SetChecked(false)
+        SuperIgnoreDB = SuperIgnoreDB or {}
+        SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] = false
+    end
+end)
+
+-- 【联动逻辑 B】：点击全局开关
+chkLoneWolfGlobal:SetScript("OnClick", function(self)
+    local isChecked = self:GetChecked()
+    
+    if isChecked then
+        -- 开启全局时，弹出精简版确认框
         StaticPopupDialogs["SUPERIGNORE_LONEWOLF_CONFIRM"] = {
             text = L.UI_LONEWOLF_CONFIRM_TEXT,
             button1 = L.UI_BTN_ENABLE,
             button2 = L.UI_BTN_CANCEL,
             OnAccept = function()
                 SuperIgnoreDB = SuperIgnoreDB or {}
-                SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] = true
+                SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] = true
                 self:SetChecked(true)
+                
+                -- 【核心联动】：强行帮单次模式打上勾，并使内存变量生效
+                SessionLoneWolf = true
+                chkLoneWolf:SetChecked(true)
             end,
             OnCancel = function()
-                -- 玩家反悔或误触，强行将勾选框恢复为未选中状态
                 self:SetChecked(false)
             end,
             timeout = 0,
             whileDead = true,
             hideOnEscape = true,
-            preferredIndex = 3, -- 使用暴雪内置的高优先级弹窗层级
+            preferredIndex = 3,
         }
         StaticPopup_Show("SUPERIGNORE_LONEWOLF_CONFIRM")
     else
-        -- 尝试关闭时，属于安全操作，直接生效无需确认
+        -- 关闭全局时，不干涉当前的单次模式
         SuperIgnoreDB = SuperIgnoreDB or {}
-        SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] = false
+        SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] = false
     end
 end)
-
-local loneWolfDesc = filtersFrame:CreateFontString(nil, "ARTWORK", "GameFontDisableSmall")
-loneWolfDesc:SetPoint("TOPLEFT", chkLoneWolf, "BOTTOMLEFT", 4, -2)
-loneWolfDesc:SetText(L.UI_CHK_LONEWOLF_DESC)
-loneWolfDesc:SetJustifyH("LEFT")
 
 
 -- 数据与同步模块
@@ -1567,7 +1656,13 @@ local function RefreshList()
         chkNPC:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false)
         chkQuest:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false)
 		chkSystem:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false)
-		chkLoneWolf:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF__"] == true)
+		-- 初始化：如果全局模式是开的，强制让单次模式变量生效
+        if SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] then
+            SessionLoneWolf = true
+        end
+        
+        chkLoneWolf:SetChecked(SessionLoneWolf == true)
+        chkLoneWolfGlobal:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] == true)
         
         searchBox:Hide(); scrollFrame:Hide()
         return
@@ -2044,6 +2139,29 @@ if Settings and Settings.RegisterCanvasLayoutCategory then
     SuperIgnoreCategory = category
 end
 
+
+-- ==========================================
+-- 8.5 登录/重载时的全局独狼模式警告提示
+-- ==========================================
+local loginCheckFrame = CreateFrame("Frame")
+loginCheckFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+local hasPrintedLoginWarning = false -- 防治过蓝条重复播报的单次锁
+
+loginCheckFrame:SetScript("OnEvent", function(self, event, isInitialLogin, isReloadingUi)
+    if event == "PLAYER_ENTERING_WORLD" then
+        if not hasPrintedLoginWarning then
+            hasPrintedLoginWarning = true -- 上锁，本次在线期间不再播报
+            
+            -- 只有在真正开启了全局模式时，才输出黄字提示
+            if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] then
+                -- 稍微延迟0.5秒输出，防止被大脚或其他插件的刷屏信息顶上去
+                C_Timer.After(0.5, function()
+                    print(L.MSG_LONEWOLF_GLOBAL_ACTIVE)
+                end)
+            end
+        end
+    end
+end)
 
 -- ==========================================
 -- 9. 插件版本静默检测 (Addon Version Check)
