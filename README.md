@@ -89,6 +89,11 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.8.0 - (2026.09.01)
+
+*   English: Fixed the interception logic for "Global Lone Wolf Mode" to ensure reliable activation upon login.
+*   中文: 修复了“全局独狼模式”的底层拦截逻辑，确保角色上线时自动生效。
+
 ## 🌟 v1.7.9 - (2026.08.31)
 
 * English: Introduced a dual-track "Lone Wolf Mode" featuring both "Session" and "Global" (account-wide) switches, complete with confirmation dialogs and an on-login status alert to prevent accidental blocks. Upgraded the familiar player verification system using core GUIDs and roster scanning to permanently fix the bug where cross-realm guild members were falsely declined.
