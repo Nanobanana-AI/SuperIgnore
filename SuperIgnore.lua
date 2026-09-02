@@ -2141,7 +2141,7 @@ end
 
 
 -- ==========================================
--- 8.5 登录/重载时的全局独狼模式警告提示
+-- 8.5 登录/重载时的全局独狼模式警告提示与变量初始化
 -- ==========================================
 local loginCheckFrame = CreateFrame("Frame")
 loginCheckFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -2152,8 +2152,10 @@ loginCheckFrame:SetScript("OnEvent", function(self, event, isInitialLogin, isRel
         if not hasPrintedLoginWarning then
             hasPrintedLoginWarning = true -- 上锁，本次在线期间不再播报
             
-            -- 只有在真正开启了全局模式时，才输出黄字提示
+            -- 【核心修复】：在玩家真正进入游戏的一瞬间，读取全局设定并激活底层拦截
             if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] then
+                SessionLoneWolf = true -- 自动激活单次独狼模式，确保不开面板也100%生效
+                
                 -- 稍微延迟0.5秒输出，防止被大脚或其他插件的刷屏信息顶上去
                 C_Timer.After(0.5, function()
                     print(L.MSG_LONEWOLF_GLOBAL_ACTIVE)
