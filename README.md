@@ -89,6 +89,11 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.8.1 - (2026.09.04)
+
+*   English: Optimized the keyword filter to specifically block automated addon whispers (e.g., welcome messages) from teammates without affecting regular group chat.
+*   中文: 优化关键词拦截逻辑，精准拦截队友整合插件自动发送的密语（如欢迎进组提示等），且绝不误伤队伍/团队频道的正常战术交流。
+
 ## 🌟 v1.8.0 - (2026.09.01)
 
 *   English: Fixed the interception logic for "Global Lone Wolf Mode" to ensure reliable activation upon login.
