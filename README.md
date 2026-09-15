@@ -89,6 +89,15 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.8.3 - (2026.09.16)
+
+*   **English:** 
+    *   **New Feature:** Added a "Pure Silent Mode" toggle in the Filters tab. When enabled, all block/interception alert messages (red text) will be completely hidden for a 100% distraction-free experience.
+
+*   **中文:** 
+    *   **全新功能：** 在【扩展过滤】面板新增“纯静默模式”选项。勾选后，将彻底隐藏拦截成功时的系统红字提示，真正实现“眼不见心不烦”的极致防骚扰体验。
+
+
 ## 🌟 v1.8.2 - (2026.09.15)
 
 *   **English:** 
