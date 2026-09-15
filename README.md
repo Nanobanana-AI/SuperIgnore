@@ -89,6 +89,14 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.8.2 - (2026.09.15)
+
+*   **English:** 
+    *   Fixed a visual bug where intercepted addon whispers (e.g., auto-welcomes) would occasionally leave an empty, blank chat tab. Interception is now 100% seamless and trace-free.
+    
+*   **中文:** 
+    *   **核心优化：** 完美解决了部分玩家在拦截插件密语（如大脚欢迎语）后，聊天框依然会残留一个“空壳标签页”的视觉 Bug。现在拦截将是 100% 真正的无痕静默！
+    *   
 ## 🌟 v1.8.1 - (2026.09.04)
 
 *   English: Optimized the keyword filter to specifically block automated addon whispers (e.g., welcome messages) from teammates without affecting regular group chat.
