@@ -501,6 +501,31 @@ local sysCache = {}
 local SessionLoneWolf = false -- 单次登录有效的独狼开关（内存变量）
 
 
+-- ==========================================
+-- 【新增】：清理空壳私聊标签页的工具函数
+-- 解决魔兽系统先建窗口、后过滤文字导致的空标签页残留问题
+-- ==========================================
+local function CloseEmptyWhisperTab(author)
+    if not author or not CHAT_FRAMES then return end
+    
+    -- 统一转小写，防止跨服名字大小写匹配不上
+    local cleanName = string.lower(Ambiguate(author, "none"))
+
+    -- 延迟一帧执行，等待暴雪自带UI把窗口彻底建完，咱们再去关它
+    C_Timer.After(0, function()
+        for _, chatFrameName in pairs(CHAT_FRAMES) do
+            local frame = _G[chatFrameName]
+            -- 寻找暴雪生成的临时私聊窗口，并且判断名字是否吻合
+            if frame and frame.isTemporary and frame.chatType == "WHISPER" and frame.chatTarget then
+                local targetName = string.lower(Ambiguate(frame.chatTarget, "none"))
+                if targetName == cleanName then
+                    FCF_Close(frame) -- 官方 API：安全关闭并回收标签页
+                end
+            end
+        end
+    end)
+end
+
 
 -- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
@@ -556,13 +581,27 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
     
-    -- A. 关键词/正则匹配拦截 (对队友和组队频道全方位豁免，防止战术交流误触)
-    if SuperIgnoreKeywordsDB and not isExempted then
+    -- A. 关键词/正则匹配拦截 (智能豁免升级：仅剥夺“密语”的豁免权，公开频道绝对免死)
+    if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
             local success, match = pcall(string.find, msg, keyword)
-            if success and match then return true end
-            if not success then
-                if string.find(msg, keyword, 1, true) then return true end
+            local isHit = false
+            
+            if success and match then 
+                isHit = true 
+            elseif not success and string.find(msg, keyword, 1, true) then 
+                isHit = true 
+            end
+            
+            if isHit then
+                -- 【绝杀逻辑】：
+                -- 1. 陌生人 (not isExempted) -> 无情拦截
+                -- 2. 队友发的密语 (CHAT_MSG_WHISPER) -> 强制拦截 (专治各种插件的私聊骚扰)
+                -- 队友在队伍/团队的任何发言，统统绝对放行，哪怕带了屏蔽词！
+                if (not isExempted) or (event == "CHAT_MSG_WHISPER") then
+                    if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(author) end
+                    return true
+                end
             end
         end
     end
@@ -570,7 +609,10 @@ local function ChatFilter(self, event, msg, author, ...)
     -- ==========================================
     -- B. 超级黑名单拦截 (黑名单绝对不豁免，哪怕是队友也照样拉黑)
     -- ==========================================
-    if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then return true end
+    if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then 
+        if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(author) end
+        return true 
+    end
     
     if not originalHasRealm and isGroupEnv then
         for dbKey, _ in pairs(SuperIgnoreDB) do
@@ -717,7 +759,10 @@ local function FilterSystemSpam(self, event, msg, ...)
         if sysCache[msg] then
             local timeDiff = now - sysCache[msg]
             if timeDiff < 5 then
-                if timeDiff > 0.2 then return true end
+                if timeDiff > 0.2 then 
+                    if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(author) end
+                    return true 
+                end
             end
         end
         
