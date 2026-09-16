@@ -55,7 +55,8 @@ local L = {
     UI_CHK_ACHV = "Merge duplicate achievements",
     UI_CHK_NPC = "Block repetitive NPC dialogues",
     UI_CHK_QUEST = "Block quest/instance progress spam",
-	UI_CHK_SYSTEM = "Block repetitive System messages", 
+	UI_CHK_SYSTEM = "Block repetitive System messages",
+	UI_CHK_SILENT_BLOCK = "Pure Silent Mode: Hide addon block notifications",
 	
 	UI_CHK_LONEWOLF = "Lone Wolf Mode: Auto-decline strangers (Current session)",
     UI_CHK_LONEWOLF_GLOBAL = "Global Lone Wolf Mode: Account-wide & permanent (Caution)",
@@ -74,8 +75,8 @@ local L = {
     ABOUT_UPDATE_TITLE = "【Updates】",
 	
 	-- 新增 优化
-    ABOUT_UPDATE_NEW = "- New: Lone Wolf mode (block strangers) & teammate chat exemption.",
-    ABOUT_UPDATE_OPT = "- Opt: Fixed raid achievement spam & core interception logic.",
+    ABOUT_UPDATE_NEW = "- New: Option to hide addon notifications after successful blocks.",
+    ABOUT_UPDATE_OPT = "- Opt: Support for 12.15 & core interception logic.",
 	
 	
     ABOUT_FOOTER = "Feedback and bug reports are welcome on CurseForge!",
@@ -182,7 +183,8 @@ if locale == "zhCN" then
     L.UI_CHK_ACHV = "合并公会/队伍同款成就 (防霸屏)"
     L.UI_CHK_NPC = "拦截 NPC 高频重复台词"
     L.UI_CHK_QUEST = "拦截队伍/副本任务进度通告"
-	L.UI_CHK_SYSTEM = "拦截系统黄字连续重复刷屏" 
+	L.UI_CHK_SYSTEM = "拦截系统黄字连续重复刷屏"
+	L.UI_CHK_SILENT_BLOCK = "纯静默模式：隐藏拦截成功后的插件提示" 
 	
 	L.UI_CHK_LONEWOLF = "独狼模式：自动拒绝陌生人组队 (本次登录有效)"
     L.UI_CHK_LONEWOLF_GLOBAL = "全局独狼模式：全战网所有角色永久生效 (慎选)"
@@ -200,8 +202,8 @@ if locale == "zhCN" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：独狼组队防御模式与队友发言智能豁免。"
-    L.ABOUT_UPDATE_OPT = "- 优化：修复团本成就刷屏漏洞及底层拦截逻辑。"
+    L.ABOUT_UPDATE_NEW = "- 新增：隐藏拦截成功后的插件提示。"
+    L.ABOUT_UPDATE_OPT = "- 优化：支持 12.15 及底层拦截逻辑。"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建议，欢迎前往 NGA 原创插件区反馈！"
@@ -298,6 +300,7 @@ elseif locale == "zhTW" then
     L.UI_CHK_NPC = "攔截 NPC 高頻重複台詞"
     L.UI_CHK_QUEST = "攔截隊伍/副本任務進度通告"
 	L.UI_CHK_SYSTEM = "攔截系統黃字連續重複洗頻" 
+	L.UI_CHK_SILENT_BLOCK = "純靜默模式：隱藏攔截成功後的插件提示"
 	
 	L.UI_CHK_LONEWOLF = "孤狼模式：自動拒絕陌生人組隊 (本次登入有效)"
     L.UI_CHK_LONEWOLF_GLOBAL = "全局孤狼模式：全戰網所有角色永久生效 (慎選)"
@@ -316,8 +319,8 @@ elseif locale == "zhTW" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：孤狼組隊防禦模式與隊友發言智能豁免。"
-    L.ABOUT_UPDATE_OPT = "- 優化：修復團本成就洗頻漏洞及底層攔截邏輯。"
+    L.ABOUT_UPDATE_NEW = "- 新增：隱藏攔截成功後的插件提示。"
+    L.ABOUT_UPDATE_OPT = "- 優化：支援 12.15 及底層攔截邏輯。"
 	
 	
     L.ABOUT_FOOTER = "如果遇到 Bug 或有功能建議，歡迎前往 CurseForge 反饋！"
@@ -415,6 +418,7 @@ elseif locale == "koKR" then
     L.UI_CHK_NPC = "NPC 반복 대사 차단"
     L.UI_CHK_QUEST = "퀘스트/인던 진행 알림 차단"
 	L.UI_CHK_SYSTEM = "시스템 메시지 반복 출력 차단" 
+	L.UI_CHK_SILENT_BLOCK = "완전 조용함 모드: 차단 성공 후 애드온 알림 숨기기"
 	
 	L.UI_CHK_LONEWOLF = "솔로 모드: 낯선 사람 파티 초대 자동 거절 (현재 접속에만 적용)"
     L.UI_CHK_LONEWOLF_GLOBAL = "글로벌 솔로 모드: 계정 내 모든 캐릭터 영구 적용 (주의)"
@@ -433,8 +437,8 @@ elseif locale == "koKR" then
 	
 	-- 新增 优化
 	
-    L.ABOUT_UPDATE_NEW = "- 추가: 솔로 모드(낯선 사람 초대 차단) 및 팀원 채팅 예외 적용."
-    L.ABOUT_UPDATE_OPT = "- 최적화: 공격대 업적 도배 방지 수정 및 기본 차단 로직 개선."
+    L.ABOUT_UPDATE_NEW = "- 추가: 차단 성공 후 애드온 알림 숨기기."
+    L.ABOUT_UPDATE_OPT = "- 최적화: 12.15 버전 지원 및 기본 차단 로직 개선."
 	
 	
     L.ABOUT_FOOTER = "피드백과 버그 제보는 언제든 CurseForge에서 환영합니다!"
@@ -931,9 +935,11 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
                                     muteLFGTime = now -- 再次上锁，触发 1 秒静默期
                                     
                                     -- 防刷屏提示逻辑 (90秒)
-                                    if not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90) then
-                                        print(string.format(L.MSG_LFG_DECLINED, fullName))
-                                        actionDeclinedCache[fullName] = now
+                                    if not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"] then
+                                        if not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90) then
+                                            print(string.format(L.MSG_LFG_DECLINED, fullName))
+                                            actionDeclinedCache[fullName] = now
+                                        end
                                     end
                                     
                                     break
@@ -952,7 +958,7 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
     -- ==========================================
     if not sender then return end
 	
--- 【新增】：独狼模式拦截逻辑 (优先于黑名单判断)
+
     -- 【新增】：独狼模式拦截逻辑 (改为判断 SessionLoneWolf 内存变量)
     if SessionLoneWolf and event == "PARTY_INVITE_REQUEST" then
         -- 提取底层事件传来的第7个参数 (sender是第1个，...里的第6个即为GUID)
@@ -966,7 +972,7 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
             if GroupInviteFrame then GroupInviteFrame:Hide() end
             if GroupInvitationFrame then GroupInvitationFrame:Hide() end
             
-            local shouldPrint = not actionDeclinedCache[sender] or (now - actionDeclinedCache[sender] > 90)
+            local shouldPrint = (not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"]) and (not actionDeclinedCache[sender] or (now - actionDeclinedCache[sender] > 90))
             if shouldPrint then
                 print("|cffffff00[SuperIgnore] 独狼模式：已自动拦截来自陌生人 " .. sender .. " 的组队邀请。|r")
                 actionDeclinedCache[sender] = now
@@ -984,7 +990,8 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
     end
     
     if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] or SuperIgnoreDB[fullName] then
-        local shouldPrint = not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90)
+        -- 常规拦截处：如果开启了纯静默，强制 shouldPrint 为 false
+        local shouldPrint = (not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"]) and (not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90))
         
         if event == "PARTY_INVITE_REQUEST" then
             DeclineGroup()
@@ -1384,14 +1391,15 @@ local function CreateConfigCheck(parent, offsetY, configKey, labelText)
 end
 
 local chkDND = CreateConfigCheck(filtersFrame, -10, "__CONFIG_FILTER_DND__", L.UI_CHK_DND)
-local chkRepeat = CreateConfigCheck(filtersFrame, -50, "__CONFIG_FILTER_REPEAT__", L.UI_CHK_REPEAT)
-local chkAchv = CreateConfigCheck(filtersFrame, -90, "__CONFIG_FILTER_ACHV__", L.UI_CHK_ACHV)
-local chkNPC = CreateConfigCheck(filtersFrame, -130, "__CONFIG_FILTER_NPC__", L.UI_CHK_NPC)
-local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
-local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
+local chkRepeat = CreateConfigCheck(filtersFrame, -40, "__CONFIG_FILTER_REPEAT__", L.UI_CHK_REPEAT)
+local chkAchv = CreateConfigCheck(filtersFrame, -70, "__CONFIG_FILTER_ACHV__", L.UI_CHK_ACHV)
+local chkNPC = CreateConfigCheck(filtersFrame, -100, "__CONFIG_FILTER_NPC__", L.UI_CHK_NPC)
+local chkQuest = CreateConfigCheck(filtersFrame, -130, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
+local chkSystem = CreateConfigCheck(filtersFrame, -160, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
+-- 新增：纯静默模式开关，行距紧凑排列
+local chkSilentBlock = CreateConfigCheck(filtersFrame, -190, "__CONFIG_SILENT_BLOCK__", L.UI_CHK_SILENT_BLOCK)
 
-local chkQuest = CreateConfigCheck(filtersFrame, -170, "__CONFIG_FILTER_QUEST__", L.UI_CHK_QUEST)
-local chkSystem = CreateConfigCheck(filtersFrame, -210, "__CONFIG_FILTER_SYSTEM__", L.UI_CHK_SYSTEM)
+
 
 -- ==========================================
 -- 【新增】：独狼模式危险区 (独立横线与说明)
@@ -1701,6 +1709,10 @@ local function RefreshList()
         chkNPC:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_NPC__"] ~= false)
         chkQuest:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false)
 		chkSystem:SetChecked(SuperIgnoreDB["__CONFIG_FILTER_SYSTEM__"] ~= false)
+		-- 新增：读取纯静默模式，由于我们默认它不打钩，所以只在 == true 的时候才勾选
+		chkSilentBlock:SetChecked(SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"] == true)
+		
+		
 		-- 初始化：如果全局模式是开的，强制让单次模式变量生效
         if SuperIgnoreDB["__CONFIG_FILTER_LONEWOLF_GLOBAL__"] then
             SessionLoneWolf = true
