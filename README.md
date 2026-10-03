@@ -89,6 +89,15 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+## 🌟 v1.8.4 - (2026.10.04)
+
+*   **English:** 
+    *   Fixed an issue where cross-realm guild and party invites from blocked players were not properly intercepted due to hidden server tags.
+    *   Updated the UI handling to ensure the guild invite popup properly hides on modern WoW clients when a blocked player invites you.
+*   **中文:** 
+    *   **跨服拦截修复：** 修复了跨服环境下，因系统隐藏服务器后缀导致黑名单玩家组队/公会邀请偶尔拦截失效的问题。
+    *   **弹窗残留修复：** 适配现代魔兽 UI 框架，彻底根除拦截公会邀请后，弹窗依然卡在屏幕上的视觉残留 Bug。
+
 ## 🌟 v1.8.3 - (2026.09.16)
 
 *   **English:** 
