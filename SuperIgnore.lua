@@ -533,26 +533,32 @@ end
 
 -- 2. 聊天过滤模块与智能拦截模块
 local function ChatFilter(self, event, msg, author, ...)
-    local name = Ambiguate(author, "none") 
+    if not author then return false end
     
     -- ==========================================
-    -- 【核心修复】：给自己颁发“免死金牌”，绝对不拦截自己发出的任何消息！
+    -- 【终极净化】：粉碎一切跨服暗坑与干扰符！
+    -- 跨服副本中，系统或大脚等插件会给名字强加 星号(*) 或 职业颜色代码(|cff...|r)
+    -- 这里在最源头将其扒得干干净净，还原出最纯净的玩家 ID！
     -- ==========================================
+    local cleanAuthor = string.gsub(author, "|c%x%x%x%x%x%x%x%x", "")
+    cleanAuthor = string.gsub(cleanAuthor, "|r", "")
+    cleanAuthor = string.gsub(cleanAuthor, "%*", "")
+    cleanAuthor = string.gsub(cleanAuthor, "%s+", "")
+    
+    local name = Ambiguate(cleanAuthor, "none") 
+    
+    -- 给自己颁发“免死金牌”，绝对不拦截自己发出的任何消息！
     if name == UnitName("player") then
         return false
     end
     
-    -- ==========================================
-    -- 【核心升级】：队友级智能豁免机制
-    -- 不仅判断频道，更判断“人”。只要是队友，无论在哪个频道说话（包含白字/大喊）都豁免！
-    -- ==========================================
+    -- 队友级智能豁免机制
     local isGroupChannel = (event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_RAID" or event == "CHAT_MSG_RAID_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT")
-    local isTeammate = UnitInParty(name) or UnitInRaid(name) or UnitInParty(author) or UnitInRaid(author)
+    local isTeammate = UnitInParty(name) or UnitInRaid(name) or UnitInParty(cleanAuthor) or UnitInRaid(cleanAuthor)
     local isExempted = isGroupChannel or isTeammate
     
-    -- 提取底层数据 (安全修复：防止跨服/副本中静默崩溃)
-    local rawName, rawRealm = strsplit("-", author)
-    local cleanAuthor = string.gsub(author, "%s+", "")
+    -- 提取最底层纯净数据
+    local rawName, rawRealm = strsplit("-", cleanAuthor)
     local originalHasRealm = (rawRealm and rawRealm ~= "")
     
     local myRealm = GetNormalizedRealmName() or ""
@@ -576,34 +582,26 @@ local function ChatFilter(self, event, msg, author, ...)
         end
     end
 
-    -- 【优化】：拦截 DND/AFK (对队友和组队频道全方位豁免)
+    -- 【优化】：拦截 DND/AFK
     if SuperIgnoreDB["__CONFIG_FILTER_DND_PLAYER__"] ~= false and not isExempted then
         if event ~= "CHAT_MSG_CHANNEL" then
-            if UnitIsAFK(author) or UnitIsDND(author) then
+            if UnitIsAFK(cleanAuthor) or UnitIsDND(cleanAuthor) then
                 return true
             end
         end
     end
     
-    -- A. 关键词/正则匹配拦截 (智能豁免升级：仅剥夺“密语”的豁免权，公开频道绝对免死)
+    -- A. 关键词/正则匹配拦截
     if SuperIgnoreKeywordsDB then
         for keyword, _ in pairs(SuperIgnoreKeywordsDB) do
             local success, match = pcall(string.find, msg, keyword)
             local isHit = false
-            
-            if success and match then 
-                isHit = true 
-            elseif not success and string.find(msg, keyword, 1, true) then 
-                isHit = true 
-            end
+            if success and match then isHit = true 
+            elseif not success and string.find(msg, keyword, 1, true) then isHit = true end
             
             if isHit then
-                -- 【绝杀逻辑】：
-                -- 1. 陌生人 (not isExempted) -> 无情拦截
-                -- 2. 队友发的密语 (CHAT_MSG_WHISPER) -> 强制拦截 (专治各种插件的私聊骚扰)
-                -- 队友在队伍/团队的任何发言，统统绝对放行，哪怕带了屏蔽词！
                 if (not isExempted) or (event == "CHAT_MSG_WHISPER") then
-                    if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(author) end
+                    if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(cleanAuthor) end
                     return true
                 end
             end
@@ -613,42 +611,47 @@ local function ChatFilter(self, event, msg, author, ...)
     -- ==========================================
     -- B. 超级黑名单拦截 (黑名单绝对不豁免，哪怕是队友也照样拉黑)
     -- ==========================================
+    local isBlacklisted = false
     if SuperIgnoreDB[cleanAuthor] or SuperIgnoreDB[fullName] then 
-        if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(author) end
-        return true 
-    end
-    
-    if not originalHasRealm and isGroupEnv then
+        isBlacklisted = true 
+    else
+        -- 终极兜底扫描：解决跨服副本/位面中暴雪 API 返回虚拟服务器后缀，或被插件屏蔽后缀的情况
         for dbKey, _ in pairs(SuperIgnoreDB) do
             if type(dbKey) == "string" and string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
-                local dbName = strsplit("-", dbKey)
-                if dbName == rawName then return true end
+                local dbName, dbRealm = strsplit("-", dbKey)
+                if dbName == rawName then 
+                    if isGroupEnv or dbRealm == myRealm or (not originalHasRealm) then
+                        isBlacklisted = true
+                        break
+                    end
+                end
             end
         end
     end
+
+    if isBlacklisted then
+        if event == "CHAT_MSG_WHISPER" then CloseEmptyWhisperTab(cleanAuthor) end
+        return true 
+    end
     
-    -- C. 智能过滤器：重复信息防刷屏 (对队友豁免，允许队友发叠词；内置 0.2秒 并发容错)
+    -- C. 智能过滤器：重复信息防刷屏
     if SuperIgnoreDB["__CONFIG_FILTER_REPEAT__"] ~= false and not isExempted then
         local now = GetTime()
         local strippedMsg = string.gsub(msg, "%s+", "")
         
-        if repeatCache[author] and repeatCache[author].msg == strippedMsg then
-            local timeDiff = now - repeatCache[author].time
-            if timeDiff < 15 then
-                -- 时间差 > 0.2 秒说明是真正的刷屏，拦截；< 0.2 秒是多标签页分发，放行
-                if timeDiff > 0.2 then 
-                    return true 
-                end
+        if repeatCache[cleanAuthor] and repeatCache[cleanAuthor].msg == strippedMsg then
+            local timeDiff = now - repeatCache[cleanAuthor].time
+            if timeDiff < 15 and timeDiff > 0.2 then 
+                return true 
             end
         end
         
-        -- 只有真正的新消息（超过 0.2 秒），才更新缓存时间
-        if not repeatCache[author] or repeatCache[author].msg ~= strippedMsg or (now - (repeatCache[author].time or 0) > 0.2) then
-            repeatCache[author] = {msg = strippedMsg, time = now}
+        if not repeatCache[cleanAuthor] or repeatCache[cleanAuthor].msg ~= strippedMsg or (now - (repeatCache[cleanAuthor].time or 0) > 0.2) then
+            repeatCache[cleanAuthor] = {msg = strippedMsg, time = now}
         end
     end
     
-    -- D. 智能过滤器：任务组队通告过滤 (保持原样，专治队伍里的任务刷屏)
+    -- D. 智能过滤器：任务组队通告过滤
     if SuperIgnoreDB["__CONFIG_FILTER_QUEST__"] ~= false then
         if event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" or event == "CHAT_MSG_INSTANCE_CHAT" then
             if string.find(msg, "%d+/%d+") or string.find(msg, "任务") or string.find(msg, "进度") or string.find(msg, "Quest") then
@@ -958,52 +961,67 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
     -- ==========================================
     if not sender then return end
 	
+    -- 【终极净化同步】：将聊天过滤的清洗逻辑同步到系统事件中
+    local cleanSender = string.gsub(sender, "|c%x%x%x%x%x%x%x%x", "")
+    cleanSender = string.gsub(cleanSender, "|r", "")
+    cleanSender = string.gsub(cleanSender, "%*", "")
+    cleanSender = string.gsub(cleanSender, "%s+", "")
+    
+    local rawName, rawRealm = strsplit("-", cleanSender)
+    local originalHasRealm = (rawRealm and rawRealm ~= "")
+    local myRealm = GetNormalizedRealmName() or ""
+    local fullName = rawName .. "-" .. (originalHasRealm and rawRealm or myRealm)
 
-    -- 【新增】：独狼模式拦截逻辑 (改为判断 SessionLoneWolf 内存变量)
+    -- 【独狼模式拦截逻辑】
     if SessionLoneWolf and event == "PARTY_INVITE_REQUEST" then
         -- 提取底层事件传来的第7个参数 (sender是第1个，...里的第6个即为GUID)
         local guid = select(6, ...) 
         
         -- 将名字和提取到的 GUID 共同交由验证函数判定
-        if not IsFamiliarPlayer(sender, guid) then
+        if not IsFamiliarPlayer(cleanSender, guid) then
             DeclineGroup()
             StaticPopup_Hide("PARTY_INVITE")
             StaticPopup_Hide("PARTY_INVITE_XREALM")
             if GroupInviteFrame then GroupInviteFrame:Hide() end
             if GroupInvitationFrame then GroupInvitationFrame:Hide() end
             
-            local shouldPrint = (not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"]) and (not actionDeclinedCache[sender] or (now - actionDeclinedCache[sender] > 90))
+            local shouldPrint = (not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"]) and (not actionDeclinedCache[cleanSender] or (now - actionDeclinedCache[cleanSender] > 90))
             if shouldPrint then
-                print("|cffffff00[SuperIgnore] 独狼模式：已自动拦截来自陌生人 " .. sender .. " 的组队邀请。|r")
-                actionDeclinedCache[sender] = now
+                print("|cffffff00[SuperIgnore] 独狼模式：已自动拦截来自陌生人 " .. cleanSender .. " 的组队邀请。|r")
+                actionDeclinedCache[cleanSender] = now
             end
             return 
         end
     end
     
-    -- 补全同服/同公会邀请时不带服务器后缀的问题
-    local cleanSender = Ambiguate(sender, "none")
-    local fullName = sender
-    if not string.find(fullName, "-") then
-        local myRealm = GetNormalizedRealmName() or ""
-        if myRealm ~= "" then fullName = cleanSender .. "-" .. myRealm end
+    -- 【黑名单兜底扫描同步】：解决跨服公会邀请/组队邀请名字对不上的问题
+    local isBlacklisted = false
+    if SuperIgnoreDB[cleanSender] or SuperIgnoreDB[fullName] then
+        isBlacklisted = true
+    else
+        for dbKey, _ in pairs(SuperIgnoreDB) do
+            if type(dbKey) == "string" and string.sub(dbKey, 1, 9) ~= "__CONFIG_" then
+                local dbName, dbRealm = strsplit("-", dbKey)
+                if dbName == rawName then 
+                    if dbRealm == myRealm or (not originalHasRealm) then
+                        isBlacklisted = true
+                        break
+                    end
+                end
+            end
+        end
     end
-    
-    if SuperIgnoreDB[sender] or SuperIgnoreDB[cleanSender] or SuperIgnoreDB[fullName] then
-        -- 常规拦截处：如果开启了纯静默，强制 shouldPrint 为 false
+
+    if isBlacklisted then
         local shouldPrint = (not SuperIgnoreDB["__CONFIG_SILENT_BLOCK__"]) and (not actionDeclinedCache[fullName] or (now - actionDeclinedCache[fullName] > 90))
         
         if event == "PARTY_INVITE_REQUEST" then
             DeclineGroup()
-            -- 【核心修复】：同步隐藏黑名单拦截的 UI 弹窗
             StaticPopup_Hide("PARTY_INVITE")
             StaticPopup_Hide("PARTY_INVITE_XREALM")
             if GroupInviteFrame then GroupInviteFrame:Hide() end
             if GroupInvitationFrame then GroupInvitationFrame:Hide() end
-            
-            if shouldPrint then
-                print(string.format(L.MSG_GROUP_DECLINED, fullName))
-            end
+            if shouldPrint then print(string.format(L.MSG_GROUP_DECLINED, fullName)) end
             
         elseif event == "TRADE_REQUEST" then
             CancelTrade()
@@ -1012,6 +1030,8 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
         elseif event == "GUILD_INVITE_REQUEST" then
             DeclineGuild()
             StaticPopup_Hide("GUILD_INVITE")
+            -- 【核心修复】：现代魔兽公会邀请使用的是独立的 GuildInviteFrame
+            if GuildInviteFrame then GuildInviteFrame:Hide() end 
             
         elseif event == "DUEL_REQUESTED" then
             CancelDuel()
@@ -1020,6 +1040,7 @@ frame:SetScript("OnEvent", function(self, event, sender, ...)
 
         if shouldPrint then actionDeclinedCache[fullName] = now end
     end
+	
 	end)
 
 -- ==========================================
