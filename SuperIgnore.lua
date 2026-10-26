@@ -75,7 +75,7 @@ local L = {
     ABOUT_UPDATE_TITLE = "【Updates】",
 	
 	-- 新增 优化
-    ABOUT_UPDATE_NEW = "- New: Option to hide addon notifications after successful blocks.",
+    ABOUT_UPDATE_NEW = "- New: Full support for syncing both new and old MeetingStone blocklists.",
     ABOUT_UPDATE_OPT = "- Opt: Support for 12.15 & core interception logic.",
 	
 	
@@ -117,16 +117,16 @@ local L = {
     UI_SYNC_LABEL = "Auto-Sync:",
     UI_CHK_AUTOSYNC_OFFICIAL = "Official",
     UI_CHK_AUTOSYNC_MS = "MeetingStone",
-    UI_CHK_AUTOSYNC_GF = "GroupFinder",      
+     
     UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard", 
     
-    REASON_GF = "GroupFinder Sync",
+   
     REASON_PGB = "PremadeGroupBoard Sync", 
-    MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r GroupFinder addon not found or list empty.",
+    
     MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r PremadeGroupBoard addon not found or list empty.", 
-    MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r GroupFinder list already synced. No new entries.",
+    
     MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PremadeGroupBoard list already synced. No new entries.", 
-    MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r GroupFinder sync! Added %d players.",
+    
     MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PremadeGroupBoard sync! Added %d players.", 
 	
 	
@@ -202,7 +202,7 @@ if locale == "zhCN" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：隐藏拦截成功后的插件提示。"
+    L.ABOUT_UPDATE_NEW = "- 新增：完美兼容新旧两版网易集合石的黑名单同步。"
     L.ABOUT_UPDATE_OPT = "- 优化：支持 12.15 及底层拦截逻辑。"
 	
 	
@@ -242,16 +242,16 @@ if locale == "zhCN" then
     L.UI_SYNC_LABEL = "自动同步黑名单数据："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "网易集合石"
-    L.UI_CHK_AUTOSYNC_GF = "GroupFinder"
+    
     L.UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard" 
     
-    L.REASON_GF = "队伍查找器同步"
+    
     L.REASON_PGB = "PGB 同步" 
-    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未检测到 GroupFinder 插件或数据。"
+    
     L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未检测到 PremadeGroupBoard 插件或数据。" 
-    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 队伍查找器已全部同步过，无新增。"
+    
     L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名单已全部同步过，无新增。" 
-    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 队伍查找器同步完成！新增: 玩家 %d 名。"
+    
     L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名单同步完成！新增: 玩家 %d 名。" 
 	
 
@@ -319,7 +319,7 @@ elseif locale == "zhTW" then
     L.ABOUT_UPDATE_TITLE = "【核心更新】"
 	
 	
-    L.ABOUT_UPDATE_NEW = "- 新增：隱藏攔截成功後的插件提示。"
+    L.ABOUT_UPDATE_NEW = "- 新增：完美相容新舊兩版網易集合石的黑名單同步。"
     L.ABOUT_UPDATE_OPT = "- 優化：支援 12.15 及底層攔截邏輯。"
 	
 	
@@ -359,16 +359,16 @@ elseif locale == "zhTW" then
     L.UI_SYNC_LABEL = "自動同步黑名單資料："
     L.UI_CHK_AUTOSYNC_OFFICIAL = "官方"
     L.UI_CHK_AUTOSYNC_MS = "網易集合石"
-    L.UI_CHK_AUTOSYNC_GF = "GroupFinder"
+    
     L.UI_CHK_AUTOSYNC_PGB = "PremadeGroupBoard" 
     
-    L.REASON_GF = "GroupFinder同步"
+    
     L.REASON_PGB = "PGB 同步" 
-    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 未偵測到 GroupFinder 插件或資料。"
+    
     L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 未偵測到 PremadeGroupBoard 插件或資料。" 
-    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 隊伍尋找器已全部同步過，無新增。"
+    
     L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 黑名單已全部同步過，無新增。" 
-    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 隊伍尋找器同步完成！新增: 玩家 %d 名。"
+
     L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 黑名單同步完成！新增: 玩家 %d 名。" 
 	
 
@@ -437,7 +437,7 @@ elseif locale == "koKR" then
 	
 	-- 新增 优化
 	
-    L.ABOUT_UPDATE_NEW = "- 추가: 차단 성공 후 애드온 알림 숨기기."
+    L.ABOUT_UPDATE_NEW = "- 추가: 신/구버전 MeetingStone 차단 목록 동기화 완벽 지원."
     L.ABOUT_UPDATE_OPT = "- 최적화: 12.15 버전 지원 및 기본 차단 로직 개선."
 	
 	
@@ -477,17 +477,17 @@ elseif locale == "koKR" then
     L.UI_SYNC_LABEL = "블랙리스트 자동 동기화:"
     L.UI_CHK_AUTOSYNC_OFFICIAL = "공식"
     L.UI_CHK_AUTOSYNC_MS = "MeetingStone"
-    L.UI_CHK_AUTOSYNC_GF = "파티 찾기"
+
     L.UI_CHK_AUTOSYNC_PGB = "사전 구성 파티 (PGB)" 
 	
 	    
-    L.REASON_GF = "파티 찾기 동기화"
+
     L.REASON_PGB = "PGB 동기화" 
-    L.MSG_ERR_NO_GF = "|cffff0000[SuperIgnore]|r 파티 찾기 애드온을 찾을 수 없거나 데이터가 없습니다."
+    
     L.MSG_ERR_NO_PGB = "|cffff0000[SuperIgnore]|r 사전 구성 파티(PGB) 애드온을 찾을 수 없거나 데이터가 없습니다." 
-    L.MSG_GF_EMPTY = "|cffffff00[SuperIgnore]|r 파티 찾기 목록이 이미 동기화되었습니다. 새 항목이 없습니다."
+    
     L.MSG_PGB_EMPTY = "|cffffff00[SuperIgnore]|r PGB 목록이 이미 동기화되었습니다. 새 항목이 없습니다." 
-    L.MSG_GF_SUCCESS = "|cff00ff00[SuperIgnore]|r 파티 찾기 동기화 완료! 플레이어 %d명 추가."
+
     L.MSG_PGB_SUCCESS = "|cff00ff00[SuperIgnore]|r PGB 동기화 완료! 플레이어 %d명 추가." 
 	
 	end
@@ -1556,19 +1556,11 @@ chkAutoSyncMS:SetScript("OnClick", function(self)
     SuperIgnoreDB = SuperIgnoreDB or {}
     SuperIgnoreDB["__CONFIG_AUTOSYNC_MS__"] = self:GetChecked()
 end)
--- 4. 队伍查找器 (第二行，对齐到“官方”的下方)
-local chkAutoSyncGF = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncGF:SetPoint("TOPLEFT", chkAutoSyncOfficial, "BOTTOMLEFT", 0, -5) 
-chkAutoSyncGF.Text:SetText(L.UI_CHK_AUTOSYNC_GF) 
-chkAutoSyncGF.Text:SetFontObject("GameFontHighlightSmall")
-chkAutoSyncGF:SetScript("OnClick", function(self)
-    SuperIgnoreDB = SuperIgnoreDB or {}
-    SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] = self:GetChecked()
-end)
 
--- 5. PremadeGroupBoard (第二行，对齐到“集合石”的下方)
+
+-- 4. PremadeGroupBoard (第二行，对齐到“集合石”的下方)
 local chkAutoSyncPGB = CreateFrame("CheckButton", nil, dataFrame, "InterfaceOptionsCheckButtonTemplate")
-chkAutoSyncPGB:SetPoint("TOPLEFT", chkAutoSyncMS, "BOTTOMLEFT", 0, -5) 
+chkAutoSyncPGB:SetPoint("TOPLEFT", chkAutoSyncOfficial, "BOTTOMLEFT", 0, -5) 
 chkAutoSyncPGB.Text:SetText(L.UI_CHK_AUTOSYNC_PGB) 
 chkAutoSyncPGB.Text:SetFontObject("GameFontHighlightSmall")
 chkAutoSyncPGB:SetScript("OnClick", function(self)
@@ -1767,14 +1759,9 @@ local function RefreshList()
             chkAutoSyncOfficial:SetChecked(true)
         end
         
-		-- 3. 队伍查找器自动同步（默认打钩）
-        if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] == false then
-            chkAutoSyncGF:SetChecked(false)
-        else
-            chkAutoSyncGF:SetChecked(true)
-        end
 		
-		-- 4. PGB自动同步（默认打钩）【新增】
+		
+		-- 3. PGB自动同步（默认打钩）【新增】
         if SuperIgnoreDB and SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] == false then
             chkAutoSyncPGB:SetChecked(false)
         else
@@ -2079,27 +2066,44 @@ local function DoSyncOfficial(isAuto)
     end
 end
 
+-- 【核心修复】同步网易集合石黑名单 (兼容新老版本双路径扫描)
 local function DoSyncMeetingStone(isAuto)
-    if not MEETINGSTONE_UI_DB or not MEETINGSTONE_UI_DB.global or not MEETINGSTONE_UI_DB.global.UIMemory or not MEETINGSTONE_UI_DB.global.UIMemory.IGNORE_LIST then
+    if not MEETINGSTONE_UI_DB then
         if not isAuto then
             print(L.MSG_ERR_NO_MS)
         end
         return
     end
 
-    local msList = MEETINGSTONE_UI_DB.global.UIMemory.IGNORE_LIST
     local count = 0
     SuperIgnoreDB = SuperIgnoreDB or {}
+    
+    -- 核心适配：将新版外层路径和旧版深层路径同时纳入扫描池
+    local paths = {
+        MEETINGSTONE_UI_DB.IGNORE_LIST,
+        MEETINGSTONE_UI_DB.global and MEETINGSTONE_UI_DB.global.UIMemory and MEETINGSTONE_UI_DB.global.UIMemory.IGNORE_LIST
+    }
 
-    for _, data in ipairs(msList) do
-        local name = data.leader
-        local reason = data.dep or L.REASON_MS
-        local timeStr = data.time or date("%Y-%m-%d %H:%M")
+    local foundData = false
+    for _, msList in ipairs(paths) do
+        if type(msList) == "table" then
+            foundData = true
+            for _, data in ipairs(msList) do
+                local name = data.leader
+                local reason = data.dep or L.REASON_MS
+                local timeStr = data.time or date("%Y-%m-%d %H:%M")
 
-        if name and name ~= "" and string.find(name, "-") and not SuperIgnoreDB[name] then
-            SuperIgnoreDB[name] = { reason = reason, time = timeStr }
-            count = count + 1
+                if name and name ~= "" and string.find(name, "-") and not SuperIgnoreDB[name] then
+                    SuperIgnoreDB[name] = { reason = reason, time = timeStr }
+                    count = count + 1
+                end
+            end
         end
+    end
+
+    if not foundData then
+        if not isAuto then print(L.MSG_ERR_NO_MS) end
+        return
     end
 
     if count > 0 then
@@ -2113,42 +2117,7 @@ local function DoSyncMeetingStone(isAuto)
 end
 
 
--- 【核心修复】同步 GroupFinder 队伍查找器黑名单 (严格仅同步有效玩家)
-local function DoSyncGroupFinder(isAuto)
-    if not GroupFinderDB or type(GroupFinderDB.blocklist) ~= "table" then
-        if not isAuto then print(L.MSG_ERR_NO_GF) end
-        return
-    end
 
-    local pCount = 0
-    SuperIgnoreDB = SuperIgnoreDB or {}
-
-    for _, data in ipairs(GroupFinderDB.blocklist) do
-        -- 核心修正：必须同时满足以下三个条件
-        -- 1. 类型必须是 leader (玩家)
-        -- 2. 字段有值且不为空
-        -- 3. 必须包含服务器连字符 "-" (防止把标题或无效数据当成玩家导入)
-        if data.kind == "leader" and data.leader and data.leader ~= "" then
-            local name = data.leader
-            if string.find(name, "-") and not SuperIgnoreDB[name] then
-                SuperIgnoreDB[name] = { 
-                    reason = data.note or L.REASON_GF, 
-                    time = data.time or date("%Y-%m-%d %H:%M") 
-                }
-                pCount = pCount + 1
-            end
-        end
-    end
-
-    if pCount > 0 then
-        print(string.format(L.MSG_GF_SUCCESS, pCount))
-        if RefreshList then RefreshList() end
-    else
-        if not isAuto then
-            print(L.MSG_GF_EMPTY)
-        end
-    end
-end
 
 
 -- 【新增核心逻辑】同步 PremadeGroupBoard (PGB) 黑名单
@@ -2200,9 +2169,7 @@ panel:SetScript("OnShow", function()
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_OFFICIAL__"] ~= false then
             if DoSyncOfficial then DoSyncOfficial(true) end
         end
-        if SuperIgnoreDB["__CONFIG_AUTOSYNC_GF__"] ~= false then
-            if DoSyncGroupFinder then DoSyncGroupFinder(true) end
-        end
+        
         --打开面板时自动触发 PGB 同步
         if SuperIgnoreDB["__CONFIG_AUTOSYNC_PGB__"] ~= false then
             if DoSyncPremadeGroupBoard then DoSyncPremadeGroupBoard(true) end
