@@ -89,6 +89,16 @@ The core features (Account-wide ignore, chat filtering, auto-decline) work perfe
 
 ## 📝 Changelog (更新日志)
 
+
+## 🌟 v1.8.5 - (2026.10.26)
+
+* **English:**
+* **MeetingStone Sync:** Fully compatible with both the new and legacy database structures of the MeetingStone addon, ensuring no blocked players are missed during sync.
+
+* **中文:**
+* **集合石兼容升级：** 完美兼容网易集合石新旧版的黑名单数据结构，确保双路径无死角同步。
+
+
 ## 🌟 v1.8.4 - (2026.10.04)
 
 *   **English:** 
